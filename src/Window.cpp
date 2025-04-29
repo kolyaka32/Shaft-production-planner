@@ -1,46 +1,13 @@
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
+#include "window.hpp"
 
 
-int main(int argv, char** argc) {
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
+Window::Window(unsigned _width, unsigned _height, std::string _name)
+: RenderWindow(sf::VideoMode({_width, _height}), _name),
+font(RESOURCE_PATH + "tuffy.ttf") {
+    // Setting frame limit
+    setFramerateLimit(60);
+}
 
-    // Load a sprite to display
-    const sf::Texture texture("Apple.png");
-    sf::Sprite sprite(texture);
-
-    // Create a graphical text to display
-    const sf::Font font("arial.ttf");
-    sf::Text text(font, "Hello SFML", 50);
-
-    // Load a music to play
-    sf::Music music("main_theme.mp3");
- 
-    // Play the music
-    music.play();
-
-    // Start the game loop
-    while (window.isOpen())
-    {
-        // Process events
-        while (const std::optional event = window.pollEvent())
-        {
-            // Close window: exit
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
-
-        // Clear screen
-        window.clear();
-
-        // Draw the sprite
-        window.draw(sprite);
-
-        // Draw the string
-        window.draw(text);
-
-        // Update the window
-        window.display();
-    }
+Window::~Window() {
+    
 }

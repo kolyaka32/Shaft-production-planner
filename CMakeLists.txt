@@ -9,6 +9,9 @@ set(SFML_STATIC_LIBRARIES TRUE)
 # Creating project
 project(Testing-app)
 
+# Hidding console
+#set(CMAKE_CXX_FLAGS "-mwindows -static")
+
 # Add all source files (that needed) under the src directory
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp" "src/*.rc")
 add_executable(${PROJECT_NAME} ${SOURCES})
