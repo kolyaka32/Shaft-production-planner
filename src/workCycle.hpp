@@ -7,7 +7,7 @@
 class WorkCycle : public CycleTemplate {
 private:
     GUI::Button button;
-    //GUI::Button button2;
+    GUI::Button button2;
     GUI::TypeBox typeBox;
     bool vis = true;
 

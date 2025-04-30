@@ -2,8 +2,8 @@
 
 
 WorkCycle::WorkCycle(Window& window)
-: button(window, 100.f, 200.f, 100.f, 50.f, {(std::string)"Abc", (std::string)"Cde123"}),
-//button2(window, 200, 400, 50, 50, {(char*)"lan1", (char*)"lan2"}),
+: button(window, 100.f, 200.f, 100.f, 50.f, {"123456789", "Abc"}),
+button2(window, 200, 400, 50, 50, {"lan1", "lan2"}),
 typeBox(window) {
 
 }
@@ -25,7 +25,7 @@ void WorkCycle::mouseClick(Window& window) {
         //mouseUnClick();
         vis = vis ^ true;
     }
-    /*if (button2.isClicked(pos)) {
+    if (button2.isClicked(pos)) {
         if (window.language == LNG_ENGLISH) {
             window.language = LNG_RUSSIAN;
         } else {
@@ -33,7 +33,7 @@ void WorkCycle::mouseClick(Window& window) {
         }
         button.update(window);
         button2.update(window);
-    }*/
+    }
 }
 
 void WorkCycle::mouseUnClick(Window& window) {
@@ -50,7 +50,7 @@ void WorkCycle::draw(Window& window) {
 
     button.draw(window);
 
-    //button2.draw(window);
+    button2.draw(window);
 
     if (vis) {
         typeBox.draw(window);

@@ -3,9 +3,9 @@
 #include <iostream>
 
 
-GUI::Button::Button(Window& win, float X, float Y, float W, float H, const std::string _text[LNG_COUNT])
+GUI::Button::Button(Window& win, float X, float Y, float W, float H, const std::vector<std::string> _texts)
 : rect({W, H}),
-texts(_text),
+texts(_texts),
 text(win.font, texts[win.language]) {
     // Creating and placing back rect
     rect.setPosition({X, Y});
@@ -32,6 +32,7 @@ bool GUI::Button::isClicked(sf::Vector2i point) {
 
 void GUI::Button::update(Window& window) {
     text.setString(texts[window.language]);
+    text.setOrigin({text.getGlobalBounds().size.x/2, text.getGlobalBounds().size.y/2+5});
 }
 
 void GUI::Button::draw(Window& window) {
