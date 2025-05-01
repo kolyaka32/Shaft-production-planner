@@ -12,11 +12,12 @@ private:
     bool vis = true;
 
 protected:
-    void keyDown(sf::Keyboard::Key key, Window& window) override;
-    void mouseClick(Window& window) override;
-    void mouseUnClick(Window& window) override;
-    void update(Window& window) override;
-    void draw(Window& window) override;
+    void keyDown(sf::Event::KeyPressed state) override;
+    void mouseClick(sf::Vector2i pos) override;
+    void mouseUnClick(sf::Vector2i pos) override;
+    void textInput(char32_t keyCode) override;
+    void update() override;
+    void draw() override;
 
 public:
     WorkCycle(Window& window);

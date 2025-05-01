@@ -2,7 +2,7 @@
 
 
 App::App()
-: window(800, 600, "Test window"),
+: window(1024, 720, "Test window"),
 cycle(window) {
     
 }
@@ -12,5 +12,5 @@ App::~App() {
 }
 
 void App::run() {
-    cycle.run(window);
+    cycle.run();
 }

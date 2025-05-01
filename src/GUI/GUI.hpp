@@ -22,11 +22,17 @@ namespace GUI {
 
     class TypeBox {
      private:
-        sf::Text text;
+        sf::Text drawText;
+        std::string currentText;
+        int caret;
+        int selectLength;
+        sf::RectangleShape drawCaret;
 
      public:
-        TypeBox(Window& window);
+        TypeBox(Window& window, float X, float Y, float W, float H, std::string startText = "");
         ~TypeBox();
+        void click(sf::Vector2i point);
+        void update(sf::Vector2i point);
         void draw(Window& window);
     };
 };

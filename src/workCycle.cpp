@@ -1,10 +1,12 @@
 #include "workCycle.hpp"
 
+#include <iostream>
 
 WorkCycle::WorkCycle(Window& window)
-: button(window, 100.f, 200.f, 100.f, 50.f, {"123456789", "Abc"}),
+: CycleTemplate(window),
+button(window, 100.f, 200.f, 100.f, 50.f, {"123456789", "Abc"}),
 button2(window, 200, 400, 50, 50, {"lan1", "lan2"}),
-typeBox(window) {
+typeBox(window, 300, 100, 500, 100, "ABC") {
 
 }
 
@@ -12,17 +14,12 @@ WorkCycle::~WorkCycle() {
 
 }
 
-void WorkCycle::keyDown(sf::Keyboard::Key key, Window& window) {
+void WorkCycle::keyDown(sf::Event::KeyPressed state) {
     
 }
 
-void WorkCycle::mouseClick(Window& window) {
-    // Getting mouse position
-    sf::Vector2i pos = sf::Mouse::getPosition(window);
-
+void WorkCycle::mouseClick(sf::Vector2i pos) {
     if (button.isClicked(pos)) {
-        //
-        //mouseUnClick();
         vis = vis ^ true;
     }
     if (button2.isClicked(pos)) {
@@ -36,15 +33,19 @@ void WorkCycle::mouseClick(Window& window) {
     }
 }
 
-void WorkCycle::mouseUnClick(Window& window) {
+void WorkCycle::mouseUnClick(sf::Vector2i pos) {
 
 }
 
-void WorkCycle::update(Window& window) {
+void WorkCycle::textInput(char32_t keyCode) {
+    std::cout << (int)keyCode;
+}
+
+void WorkCycle::update() {
 
 }
 
-void WorkCycle::draw(Window& window) {
+void WorkCycle::draw() {
     // Clear the window
     window.clear(sf::Color(20, 20, 20));
 

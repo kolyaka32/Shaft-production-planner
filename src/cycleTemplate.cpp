@@ -1,40 +1,42 @@
 #include "cycleTemplate.hpp"
 
 
-CycleTemplate::CycleTemplate() {
+CycleTemplate::CycleTemplate(Window& _window)
+: window(_window) {
 
 }
 
-CycleTemplate::~CycleTemplate() {
-
-}
-
-void CycleTemplate::getInput(Window& window) {
-    // Handle events
+void CycleTemplate::getInput() {
+    // Handling events
     while (const std::optional event = window.pollEvent()) {
         // Window closed: exit
         if (event->is<sf::Event::Closed>()) {
-                window.close();
-                break;
-            }
+            window.close();
+            break;
+        }
 
         // Catching pressing keys
-        if (event->is<sf::Event::KeyPressed>()) {
-            keyDown(event->getIf<sf::Event::KeyPressed>()->code, window);
+        if (auto t = event->getIf<sf::Event::KeyPressed>()) {
+            keyDown(*t);
         }
-        if (event->is<sf::Event::MouseButtonPressed>()) {
-            mouseClick(window);
+        // Catching clicking and unclicking at mouse
+        if (auto t = event->getIf<sf::Event::MouseButtonPressed>()) {
+            mouseClick(t->position);
         }
-        if (event->is<sf::Event::MouseButtonReleased>()) {
-            mouseUnClick(window);
+        if (auto t = event->getIf<sf::Event::MouseButtonReleased>()) {
+            mouseUnClick(t->position);
+        }
+        // Catching clicking and unclicking at mouse
+        if (auto t = event->getIf<sf::Event::TextEntered>()) {
+            textInput(t->unicode);
         }
     }
 }
 
-void CycleTemplate::run(Window& window) {
+void CycleTemplate::run() {
     while (window.isOpen()) {
-        getInput(window);
-        update(window);
-        draw(window);
+        getInput();
+        update();
+        draw();
     }
 }

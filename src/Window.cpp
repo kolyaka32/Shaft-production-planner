@@ -6,6 +6,7 @@ Window::Window(unsigned _width, unsigned _height, std::string _name)
 font(RESOURCE_PATH + "tuffy.ttf") {
     // Setting frame limit
     setFramerateLimit(60);
+    
 }
 
 Window::~Window() {
