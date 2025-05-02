@@ -6,7 +6,7 @@ WorkCycle::WorkCycle(Window& window)
 : CycleTemplate(window),
 button(window, 100.f, 200.f, 100.f, 50.f, {"123456789", "Abc"}),
 button2(window, 200, 400, 50, 50, {"lan1", "lan2"}),
-typeBox(window, 300, 100, 500, 100, "ABC") {
+typeBox(window, 300, 100, 20, "ABC") {
 
 }
 
@@ -15,7 +15,7 @@ WorkCycle::~WorkCycle() {
 }
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
-    
+    typeBox.keyPress(state);
 }
 
 void WorkCycle::mouseClick(sf::Vector2i pos) {
@@ -31,18 +31,19 @@ void WorkCycle::mouseClick(sf::Vector2i pos) {
         button.update(window);
         button2.update(window);
     }
+    typeBox.click(pos);
 }
 
 void WorkCycle::mouseUnClick(sf::Vector2i pos) {
-
+    typeBox.unClick();
 }
 
 void WorkCycle::textInput(char32_t keyCode) {
-    std::cout << (int)keyCode;
+    typeBox.inputText(keyCode);
 }
 
 void WorkCycle::update() {
-
+    typeBox.update(sf::Mouse::getPosition(window));
 }
 
 void WorkCycle::draw() {
@@ -53,9 +54,7 @@ void WorkCycle::draw() {
 
     button2.draw(window);
 
-    if (vis) {
-        typeBox.draw(window);
-    }
+    typeBox.draw(window);
 
     // Display things on screen
     window.display();

@@ -22,17 +22,41 @@ namespace GUI {
 
     class TypeBox {
      private:
+        // Inputing text info
+        const unsigned maxLength;  // Length of string, that we contain
+        const unsigned charSize;   // Size of character in pixels
         sf::Text drawText;
-        std::string currentText;
+        //std::string currentText;
+
+        // Selection info
+        bool selected = false;
+        bool pressed = false;
+
+        // Caret and select data info
         int caret;
         int selectLength;
+        // Caret draw info
+        bool showCaret = false;
         sf::RectangleShape drawCaret;
+        sf::Clock clock;
+        sf::Time updateTime;
+
+        // Background
+        sf::RectangleShape backGround;
 
      public:
-        TypeBox(Window& window, float X, float Y, float W, float H, std::string startText = "");
+        TypeBox(Window& window, float X, float Y, unsigned maxLength = 20, std::string startText = "");
         ~TypeBox();
+        // Getting input
         void click(sf::Vector2i point);
+        void unClick();
+        void keyPress(sf::Event::KeyPressed state);
+        void inputText(char32_t ch);
         void update(sf::Vector2i point);
+        // Drawing at screen
         void draw(Window& window);
+        // Getting entered text
+        std::string getString();
+        float getNumber();
     };
 };
