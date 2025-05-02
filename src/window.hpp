@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "testing.hpp"
+#include "macroses.hpp"
 
 
 // Selectable languages to use

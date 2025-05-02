@@ -24,7 +24,7 @@ namespace GUI {
      private:
         // Inputing text info
         const unsigned maxLength;  // Length of string, that we contain
-        const unsigned charSize;   // Size of character in pixels
+        const int charSize;        // Size of character in pixels
         sf::Text drawText;
         //std::string currentText;
 
@@ -37,12 +37,19 @@ namespace GUI {
         int selectLength;
         // Caret draw info
         bool showCaret = false;
-        sf::RectangleShape drawCaret;
         sf::Clock clock;
         sf::Time updateTime;
+        sf::RectangleShape drawCaret;
+
+        // Inverse text and it background
+        sf::Text inverseText;
+        sf::RectangleShape inverseRect;
 
         // Background
         sf::RectangleShape backGround;
+
+    protected:
+        bool in(sf::Vector2i point);
 
      public:
         TypeBox(Window& window, float X, float Y, unsigned maxLength = 20, std::string startText = "");
