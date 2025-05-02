@@ -1,5 +1,4 @@
 #include "GUI.hpp"
-#include <iostream>
 
 GUI::TypeBox::TypeBox(Window& window, float X, float Y, float W, std::string _startText)
 : drawText(window.font, _startText),

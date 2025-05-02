@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../window.hpp"
+#include "../app/window.hpp"
 #include <vector>
 #include <string>
 

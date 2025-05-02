@@ -1,7 +1,7 @@
 #pragma once
 
 #include "window.hpp"
-#include "GUI/GUI.hpp"
+#include "../GUI/GUI.hpp"
 
 
 // Template class for create and run cycles

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "workCycle.hpp"
+#include "../workCycle.hpp"
 
 class App {
  private:
