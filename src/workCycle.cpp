@@ -6,7 +6,7 @@ WorkCycle::WorkCycle(Window& window)
 : CycleTemplate(window),
 button(window, 100.f, 200.f, 100.f, 50.f, {"123456789", "Abc"}),
 button2(window, 200, 400, 50, 50, {"lan1", "lan2"}),
-typeBox(window, 300, 100, 20, "ABC") {
+typeBox(window, 300, 100, 400, "ABC") {
 
 }
 

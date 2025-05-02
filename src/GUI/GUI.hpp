@@ -23,10 +23,7 @@ namespace GUI {
     class TypeBox {
      private:
         // Inputing text info
-        const unsigned maxLength;  // Length of string, that we contain
-        const int charSize;        // Size of character in pixels
         sf::Text drawText;
-        //std::string currentText;
 
         // Selection info
         bool selected = false;
@@ -48,12 +45,11 @@ namespace GUI {
         // Background
         sf::RectangleShape backGround;
 
-        bool in(sf::Vector2i point);
         void clearSelected(const sf::String& str);
         void updateInversePos();
 
      public:
-        TypeBox(Window& window, float X, float Y, unsigned maxLength = 20, std::string startText = "");
+        TypeBox(Window& window, float X, float Y, float W, std::string startText = "");
         // Getting input
         void click(sf::Vector2i point);
         void unClick();

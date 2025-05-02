@@ -1,12 +1,10 @@
 #include "GUI.hpp"
+#include <iostream>
 
-
-GUI::TypeBox::TypeBox(Window& window, float X, float Y, unsigned _maxLength, std::string _startText)
-: maxLength(_maxLength),
-charSize(20),
-drawText(window.font, _startText, 30),
-backGround({maxLength*(float)charSize, 30}),
-inverseText(window.font, "", 30),
+GUI::TypeBox::TypeBox(Window& window, float X, float Y, float W, std::string _startText)
+: drawText(window.font, _startText),
+backGround({W, 30}),
+inverseText(window.font),
 inverseRect() {
     // Setting text settings
     drawText.setFillColor(sf::Color::Black);
@@ -32,13 +30,6 @@ inverseRect() {
 
     inverseRect.setFillColor(sf::Color::Black);
     inverseRect.setOrigin({0, -6.f});
-}
-
-bool GUI::TypeBox::in(sf::Vector2i point) {
-    return (backGround.getPosition().x < point.x)
-        && (backGround.getPosition().y < point.y)
-        && (backGround.getPosition().x + backGround.getSize().x > point.x)
-        && (backGround.getPosition().y + backGround.getSize().y > point.y);
 }
 
 void GUI::TypeBox::clearSelected(const sf::String& str) {
@@ -69,7 +60,10 @@ void GUI::TypeBox::updateInversePos() {
 
 void GUI::TypeBox::click(sf::Vector2i point) {
     // Checking, if pressed to start typing
-    if (in(point)) {
+    if ((backGround.getPosition().x < point.x)
+        && (backGround.getPosition().y < point.y)
+        && (backGround.getPosition().x + backGround.getSize().x > point.x)
+        && (backGround.getPosition().y + backGround.getSize().y > point.y)) {
         selected = true;
         pressed = true;
 
@@ -170,7 +164,53 @@ void GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
                 }
             }
             break;
-        
+
+        case sf::Keyboard::Key::A:
+            if (state.control) {
+                // Selecting all text
+                caret = str.getSize();
+                selectLength = -caret;
+                drawCaret.setPosition(drawText.findCharacterPos(caret));
+                updateInversePos();
+            }
+            break;
+
+        case sf::Keyboard::Key::C:
+            if (state.control && selectLength) {
+                // Copying to clipboard selected part
+                if (selectLength < 0) {
+                    sf::Clipboard::setString(str.substring(caret+selectLength, -selectLength));
+                } else {
+                    sf::Clipboard::setString(str.substring(caret, selectLength));
+                }
+            }
+            break;
+
+        case sf::Keyboard::Key::X:
+            if (state.control && selectLength) {
+                // Copying to clipboard selected part and clearing it
+                if (selectLength < 0) {
+                    sf::Clipboard::setString(str.substring(caret+selectLength, -selectLength));
+                } else {
+                    sf::Clipboard::setString(str.substring(caret, selectLength));
+                }
+                clearSelected(str);
+                drawCaret.setPosition(drawText.findCharacterPos(caret));
+            }
+            break;
+
+        case sf::Keyboard::Key::V:
+            if (state.control) {
+                // Copying text from clipboard
+                clearSelected(str);
+                const sf::String& adding = sf::Clipboard::getString();
+                drawText.setString(str.substring(0, caret) + adding + str.substring(caret));
+                // Moving caret
+                caret += adding.getSize();
+                drawCaret.setPosition(drawText.findCharacterPos(caret));
+            }
+            break;
+
         default:
             break;
         }
@@ -181,8 +221,8 @@ void GUI::TypeBox::inputText(char32_t ch) {
     // Resetting
     pressed = false;
 
-    // Checking, if current box selected and not entering backspace
-    if (selected && ch != 8) {
+    // Checking, if current box selected and not entering special comands
+    if (selected && ch > 40) {
         // Adding new charachter, deleting selected part
         const sf::String& str = drawText.getString();
         if (selectLength < 0) {
