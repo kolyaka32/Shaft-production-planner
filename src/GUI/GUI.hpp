@@ -48,12 +48,12 @@ namespace GUI {
         // Background
         sf::RectangleShape backGround;
 
-    protected:
         bool in(sf::Vector2i point);
+        void clearSelected(const sf::String& str);
+        void updateInversePos();
 
      public:
         TypeBox(Window& window, float X, float Y, unsigned maxLength = 20, std::string startText = "");
-        ~TypeBox();
         // Getting input
         void click(sf::Vector2i point);
         void unClick();

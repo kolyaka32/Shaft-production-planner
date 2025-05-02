@@ -1,10 +1,9 @@
 #include "GUI.hpp"
 
-#include <iostream>
 
 GUI::TypeBox::TypeBox(Window& window, float X, float Y, unsigned _maxLength, std::string _startText)
 : maxLength(_maxLength),
-charSize(19),
+charSize(20),
 drawText(window.font, _startText, 30),
 backGround({maxLength*(float)charSize, 30}),
 inverseText(window.font, "", 30),
@@ -14,6 +13,7 @@ inverseRect() {
     drawText.setString(_startText);
     drawText.setPosition({X, Y});
     drawText.setOrigin({-4, drawText.getGlobalBounds().size.y/2-6});
+    drawText.setLineSpacing(0.1);
 
     // Setting background rect
     backGround.setPosition({X, Y});
@@ -31,11 +31,7 @@ inverseRect() {
     inverseRect.setOrigin({-4, 0});
 
     inverseRect.setFillColor(sf::Color::Black);
-    inverseRect.setOrigin({0, -4.f});
-}
-
-GUI::TypeBox::~TypeBox() {
-
+    inverseRect.setOrigin({0, -6.f});
 }
 
 bool GUI::TypeBox::in(sf::Vector2i point) {
@@ -45,16 +41,47 @@ bool GUI::TypeBox::in(sf::Vector2i point) {
         && (backGround.getPosition().y + backGround.getSize().y > point.y);
 }
 
+void GUI::TypeBox::clearSelected(const sf::String& str) {
+    if (selectLength < 0) {
+        drawText.setString(str.substring(0, caret+selectLength) + str.substring(caret));
+        caret += selectLength;
+    } else {
+        drawText.setString(str.substring(0, caret) + str.substring(caret+selectLength));
+    }
+    selectLength = 0;
+}
+
+void GUI::TypeBox::updateInversePos() {
+    if (selectLength > 0) {
+        inverseRect.setSize({drawText.findCharacterPos(caret+selectLength).x-drawText.findCharacterPos(caret).x, 26.f});
+        inverseRect.setPosition({drawCaret.getPosition().x, drawCaret.getPosition().y});
+
+        inverseText.setString(drawText.getString().substring(caret, selectLength));
+        inverseText.setPosition(inverseRect.getPosition());
+    } else {
+        inverseRect.setSize({drawText.findCharacterPos(caret).x-drawText.findCharacterPos(caret+selectLength).x, 26.f});
+        inverseRect.setPosition({drawText.findCharacterPos(caret+selectLength).x, drawCaret.getPosition().y});
+
+        inverseText.setString(drawText.getString().substring(caret + selectLength, -selectLength));
+        inverseText.setPosition(inverseRect.getPosition());
+    }
+}
+
 void GUI::TypeBox::click(sf::Vector2i point) {
     // Checking, if pressed to start typing
     if (in(point)) {
         selected = true;
         pressed = true;
 
-        // Finding selection start point
-        caret = (point.x - (int)drawText.findCharacterPos(0).x) / charSize;
-        // Setting maximal caret position
-        SET_MAX(caret, drawText.getString().getSize());
+        // Finding selection point
+        if (point.x > drawText.getGlobalBounds().size.x + drawText.getPosition().x) {
+            caret = drawText.getString().getSize();
+        } else {
+            caret = 0;
+            while (point.x > drawText.findCharacterPos(caret).x) {
+                caret++;
+            }
+        }
 
         selectLength = 0;
         showCaret = true;
@@ -73,11 +100,100 @@ void GUI::TypeBox::unClick() {
 }
 
 void GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
+    if (selected) {
+        pressed = false;
+        const sf::String& str = drawText.getString();
+        switch (state.code) {
+        case sf::Keyboard::Key::Delete:
+            if (selectLength) {
+                // Clearing selected part
+                clearSelected(str);
+            } else {
+                // Delete previous symbol
+                if (caret < str.getSize()) {
+                    drawText.setString(str.substring(0, caret) + str.substring(caret+1));
+                }
+            }
+            break;
 
+        case sf::Keyboard::Key::Backspace:
+            if (selectLength) {
+                // Clearing selected part
+                clearSelected(str);
+                drawCaret.setPosition(drawText.findCharacterPos(caret));
+            } else {
+                // Delete previous symbol
+                if (caret > 0) {
+                    drawText.setString(str.substring(0, caret-1) + str.substring(caret));
+                    caret--;
+                    drawCaret.setPosition(drawText.findCharacterPos(caret));
+                }
+            }
+            break;
+
+        case sf::Keyboard::Key::Left:
+            if (state.shift) {
+                if (caret > 0) {
+                    caret--;
+                    selectLength++;
+                    drawCaret.setPosition(drawText.findCharacterPos(caret));
+                    updateInversePos();
+                }
+            } else {
+                if (selectLength) {
+                    selectLength = 0;
+                } else {
+                    if (caret > 0) {
+                        caret--;
+                        drawCaret.setPosition(drawText.findCharacterPos(caret));
+                    }
+                }
+            }
+            break;
+
+        case sf::Keyboard::Key::Right:
+            if (state.shift) {
+                if (caret < str.getSize()) {
+                    caret++;
+                    selectLength--;
+                    drawCaret.setPosition(drawText.findCharacterPos(caret));
+                    updateInversePos();
+                }
+            } else {
+                if (selectLength) {
+                    selectLength = 0;
+                } else {
+                    if (caret < str.getSize()) {
+                        caret++;
+                        drawCaret.setPosition(drawText.findCharacterPos(caret));
+                    }
+                }
+            }
+            break;
+        
+        default:
+            break;
+        }
+    }
 }
 
 void GUI::TypeBox::inputText(char32_t ch) {
-    //drawText.getString().substring();
+    // Resetting
+    pressed = false;
+
+    // Checking, if current box selected and not entering backspace
+    if (selected && ch != 8) {
+        // Adding new charachter, deleting selected part
+        const sf::String& str = drawText.getString();
+        if (selectLength < 0) {
+            drawText.setString(str.substring(0, caret+selectLength) + ch + str.substring(caret));
+        } else {
+            drawText.setString(str.substring(0, caret) + ch + str.substring(caret+selectLength));
+        }
+        // Moving caret
+        caret++;
+        drawCaret.setPosition(drawText.findCharacterPos(caret));
+    }
 }
 
 void GUI::TypeBox::update(sf::Vector2i point) {
@@ -85,34 +201,20 @@ void GUI::TypeBox::update(sf::Vector2i point) {
         if (pressed) {
             // Getting new caret position and selection length
             selectLength += caret;
-            if (point.x < backGround.getGlobalBounds().position.x) {
-                caret = 0;
+            if (point.x > drawText.getGlobalBounds().size.x + drawText.getPosition().x) {
+                caret = drawText.getString().getSize();
             } else {
-                caret = (point.x - (int)drawText.findCharacterPos(0).x) / charSize;
+                caret = 0;
+                while (point.x > drawText.findCharacterPos(caret).x) {
+                    caret++;
+                }
             }
-            // Setting maximal caret position
-            SET_MAX(caret, drawText.getString().getSize());
-            // Setting minimal caret position
-            SET_MIN(caret, 0);
             selectLength -= caret;
 
             // Update caret position
             drawCaret.setPosition(drawText.findCharacterPos(caret));
             // Update inverse rect and text
-            if (selectLength > 0) {
-                inverseRect.setSize({selectLength*float(charSize), 30.f});
-                inverseRect.setPosition({drawCaret.getPosition().x, drawCaret.getPosition().y});
-
-                inverseText.setString(drawText.getString().substring(caret, selectLength));
-                inverseText.setPosition(inverseRect.getPosition());
-            } else {
-                inverseRect.setSize({-selectLength*float(charSize), 30.f});
-                std::cout << drawCaret.getPosition().x + selectLength*charSize << ' ' << drawCaret.getPosition().y << '\n';
-                inverseRect.setPosition({drawCaret.getPosition().x + selectLength*charSize, drawCaret.getPosition().y});
-
-                inverseText.setString(drawText.getString().substring(caret + selectLength, -selectLength));
-                inverseText.setPosition(inverseRect.getPosition());
-            }
+            updateInversePos();
         }
         // Blinking caret
         if (clock.getElapsedTime().asSeconds() > 1) {
