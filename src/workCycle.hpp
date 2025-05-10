@@ -1,15 +1,20 @@
 #pragma once
 
 #include "app/cycleTemplate.hpp"
-
+#include "computing/factory.hpp"
+#include "computing/cursorMachine.hpp"
 
 // Template class for create and run cycles
 class WorkCycle : public CycleTemplate {
 private:
-    GUI::Button button;
-    GUI::Button button2;
+    // Graphic objects
+    GUI::Button button1, button2, button3, button4;
     GUI::TypeBox typeBox;
-    bool vis = true;
+    Factory factory;
+
+    // Current selected object to place
+    bool selectObject = false;
+    CursorMachine cursorMachine;
 
 protected:
     void keyDown(sf::Event::KeyPressed state) override;
