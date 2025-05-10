@@ -23,22 +23,6 @@ sf::Color getCellColor(Cell::Type type) {
     }
 }
 
-sf::Vector2i getScale(Cell::Type type) {
-    switch (type) {
-    case Cell::Type::Machine_1:
-        return {1, 2};
-
-    case Cell::Type::Machine_2:
-        return {2, 3};
-
-    case Cell::Type::Furnace_1:
-        return {3, 3};
-    
-    default:
-        return {1, 1};
-    }
-}
-
 // Cell class
 Cell::Cell(Type _type)
 : type(_type) {
@@ -47,4 +31,8 @@ Cell::Cell(Type _type)
 
 Cell::Type Cell::getType() {
     return type;
+}
+
+void Cell::setType(Cell::Type _type) {
+    type = _type;
 }

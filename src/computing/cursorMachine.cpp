@@ -2,7 +2,7 @@
 
 
 CursorMachine::CursorMachine() {
-
+    rect.setSize({cellSize, cellSize});
 }
 
 CursorMachine::~CursorMachine() {
@@ -11,7 +11,6 @@ CursorMachine::~CursorMachine() {
 
 void CursorMachine::setType(Cell::Type _type) {
     type = _type;
-    rect.setSize({getScale(type).x*cellSize, getScale(type).y*cellSize});
     rect.setFillColor(getCellColor(type));
 }
 

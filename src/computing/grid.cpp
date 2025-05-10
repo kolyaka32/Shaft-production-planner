@@ -18,12 +18,12 @@ Grid::~Grid() {
 }
 
 // Shortcut functions
-Cell Grid::getCell(unsigned X, unsigned Y) {
+Cell& Grid::getCell(unsigned X, unsigned Y) {
     return grid[X + Y*width];
 }
 
-void Grid::setCell(unsigned X, unsigned Y, Cell::Type type) {
-    grid[X+Y*width] = type;
+Cell& Grid::getCell(sf::Vector2i pos) {
+    return grid[pos.x + pos.y*width];
 }
 
 sf::Vector2i Grid::getLocal(sf::Vector2i absPos) {

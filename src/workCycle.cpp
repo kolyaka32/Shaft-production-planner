@@ -37,7 +37,7 @@ void WorkCycle::mouseClick(sf::Vector2i pos) {
         selectObject = false;
     } else if (factory.isSelected(pos) && selectObject) {
         // Setting object in grid
-        factory.add(cursorMachine.getType(), pos);
+        factory.set(cursorMachine.getType(), pos);
     } else {
         selectObject = false;
     }

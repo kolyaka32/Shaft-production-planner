@@ -17,8 +17,8 @@ protected:
     const sf::Vector2f pos;
 
     // Shortcut functions
-    Cell getCell(unsigned X, unsigned Y);
-    void setCell(unsigned X, unsigned Y, Cell::Type type = Cell::Type::None);
+    Cell& getCell(unsigned X, unsigned Y);
+    Cell& getCell(sf::Vector2i pos);
 
     sf::Vector2i getLocal(sf::Vector2i absPos);
     sf::Vector2f getAbs(sf::Vector2i localPos);
