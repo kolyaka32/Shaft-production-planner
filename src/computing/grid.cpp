@@ -9,7 +9,7 @@ grid(new Cell[_width*_height]),
 pos(_pos) {
     // Clearing grid
     for (int i=0; i < _width*_height; ++i) {
-        grid[i] = Cell::Type::None;
+        grid[i].setType(Cell::Type::None);
     }
 }
 
@@ -41,12 +41,16 @@ void Grid::blit(Window& window) {
     // Draw cells
     for (int y=0; y < height; ++y) {
         for (int x=0; x < width; ++x) {
-            square.setFillColor(getCellColor(grid[x+y*width].getType()));
-            window.draw(square);
+            // Checking, if cell 
+            if (getCell({x, y}).getType() != Cell::Type::Void) {
+                square.setFillColor(getCell({x, y}).getColor());
+                window.draw(square);
+            }
             square.move({cellSize, 0});
         }
         square.move({-cellSize*width, cellSize});
     }
+
     // Draw vertical lines
     sf::Vertex vertLine[] {
         {pos, sf::Color::Black, {0.f, 0.f}},
@@ -57,6 +61,7 @@ void Grid::blit(Window& window) {
         vertLine[0].position.x += cellSize;
         vertLine[1].position.x += cellSize;
     }
+
     // Draw horizontal lines
     sf::Vertex horLine[] {
         {pos, sf::Color::Black, {0.f, 0.f}},

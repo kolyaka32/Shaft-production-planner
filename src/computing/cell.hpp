@@ -29,6 +29,7 @@ public:
     Cell(Type type = Type::None);
     Type getType();
     void setType(Type type);
+    sf::Color getColor();
 
 protected:
     Type type;

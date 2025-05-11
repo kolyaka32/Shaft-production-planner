@@ -6,21 +6,22 @@
 // Class for draw and calculate objects at the grid
 class Grid {
 private:
-    // Array with all
+    // Array with all cells
     Cell* grid;
-    
-
-protected:
-    // Dimensions of grid
-    const unsigned width, height;
     // Absolute position of first element
     const sf::Vector2f pos;
 
-    // Shortcut functions
+protected:
+    // Dimensions of grid
+    unsigned width, height;
+
+    // Functions for getting cell at need position
     Cell& getCell(unsigned X, unsigned Y);
     Cell& getCell(sf::Vector2i pos);
 
+    // Getting local position (in cells) from absolute coordinate
     sf::Vector2i getLocal(sf::Vector2i absPos);
+    // Getting absolute position (in pixels) from local coordinate
     sf::Vector2f getAbs(sf::Vector2i localPos);
 
 public:

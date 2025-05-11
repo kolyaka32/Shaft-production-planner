@@ -15,8 +15,10 @@ protected:
 
     // Overriding functions for do with input
     virtual void keyDown(sf::Event::KeyPressed state) {};
-    virtual void mouseClick(sf::Vector2i pos) {};
-    virtual void mouseUnClick(sf::Vector2i pos) {};
+    virtual void mouseLClick(sf::Vector2i pos) {};
+    virtual void mouseRClick(sf::Vector2i pos) {};
+    virtual void mouseLUnClick(sf::Vector2i pos) {};
+    virtual void mouseRUnClick(sf::Vector2i pos) {};
     virtual void textInput(char32_t keyCode) {};
 
     // Overring function for another objects update

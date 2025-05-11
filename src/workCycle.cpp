@@ -22,7 +22,7 @@ void WorkCycle::keyDown(sf::Event::KeyPressed state) {
     typeBox.keyPress(state);
 }
 
-void WorkCycle::mouseClick(sf::Vector2i pos) {
+void WorkCycle::mouseLClick(sf::Vector2i pos) {
     // Selecting type for setting it
     if (button1.isClicked(pos)) {
         selectObject = true;
@@ -35,17 +35,28 @@ void WorkCycle::mouseClick(sf::Vector2i pos) {
         cursorMachine.setType(Cell::Type::Furnace_1);
     } else if (button4.isClicked(pos)) {
         selectObject = false;
-    } else if (factory.isSelected(pos) && selectObject) {
+    } else if (factory.isSelected(pos)) {
         // Setting object in grid
-        factory.set(cursorMachine.getType(), pos);
+        if (selectObject) {
+            factory.set(cursorMachine.getType(), pos);
+        } else {
+            factory.reset(pos);
+        }
     } else {
         selectObject = false;
     }
     //typeBox.click(pos);
 }
 
-void WorkCycle::mouseUnClick(sf::Vector2i pos) {
+void WorkCycle::mouseLUnClick(sf::Vector2i pos) {
     //typeBox.unClick();
+}
+
+void WorkCycle::mouseRClick(sf::Vector2i pos) {
+    if (factory.isSelected(pos)) {
+        // Setting object in grid
+        factory.remove(pos);
+    }
 }
 
 void WorkCycle::textInput(char32_t keyCode) {

@@ -18,8 +18,9 @@ private:
 
 protected:
     void keyDown(sf::Event::KeyPressed state) override;
-    void mouseClick(sf::Vector2i pos) override;
-    void mouseUnClick(sf::Vector2i pos) override;
+    void mouseLClick(sf::Vector2i pos) override;
+    void mouseLUnClick(sf::Vector2i pos) override;
+    void mouseRClick(sf::Vector2i pos) override;
     void textInput(char32_t keyCode) override;
     void update() override;
     void draw() override;

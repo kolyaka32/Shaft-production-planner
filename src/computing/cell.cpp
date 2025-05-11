@@ -36,3 +36,7 @@ Cell::Type Cell::getType() {
 void Cell::setType(Cell::Type _type) {
     type = _type;
 }
+
+sf::Color Cell::getColor() {
+    return getCellColor(type);
+}
