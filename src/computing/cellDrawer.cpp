@@ -28,21 +28,21 @@ CellDrawer::~CellDrawer() {
 
 }
 
-sf::Color CellDrawer::getColor(Cell::Type type) {
+sf::Color CellDrawer::getColor(CellType type) {
     switch (type) {
-    case Cell::Type::None:
+    case CellType::None:
         return sf::Color::White;
 
-    case Cell::Type::Way:
+    case CellType::Way:
         return sf::Color::Yellow;
 
-    case Cell::Type::Machine_1:
+    case CellType::Machine_1:
         return sf::Color::Red;
 
-    case Cell::Type::Machine_2:
+    case CellType::Machine_2:
         return sf::Color::Blue;
 
-    case Cell::Type::Furnace_1:
+    case CellType::Furnace_1:
         return sf::Color::Cyan;
     
     default:
@@ -50,7 +50,7 @@ sf::Color CellDrawer::getColor(Cell::Type type) {
     }
 }
 
-sf::Sprite& CellDrawer::getSprite(Cell::Type type) {
+sf::Sprite& CellDrawer::getSprite(CellType type) {
     return sprites[(int)type-2];
 }
 
@@ -58,8 +58,8 @@ void CellDrawer::switchDrawType() {
     drawTexture ^= true;
 }
 
-void CellDrawer::draw(Window& window, Cell::Type type, sf::Vector2f absPos) {
-    if (drawTexture && type != Cell::Type::None && type != Cell::Type::Void) {
+void CellDrawer::draw(Window& window, CellType type, sf::Vector2f absPos) {
+    if (drawTexture && type != CellType::None && type != CellType::Void) {
         // Drawing cell as sprite with texture
         getSprite(type).setPosition(absPos);
         window.draw(getSprite(type));

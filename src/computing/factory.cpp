@@ -15,34 +15,39 @@ void Factory::draw(Window& window) {
     blit(window);
 }
 
-void Factory::set(Cell::Type _type, sf::Vector2i absPos) {
-    // Setting selected cell to matched type
-    getCell(getLocal(absPos)).setType(_type);
+void Factory::set(CellType _type, sf::Vector2i absPos) {
+    // If selected cell is void - resetting to none
+    if (getCell(getLocal(absPos)).getType() == CellType::Void) {
+        getCell(getLocal(absPos)).setType(CellType::None);
+    } else {
+        // Setting selected cell to matched type
+        getCell(getLocal(absPos)).setType(_type);
+    }
 }
 
 void Factory::remove(sf::Vector2i absPos) {
     switch (getCell(getLocal(absPos)).getType()) {
-    case Cell::Type::Void:
+    case CellType::Void:
         // Special action in void cell - do nothing
         break;
 
-    case Cell::Type::None:
+    case CellType::None:
         // Special action in void none - none in building
-        getCell(getLocal(absPos)).setType(Cell::Type::Void);
+        getCell(getLocal(absPos)).setType(CellType::Void);
         break;
 
     default:
         // In any normal machine/way - reset to none-type
-        getCell(getLocal(absPos)).setType(Cell::Type::None);
+        getCell(getLocal(absPos)).setType(CellType::None);
         break;
     }
 }
 
 void Factory::reset(sf::Vector2i absPos) {
     switch (getCell(getLocal(absPos)).getType()) {
-    case Cell::Type::Void:
+    case CellType::Void:
         // Special action in void cell - reset to none type
-        getCell(getLocal(absPos)).setType(Cell::Type::None);
+        getCell(getLocal(absPos)).setType(CellType::None);
         break;
     }
 }

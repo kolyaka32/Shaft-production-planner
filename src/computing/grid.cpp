@@ -9,17 +9,12 @@ grid(new Cell[_width*_height]),
 pos(_pos) {
     // Clearing grid
     for (int i=0; i < _width*_height; ++i) {
-        grid[i].setType(Cell::Type::None);
+        grid[i].setType(CellType::None);
     }
 }
 
 Grid::~Grid() {
     delete grid;
-}
-
-// Shortcut functions
-Cell& Grid::getCell(unsigned X, unsigned Y) {
-    return grid[X + Y*width];
 }
 
 Cell& Grid::getCell(sf::Vector2i pos) {
@@ -42,8 +37,8 @@ void Grid::blit(Window& window) {
     for (int y=0; y < height; ++y) {
         for (int x=0; x < width; ++x) {
             // Checking, if cell 
-            if (getCell({x, y}).getType() != Cell::Type::Void) {
-                drawer.draw(window, getCell({x, y}).getType(), getAbs({x, y}));
+            if (getCell({x, y}).getType() != CellType::Void) {
+                getCell({x, y}).draw(window, getAbs({x, y}));
             }
             square.move({cellSize, 0});
         }

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../GUI/GUI.hpp"
-#include "cellDrawer.hpp"
+#include "cell.hpp"
+
 
 // Class for draw and calculate objects at the grid
 class Grid {
@@ -10,15 +11,12 @@ private:
     Cell* grid;
     // Absolute position of first element
     const sf::Vector2f pos;
-    // System for correct draw of cells
-    CellDrawer drawer;
 
 protected:
     // Dimensions of grid
     unsigned width, height;
 
     // Functions for getting cell at need position
-    Cell& getCell(unsigned X, unsigned Y);
     Cell& getCell(sf::Vector2i pos);
 
     // Getting local position (in cells) from absolute coordinate

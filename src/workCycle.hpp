@@ -2,7 +2,7 @@
 
 #include "app/cycleTemplate.hpp"
 #include "computing/factory.hpp"
-#include "computing/cursorMachine.hpp"
+
 
 // Template class for create and run cycles
 class WorkCycle : public CycleTemplate {
@@ -14,7 +14,7 @@ private:
 
     // Current selected object to place
     bool selectObject = false;
-    CursorMachine cursorMachine;
+    Cell cursorCell;
 
 protected:
     void keyDown(sf::Event::KeyPressed state) override;

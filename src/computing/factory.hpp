@@ -9,7 +9,7 @@ public:
     Factory(unsigned width, unsigned height, sf::Vector2f pos);
     ~Factory();
     void draw(Window& window);
-    void set(Cell::Type type, sf::Vector2i absPos);
+    void set(CellType type, sf::Vector2i absPos);
     void remove(sf::Vector2i absPos);
     void reset(sf::Vector2i absPos);
 };

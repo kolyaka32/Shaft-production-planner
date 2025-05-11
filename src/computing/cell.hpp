@@ -1,38 +1,19 @@
 #pragma once
 
-#include "../app/window.hpp"
+#include "cellDrawer.hpp"
 
 // Class representing single cell of grid
 class Cell {
 public:
-    // Array representing types of equipment
-    enum class Type : unsigned {
-        // Type representing unasseseble area
-        Void,
-
-        // Type representing empty space
-        None,
-
-        // Types for calculations
-        Way,
-
-        // Types for storage
-        Cargo,
-
-        // Types of machines
-        Machine_1,
-        Machine_2, 
-        Furnace_1,
-    };
-
-public:
-    Cell(Type type = Type::None);
-    Type getType();
-    void setType(Type type);
+    Cell(CellType type = CellType::None);
+    CellType getType();
+    void setType(CellType type);
+    void draw(Window& window, sf::Vector2f absPos);
+    void draw(Window& window, sf::Vector2i absPos);
 
 protected:
-    Type type;
+    // Type of selected cell
+    CellType type;
+    // Global devise for draw cells
+    static CellDrawer drawer;
 };
-
-// Size of square to draw
-const float cellSize = 50.f;

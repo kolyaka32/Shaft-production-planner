@@ -10,7 +10,7 @@ button3(window, 100, 300, 80, 40, {"Type3", "lan2"}),
 button4(window, 100, 350, 80, 40, {"None", "lan2"}),
 typeBox(window, 300, 500, 400, "ABC"),
 factory(10, 5, {300, 200}),
-cursorMachine() {
+cursorCell() {
 
 }
 
@@ -26,19 +26,19 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
     // Selecting type for setting it
     if (button1.isClicked(pos)) {
         selectObject = true;
-        cursorMachine.setType(Cell::Type::Machine_1);
+        cursorCell.setType(CellType::Machine_1);
     } else if (button2.isClicked(pos)) {
         selectObject = true;
-        cursorMachine.setType(Cell::Type::Machine_2);
+        cursorCell.setType(CellType::Machine_2);
     } else if (button3.isClicked(pos)) {
         selectObject = true;
-        cursorMachine.setType(Cell::Type::Furnace_1);
+        cursorCell.setType(CellType::Furnace_1);
     } else if (button4.isClicked(pos)) {
         selectObject = false;
     } else if (factory.isSelected(pos)) {
         // Setting object in grid
         if (selectObject) {
-            factory.set(cursorMachine.getType(), pos);
+            factory.set(cursorCell.getType(), pos);
         } else {
             factory.reset(pos);
         }
@@ -80,7 +80,7 @@ void WorkCycle::draw() {
 
     // Draw selected object
     if (selectObject) {
-        cursorMachine.draw(window, sf::Mouse::getPosition(window));
+        cursorCell.draw(window, sf::Mouse::getPosition(window));
     }
 
     //typeBox.draw(window);
