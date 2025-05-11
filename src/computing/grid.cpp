@@ -43,8 +43,7 @@ void Grid::blit(Window& window) {
         for (int x=0; x < width; ++x) {
             // Checking, if cell 
             if (getCell({x, y}).getType() != Cell::Type::Void) {
-                square.setFillColor(getCell({x, y}).getColor());
-                window.draw(square);
+                drawer.draw(window, getCell({x, y}).getType(), getAbs({x, y}));
             }
             square.move({cellSize, 0});
         }

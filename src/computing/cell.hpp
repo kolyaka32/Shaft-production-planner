@@ -29,7 +29,6 @@ public:
     Cell(Type type = Type::None);
     Type getType();
     void setType(Type type);
-    sf::Color getColor();
 
 protected:
     Type type;
@@ -37,4 +36,3 @@ protected:
 
 // Size of square to draw
 const float cellSize = 50.f;
-sf::Color getCellColor(Cell::Type type);

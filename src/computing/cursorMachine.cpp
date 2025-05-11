@@ -11,7 +11,7 @@ CursorMachine::~CursorMachine() {
 
 void CursorMachine::setType(Cell::Type _type) {
     type = _type;
-    rect.setFillColor(getCellColor(type));
+    //rect.setFillColor(getCellColor(type));
 }
 
 Cell::Type CursorMachine::getType() {
