@@ -7,10 +7,14 @@
 // Template class for create and run cycles
 class WorkCycle : public CycleTemplate {
 private:
-    // Graphic objects
-    GUI::Button button1, button2, button3, button4;
-    GUI::TypeBox typeBox;
+    // Grid options
+    GUI::Text widthText, heightText;
+    GUI::TypeBox widthBox, heightBox;
+    GUI::Button cellTypeButtons[4];
     Factory factory;
+
+    // Global options
+    GUI::Button languageButtons[2];
 
     // Current selected object to place
     bool selectObject = false;
@@ -24,6 +28,7 @@ protected:
     void textInput(char32_t keyCode) override;
     void update() override;
     void draw() override;
+    void updateAll();
 
 public:
     WorkCycle(Window& window);

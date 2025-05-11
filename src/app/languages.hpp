@@ -1,13 +1,13 @@
 #pragma once
 
 // Selectable languages to use
-enum LNG_types {
-    LNG_ENGLISH,
-    LNG_RUSSIAN,
+enum class Language {
+    English,
+    Russian,
 
     // Counter of all languages
-    LNG_COUNT,
+    Count,
 
     // Standart pre-selected language
-    LNG_DEFAULT = LNG_ENGLISH,
+    Default = English,
 };

@@ -6,6 +6,18 @@
 
 
 namespace GUI {
+    class Text {
+    private:
+        const std::vector<std::string> texts;
+        sf::Text text;
+
+    public:
+        Text(Window& window, float X, float Y, const std::vector<std::string>);
+        ~Text();
+        void update(Window& window);
+        void draw(Window& window);
+    };
+    
     class Button {
     private:
         const std::vector<std::string> texts;
@@ -62,4 +74,4 @@ namespace GUI {
         std::string getString();
         float getNumber();
     };
-};
+}; // Namespace GUI

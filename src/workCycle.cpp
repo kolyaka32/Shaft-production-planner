@@ -4,36 +4,42 @@
 
 WorkCycle::WorkCycle(Window& window)
 : CycleTemplate(window),
-button1(window, 100, 200, 80, 40, {"Type1", "abc"}),
-button2(window, 100, 250, 80, 40, {"Type2", "lan2"}),
-button3(window, 100, 300, 80, 40, {"Type3", "lan2"}),
-button4(window, 100, 350, 80, 40, {"None", "lan2"}),
-typeBox(window, 300, 500, 400, "ABC"),
+widthText(window, 135, 25, {"Width", "Ширина"}),
+widthBox(window, 100, 50, 80, "10"),
+heightText(window, 235, 25, {"Height", "Высота"}),
+heightBox(window, 200, 50, 80, "5"),
+cellTypeButtons {
+    {window, 100, 200, 150, 40, {"Machine 1", "Станок 1"}},
+    {window, 100, 250, 150, 40, {"Machine 2", "Станок 2"}},
+    {window, 100, 300, 150, 40, {"Furnace 1", "Печь 1"}},
+    {window, 100, 350, 150, 40, {"None", "Ничего"}},
+},
 factory(10, 5, {300, 200}),
-cursorCell() {
+languageButtons {
+    {window, 860, 50, 150, 40, {"English", "Английский"}},
+    {window, 860, 100, 150, 40, {"Russian", "Русский"}},
+},
+cursorCell() {}
 
-}
-
-WorkCycle::~WorkCycle() {
-
-}
+WorkCycle::~WorkCycle() {}
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
-    typeBox.keyPress(state);
+    widthBox.keyPress(state);
+    heightBox.keyPress(state);
 }
 
 void WorkCycle::mouseLClick(sf::Vector2i pos) {
     // Selecting type for setting it
-    if (button1.isClicked(pos)) {
+    if (cellTypeButtons[0].isClicked(pos)) {
         selectObject = true;
         cursorCell.setType(CellType::Machine_1);
-    } else if (button2.isClicked(pos)) {
+    } else if (cellTypeButtons[1].isClicked(pos)) {
         selectObject = true;
         cursorCell.setType(CellType::Machine_2);
-    } else if (button3.isClicked(pos)) {
+    } else if (cellTypeButtons[2].isClicked(pos)) {
         selectObject = true;
         cursorCell.setType(CellType::Furnace_1);
-    } else if (button4.isClicked(pos)) {
+    } else if (cellTypeButtons[3].isClicked(pos)) {
         selectObject = false;
     } else if (factory.isSelected(pos)) {
         // Setting object in grid
@@ -42,14 +48,28 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
         } else {
             factory.reset(pos);
         }
+    } else if (languageButtons[0].isClicked(pos)) {
+        if (window.language != (unsigned)Language::English) {
+            window.language = (unsigned)Language::English;
+            // Updating all objects
+            updateAll();
+        }
+    } else if (languageButtons[1].isClicked(pos)) {
+        if (window.language != (unsigned)Language::Russian) {
+            window.language = (unsigned)Language::Russian;
+            // Updating all objects
+            updateAll();
+        }
     } else {
         selectObject = false;
+        widthBox.click(pos);
+        heightBox.click(pos);
     }
-    //typeBox.click(pos);
 }
 
 void WorkCycle::mouseLUnClick(sf::Vector2i pos) {
-    //typeBox.unClick();
+    widthBox.unClick();
+    heightBox.unClick();
 }
 
 void WorkCycle::mouseRClick(sf::Vector2i pos) {
@@ -60,31 +80,51 @@ void WorkCycle::mouseRClick(sf::Vector2i pos) {
 }
 
 void WorkCycle::textInput(char32_t keyCode) {
-    //typeBox.inputText(keyCode);
+    widthBox.inputText(keyCode);
+    heightBox.inputText(keyCode);
 }
 
 void WorkCycle::update() {
-    //typeBox.update(sf::Mouse::getPosition(window));
+    widthBox.update(sf::Mouse::getPosition(window));
+    heightBox.update(sf::Mouse::getPosition(window));
 }
 
 void WorkCycle::draw() {
     // Clear the window
     window.clear(sf::Color(20, 20, 20));
 
+    // Draw input objects
+    widthBox.draw(window);
+    widthText.draw(window);
+    heightBox.draw(window);
+    heightText.draw(window);
+
+    for (int i=0; i < 4; ++i) {
+        cellTypeButtons[i].draw(window);
+    }
+
+    // Draw grid
     factory.draw(window);
 
-    button1.draw(window);
-    button2.draw(window);
-    button3.draw(window);
-    button4.draw(window);
+    // Draw global options
+    languageButtons[0].draw(window);
+    languageButtons[1].draw(window);
 
     // Draw selected object
     if (selectObject) {
         cursorCell.draw(window, sf::Mouse::getPosition(window));
     }
-
-    //typeBox.draw(window);
-
     // Display things on screen
     window.display();
+}
+
+void WorkCycle::updateAll() {
+    widthText.update(window);
+    heightText.update(window);
+    for (int i=0; i < 4; ++i) {
+        cellTypeButtons[i].update(window);
+    }
+    for (int i=0; i < 2; ++i) {
+        languageButtons[i].update(window);
+    }
 }

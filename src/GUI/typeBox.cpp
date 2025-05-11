@@ -229,6 +229,8 @@ void GUI::TypeBox::inputText(char32_t ch) {
         } else {
             drawText.setString(str.substring(0, caret) + ch + str.substring(caret+selectLength));
         }
+        selectLength = 0;
+
         // Moving caret
         caret++;
         drawCaret.setPosition(drawText.findCharacterPos(caret));
