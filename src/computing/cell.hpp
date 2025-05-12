@@ -10,6 +10,8 @@ public:
     void setType(CellType type);
     void draw(Window& window, sf::Vector2f absPos);
     void draw(Window& window, sf::Vector2i absPos);
+    void loadFrom(char letter);
+    char saveAs();
 
 protected:
     // Type of selected cell

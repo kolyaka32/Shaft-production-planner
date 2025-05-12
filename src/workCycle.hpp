@@ -14,6 +14,8 @@ private:
     Factory factory;
 
     // Global options
+    GUI::TextButton saveButton, loadButton;
+    GUI::InfoBox saveInfo;
     GUI::ImageButton languageButtons[2];
 
     // Current selected object to place

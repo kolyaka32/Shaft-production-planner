@@ -10,8 +10,6 @@ sprite(texture) {
     sprite.setPosition({X, Y});
 }
 
-GUI::ImageButton::~ImageButton() {}
-
 bool GUI::ImageButton::isClicked(sf::Vector2i point) {
     return (sprite.getGlobalBounds().position.x < point.x)
         && (sprite.getGlobalBounds().position.y < point.y)

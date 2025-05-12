@@ -13,7 +13,6 @@ namespace GUI {
 
     public:
         Text(Window& window, float X, float Y, const std::vector<std::string>);
-        ~Text();
         void update(Window& window);
         void draw(Window& window);
     };
@@ -26,7 +25,6 @@ namespace GUI {
 
     public:
         TextButton(Window& window, float X, float Y, float W, float H, const std::vector<std::string>);
-        ~TextButton();
         bool isClicked(sf::Vector2i point);
         void update(Window& window);
         void draw(Window& window);
@@ -37,11 +35,26 @@ namespace GUI {
     private:
         const sf::Texture texture;
         sf::Sprite sprite;
+
     public:
         ImageButton(float X, float Y, float W, float H, const std::string fileName);
-        ~ImageButton();
         bool isClicked(sf::Vector2i point);
         void draw(Window& window);
+    };
+
+
+    class InfoBox {
+    private:
+        const std::vector<std::string> texts;
+        unsigned counter = 0;
+        sf::Color color = sf::Color::White;
+        sf::Text text;
+
+    public:
+        InfoBox(Window& window, float X, float Y, const std::vector<std::string> texts);
+        void draw(Window& window);
+        void update(Window& window);
+        void reset();
     };
 
 

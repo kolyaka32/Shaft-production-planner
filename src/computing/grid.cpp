@@ -1,7 +1,7 @@
 #include "grid.hpp"
+#include <fstream>
 
 
-// Grid realisation
 Grid::Grid(unsigned _width, unsigned _height, sf::Vector2f _pos)
 : width(_width),
 height(_height),
@@ -103,4 +103,52 @@ void Grid::setHeight(unsigned _height) {
     delete[] grid;
     grid = newGrid;
     height = _height;
+}
+
+void Grid::saveGrid(std::string name) {
+    // File for saving current state of grid
+    std::ofstream fout(name);
+
+    // Writing system data
+    fout << name << '\n';
+    fout << width << ' ' << height << '\n';
+
+    // Writing grid data
+    for (int y=0; y < height; ++y) {
+        for (int x=0; x < width; ++x) {
+            fout << getCell({x, y}).saveAs();
+        }
+        fout << '\n';
+    }
+
+    fout.close();
+
+}
+
+void Grid::loadGrid(std::string name) {
+    // Reading data of grid from file
+    std::ifstream fin(name);
+
+    // Current reading line
+    std::string line;
+
+    // Skipping first line (name)
+    std::getline(fin, line);
+    
+    // Getting width and height
+    fin >> width >> height;
+
+    // Reading all other lines with grid data
+    int y=0;
+    while (std::getline(fin, line)) {
+        // Read all need charachters or less, if haven't
+        for (int x=0; x < std::min(width, (unsigned)line.length()); ++x) {
+            //
+            getCell({x, y}).loadFrom(line[x]);
+        }
+        // Check, if read all lines
+        if (++y == height) {
+            break;
+        }
+    }
 }

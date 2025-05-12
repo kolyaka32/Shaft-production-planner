@@ -18,10 +18,6 @@ text(win.font, sf::String::fromUtf8(texts[win.language].begin(), texts[win.langu
     text.setFillColor(sf::Color::White);
 }
 
-GUI::TextButton::~TextButton() {
-    
-}
-
 bool GUI::TextButton::isClicked(sf::Vector2i point) {
     return (rect.getPosition().x < point.x)
         && (rect.getPosition().y < point.y)

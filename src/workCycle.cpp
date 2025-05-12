@@ -19,6 +19,9 @@ languageButtons {
     {920, 50, 120, 80, "GUI/Flag_ENG.png"},
     {920, 150, 120, 80, "GUI/Flag_RUS.png"},
 },
+saveButton(window, 20, 550, 150, 40, {"Save", "Сохранить"}),
+loadButton(window, 20, 600, 150, 40, {"Load", "Загрузить"}),
+saveInfo(window, 70, 500, {"Saved", "Сохранено"}),
 cursorCell() {}
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
@@ -48,7 +51,13 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
         }
     } else {
         selectObject = false;
-        if (languageButtons[0].isClicked(pos)) {
+        if (saveButton.isClicked(pos)) {
+            factory.saveGrid("grid.cfg");
+            // Showing message of sucsesfull saving
+            saveInfo.reset();
+        } else if (loadButton.isClicked(pos)) {
+            factory.loadGrid("grid.cfg");
+        } else if (languageButtons[0].isClicked(pos)) {
             if (window.language != (unsigned)Language::English) {
                 window.language = (unsigned)Language::English;
                 // Updating all objects
@@ -78,7 +87,9 @@ void WorkCycle::mouseLUnClick(sf::Vector2i pos) {
 }
 
 void WorkCycle::mouseRClick(sf::Vector2i pos) {
-    if (factory.isSelected(pos)) {
+    if (selectObject) {
+        selectObject = false;
+    } else if (factory.isSelected(pos)) {
         // Setting object in grid
         factory.remove(pos);
     }
@@ -112,6 +123,9 @@ void WorkCycle::draw() {
     factory.draw(window);
 
     // Draw global options
+    saveButton.draw(window);
+    loadButton.draw(window);
+    saveInfo.draw(window);
     languageButtons[0].draw(window);
     languageButtons[1].draw(window);
 
@@ -129,4 +143,7 @@ void WorkCycle::updateAll() {
     for (int i=0; i < 4; ++i) {
         cellTypeButtons[i].update(window);
     }
+    saveButton.update(window);
+    loadButton.update(window);
+    saveInfo.update(window);
 }

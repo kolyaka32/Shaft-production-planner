@@ -31,4 +31,6 @@ public:
     bool isSelected(sf::Vector2i pos);
     void setWidth(unsigned width);
     void setHeight(unsigned height);
+    void saveGrid(std::string name);
+    void loadGrid(std::string name);
 };

@@ -8,8 +8,6 @@ text(window.font, sf::String::fromUtf8(texts[window.language].begin(), texts[win
     text.setPosition({X, Y});
 }
 
-GUI::Text::~Text() {}
-
 void GUI::Text::update(Window& window) {
     text.setString(sf::String::fromUtf8(texts[window.language].begin(), texts[window.language].end()));
     text.setOrigin({text.getGlobalBounds().size.x/2, 0});
