@@ -57,7 +57,7 @@ void GUI::TypeBox::updateInversePos() {
     }
 }
 
-void GUI::TypeBox::click(sf::Vector2i point) {
+bool GUI::TypeBox::click(sf::Vector2i point) {
     // Checking, if pressed to start typing
     if ((backGround.getPosition().x < point.x)
         && (backGround.getPosition().y < point.y)
@@ -79,12 +79,17 @@ void GUI::TypeBox::click(sf::Vector2i point) {
         selectLength = 0;
         showCaret = true;
         clock.restart();
+
+        return false;
     } else {
+        bool wasSelected = selected;
         selected = false;
         pressed = false;
         selectLength = 0;
         showCaret = false;
         clock.stop();
+
+        return wasSelected;
     }
 }
 

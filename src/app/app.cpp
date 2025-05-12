@@ -2,7 +2,7 @@
 
 // Realisation of base path
 const std::filesystem::path resourcesDir() {
-#ifdef DEBUG
+#if DEBUG
     return "../resources/";
 #else
     return "resources/";

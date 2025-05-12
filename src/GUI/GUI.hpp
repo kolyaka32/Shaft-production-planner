@@ -63,7 +63,7 @@ namespace GUI {
      public:
         TypeBox(Window& window, float X, float Y, float W, std::string startText = "");
         // Getting input
-        void click(sf::Vector2i point);
+        bool click(sf::Vector2i point);  // Return true, when stop inputing
         void unClick();
         void keyPress(sf::Event::KeyPressed state);
         void inputText(char32_t ch);

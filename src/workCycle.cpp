@@ -48,23 +48,30 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
         } else {
             factory.reset(pos);
         }
-    } else if (languageButtons[0].isClicked(pos)) {
-        if (window.language != (unsigned)Language::English) {
-            window.language = (unsigned)Language::English;
-            // Updating all objects
-            updateAll();
-        }
-    } else if (languageButtons[1].isClicked(pos)) {
-        if (window.language != (unsigned)Language::Russian) {
-            window.language = (unsigned)Language::Russian;
-            // Updating all objects
-            updateAll();
-        }
     } else {
         selectObject = false;
-        widthBox.click(pos);
-        heightBox.click(pos);
-    }
+        if (languageButtons[0].isClicked(pos)) {
+            if (window.language != (unsigned)Language::English) {
+                window.language = (unsigned)Language::English;
+                // Updating all objects
+                updateAll();
+            }
+        } else if (languageButtons[1].isClicked(pos)) {
+            if (window.language != (unsigned)Language::Russian) {
+                window.language = (unsigned)Language::Russian;
+                // Updating all objects
+                updateAll();
+            }
+        } else {
+            // Check, if stop input - update grid scales
+            if (widthBox.click(pos)) {
+                factory.setWidth(widthBox.getNumber());
+            }
+            if (heightBox.click(pos)) {
+                factory.setHeight(heightBox.getNumber());
+            }
+        }
+    } 
 }
 
 void WorkCycle::mouseLUnClick(sf::Vector2i pos) {

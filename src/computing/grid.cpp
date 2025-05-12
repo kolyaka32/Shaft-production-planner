@@ -14,7 +14,7 @@ pos(_pos) {
 }
 
 Grid::~Grid() {
-    delete grid;
+    delete[] grid;
 }
 
 Cell& Grid::getCell(sf::Vector2i pos) {
@@ -73,4 +73,34 @@ bool Grid::isSelected(sf::Vector2i point) {
     && (pos.y < point.y)
     && (pos.x + width*cellSize > point.x)
     && (pos.y + height*cellSize > point.y);
+}
+
+void Grid::setWidth(unsigned _width) {
+    // Creating new array of cells
+    Cell* newGrid = new Cell[height*_width];
+    for (int y=0; y < height; ++y) {
+        // Copying line (or as much as can) to new array
+        memcpy(newGrid+y*_width, grid+y*width, std::min(width, _width)*sizeof(Cell));
+    }
+    // Setting new options
+    delete[] grid;
+    grid = newGrid;
+    width = _width;
+}
+
+void Grid::setHeight(unsigned _height) {
+    // Creating new array of cells
+    Cell* newGrid = new Cell[_height*width]{};
+    
+    // Copying as much elements as we could
+    if (_height > height) {
+        memcpy(newGrid, grid, height*width*sizeof(Cell));
+    } else {
+        memcpy(newGrid, grid, _height*width*sizeof(Cell));
+    }
+
+    // Setting new options
+    delete[] grid;
+    grid = newGrid;
+    height = _height;
 }

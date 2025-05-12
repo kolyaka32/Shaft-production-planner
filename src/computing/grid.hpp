@@ -29,4 +29,6 @@ public:
     ~Grid();
     void blit(Window& window);
     bool isSelected(sf::Vector2i pos);
+    void setWidth(unsigned width);
+    void setHeight(unsigned height);
 };
