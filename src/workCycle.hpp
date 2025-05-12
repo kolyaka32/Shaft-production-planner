@@ -10,11 +10,11 @@ private:
     // Grid options
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
-    GUI::Button cellTypeButtons[4];
+    GUI::TextButton cellTypeButtons[4];
     Factory factory;
 
     // Global options
-    GUI::Button languageButtons[2];
+    GUI::ImageButton languageButtons[2];
 
     // Current selected object to place
     bool selectObject = false;

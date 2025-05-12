@@ -16,8 +16,8 @@ cellTypeButtons {
 },
 factory(10, 5, {300, 200}),
 languageButtons {
-    {window, 860, 50, 150, 40, {"English", "Английский"}},
-    {window, 860, 100, 150, 40, {"Russian", "Русский"}},
+    {950, 30, 75, 50, "GUI/Flag_USA.png"},
+    {950, 100, 75, 50, "GUI/Flag_RUS.png"},
 },
 cursorCell() {}
 
@@ -130,8 +130,5 @@ void WorkCycle::updateAll() {
     heightText.update(window);
     for (int i=0; i < 4; ++i) {
         cellTypeButtons[i].update(window);
-    }
-    for (int i=0; i < 2; ++i) {
-        languageButtons[i].update(window);
     }
 }

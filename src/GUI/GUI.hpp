@@ -18,19 +18,32 @@ namespace GUI {
         void draw(Window& window);
     };
     
-    class Button {
+    class TextButton {
     private:
         const std::vector<std::string> texts;
         sf::RectangleShape rect;
         sf::Text text;
 
     public:
-        Button(Window& window, float X, float Y, float W, float H, const std::vector<std::string>);
-        ~Button();
+        TextButton(Window& window, float X, float Y, float W, float H, const std::vector<std::string>);
+        ~TextButton();
         bool isClicked(sf::Vector2i point);
         void update(Window& window);
         void draw(Window& window);
     };
+
+
+    class ImageButton {
+    private:
+        const sf::Texture texture;
+        sf::Sprite sprite;
+    public:
+        ImageButton(float X, float Y, float W, float H, const std::string fileName);
+        ~ImageButton();
+        bool isClicked(sf::Vector2i point);
+        void draw(Window& window);
+    };
+
 
     class TypeBox {
      private:
