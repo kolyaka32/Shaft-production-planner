@@ -1,14 +1,14 @@
 #pragma once
 
 #include "../GUI/GUI.hpp"
-#include "cell.hpp"
+#include "indexedCell.hpp"
 
 
 // Class for draw and calculate objects at the grid
 class Grid {
 private:
     // Array with all cells
-    Cell* grid;
+    IndexedCell* grid;
     // Absolute position of first element
     const sf::Vector2f pos;
 

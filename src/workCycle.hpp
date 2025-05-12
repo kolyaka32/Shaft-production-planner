@@ -10,7 +10,7 @@ private:
     // Grid options
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
-    GUI::TextButton cellTypeButtons[4];
+    GUI::TextButton cellTypeButtons[5];
     Factory factory;
 
     // Global options

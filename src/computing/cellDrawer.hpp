@@ -31,8 +31,8 @@ const float cellSize = 50.f;
 class CellDrawer {
 private:
     const static unsigned spriteCount = 5;
-    const sf::Texture textures[spriteCount];
-    sf::Sprite sprites[spriteCount];
+    const sf::Texture textures[spriteCount+1];
+    sf::Sprite sprites[spriteCount+1];
     bool drawTexture = true;
 
     sf::Color getColor(CellType type);
@@ -40,7 +40,7 @@ private:
 
 public:
     CellDrawer();
-    ~CellDrawer();
     void switchDrawType();
     void draw(Window& _window, CellType type, sf::Vector2f absPos);
+    void drawWarning(Window& _window, sf::Vector2f absPos);
 };

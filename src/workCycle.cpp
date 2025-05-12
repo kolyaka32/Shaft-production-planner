@@ -12,7 +12,8 @@ cellTypeButtons {
     {window, 100, 200, 150, 40, {"Machine 1", "Станок 1"}},
     {window, 100, 250, 150, 40, {"Machine 2", "Станок 2"}},
     {window, 100, 300, 150, 40, {"Furnace 1", "Печь 1"}},
-    {window, 100, 350, 150, 40, {"None", "Ничего"}},
+    {window, 100, 350, 150, 40, {"Path tile", "Клетка пути"}},
+    {window, 100, 400, 150, 40, {"None", "Ничего"}},
 },
 factory(10, 5, {300, 200}),
 languageButtons {
@@ -21,7 +22,7 @@ languageButtons {
 },
 saveButton(window, 20, 550, 150, 40, {"Save", "Сохранить"}),
 loadButton(window, 20, 600, 150, 40, {"Load", "Загрузить"}),
-saveInfo(window, 70, 500, {"Saved", "Сохранено"}),
+saveInfo(window, 100, 500, {"Saved", "Сохранено"}),
 cursorCell() {}
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
@@ -41,6 +42,9 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
         selectObject = true;
         cursorCell.setType(CellType::Furnace_1);
     } else if (cellTypeButtons[3].isClicked(pos)) {
+        selectObject = true;
+        cursorCell.setType(CellType::Way);
+    } else if (cellTypeButtons[4].isClicked(pos)) {
         selectObject = false;
     } else if (factory.isSelected(pos)) {
         // Setting object in grid
@@ -115,9 +119,9 @@ void WorkCycle::draw() {
     heightBox.draw(window);
     heightText.draw(window);
 
-    for (int i=0; i < 4; ++i) {
+    /*for (int i=0; i < 5; ++i) {
         cellTypeButtons[i].draw(window);
-    }
+    }*/
 
     // Draw grid
     factory.draw(window);
@@ -140,7 +144,7 @@ void WorkCycle::draw() {
 void WorkCycle::updateAll() {
     widthText.update(window);
     heightText.update(window);
-    for (int i=0; i < 4; ++i) {
+    for (int i=0; i < 5; ++i) {
         cellTypeButtons[i].update(window);
     }
     saveButton.update(window);
