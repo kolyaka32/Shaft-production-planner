@@ -13,10 +13,10 @@ sprite(texture) {
 GUI::ImageButton::~ImageButton() {}
 
 bool GUI::ImageButton::isClicked(sf::Vector2i point) {
-    return (sprite.getPosition().x < point.x)
-        && (sprite.getPosition().y < point.y)
-        && (sprite.getPosition().x + sprite.getGlobalBounds().size.x > point.x)
-        && (sprite.getPosition().y + sprite.getGlobalBounds().size.y > point.y);
+    return (sprite.getGlobalBounds().position.x < point.x)
+        && (sprite.getGlobalBounds().position.y < point.y)
+        && (sprite.getGlobalBounds().position.x + sprite.getGlobalBounds().size.x > point.x)
+        && (sprite.getGlobalBounds().position.y + sprite.getGlobalBounds().size.y > point.y);
 }
 
 void GUI::ImageButton::draw(Window& window) {

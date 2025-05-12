@@ -4,10 +4,10 @@
 
 WorkCycle::WorkCycle(Window& window)
 : CycleTemplate(window),
-widthText(window, 135, 25, {"Width", "Ширина"}),
+widthText(window, 140, 12, {"Width", "Ширина"}),
 widthBox(window, 100, 50, 80, "10"),
-heightText(window, 235, 25, {"Height", "Высота"}),
-heightBox(window, 200, 50, 80, "5"),
+heightText(window, 260, 12, {"Height", "Высота"}),
+heightBox(window, 220, 50, 80, "5"),
 cellTypeButtons {
     {window, 100, 200, 150, 40, {"Machine 1", "Станок 1"}},
     {window, 100, 250, 150, 40, {"Machine 2", "Станок 2"}},
@@ -16,12 +16,10 @@ cellTypeButtons {
 },
 factory(10, 5, {300, 200}),
 languageButtons {
-    {950, 30, 75, 50, "GUI/Flag_USA.png"},
-    {950, 100, 75, 50, "GUI/Flag_RUS.png"},
+    {920, 50, 120, 80, "GUI/Flag_ENG.png"},
+    {920, 150, 120, 80, "GUI/Flag_RUS.png"},
 },
 cursorCell() {}
-
-WorkCycle::~WorkCycle() {}
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
     widthBox.keyPress(state);

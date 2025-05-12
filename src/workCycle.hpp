@@ -32,5 +32,4 @@ protected:
 
 public:
     WorkCycle(Window& window);
-    ~WorkCycle();
 };
