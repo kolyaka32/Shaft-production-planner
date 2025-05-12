@@ -6,13 +6,11 @@
 // Specified cell, which nown, in to which network it connected
 class IndexedCell : public Cell{
 private:
-    unsigned index;  // 0 index represent none-cennction, other - index of network
-    static unsigned globalIndex;  // Global counter of indexes to create new ones
+    unsigned index = 0;  // 0 index represent none-cennction, other - index of network
 
 public:
-    IndexedCell(CellType type = CellType::None, unsigned index = 0);
+    IndexedCell(CellType type = CellType::None);
     void draw(Window& window, sf::Vector2f absPos);
-    void draw(Window& window, sf::Vector2i absPos);
     unsigned getIndex();
     void setIndex(unsigned index);
 };

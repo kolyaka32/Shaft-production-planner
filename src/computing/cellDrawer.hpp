@@ -31,8 +31,10 @@ const float cellSize = 50.f;
 class CellDrawer {
 private:
     const static unsigned spriteCount = 5;
-    const sf::Texture textures[spriteCount+1];
-    sf::Sprite sprites[spriteCount+1];
+    const sf::Texture textures[spriteCount];
+    const sf::Texture warningTexture;
+    sf::Sprite sprites[spriteCount];
+    sf::Sprite warningSprite;
     bool drawTexture = true;
 
     sf::Color getColor(CellType type);

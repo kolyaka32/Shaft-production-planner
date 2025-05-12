@@ -15,6 +15,7 @@ cellTypeButtons {
     {window, 100, 350, 150, 40, {"Path tile", "Клетка пути"}},
     {window, 100, 400, 150, 40, {"None", "Ничего"}},
 },
+updateLinkageButton(window, 20, 450, 150, 40, {"Update", "Обновить"}),
 factory(10, 5, {300, 200}),
 languageButtons {
     {920, 50, 120, 80, "GUI/Flag_ENG.png"},
@@ -55,7 +56,10 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
         }
     } else {
         selectObject = false;
-        if (saveButton.isClicked(pos)) {
+        if (updateLinkageButton.isClicked(pos)) {
+            // Updating grid connection warning
+            factory.checkConnections();
+        } else if (saveButton.isClicked(pos)) {
             factory.saveGrid("grid.cfg");
             // Showing message of sucsesfull saving
             saveInfo.reset();
@@ -119,14 +123,15 @@ void WorkCycle::draw() {
     heightBox.draw(window);
     heightText.draw(window);
 
-    /*for (int i=0; i < 5; ++i) {
+    for (int i=0; i < 5; ++i) {
         cellTypeButtons[i].draw(window);
-    }*/
+    }
 
     // Draw grid
     factory.draw(window);
 
     // Draw global options
+    updateLinkageButton.draw(window);
     saveButton.draw(window);
     loadButton.draw(window);
     saveInfo.draw(window);

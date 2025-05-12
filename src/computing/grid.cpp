@@ -17,7 +17,7 @@ Grid::~Grid() {
     delete[] grid;
 }
 
-Cell& Grid::getCell(sf::Vector2i pos) {
+IndexedCell& Grid::getCell(sf::Vector2i pos) {
     return grid[pos.x + pos.y*width];
 }
 

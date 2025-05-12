@@ -17,7 +17,7 @@ protected:
     unsigned width, height;
 
     // Functions for getting cell at need position
-    Cell& getCell(sf::Vector2i pos);
+    IndexedCell& getCell(sf::Vector2i pos);
 
     // Getting local position (in cells) from absolute coordinate
     sf::Vector2i getLocal(sf::Vector2i absPos);

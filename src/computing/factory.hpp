@@ -12,4 +12,8 @@ public:
     void set(CellType type, sf::Vector2i absPos);
     void remove(sf::Vector2i absPos);
     void reset(sf::Vector2i absPos);
+    bool checkConnections();
+
+private:
+    void indexConnected(sf::Vector2i pos, unsigned index);
 };

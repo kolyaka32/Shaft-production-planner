@@ -11,6 +11,7 @@ private:
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
     GUI::TextButton cellTypeButtons[5];
+    GUI::TextButton updateLinkageButton;
     Factory factory;
 
     // Global options
