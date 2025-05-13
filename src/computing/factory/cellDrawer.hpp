@@ -1,27 +1,7 @@
 #pragma once
 
-#include "../app/window.hpp"
-
-
-// Array representing types of equipment
-enum class CellType {
-    // Type representing unasseseble area
-    Void,
-
-    // Type representing empty space
-    None,
-
-    // Types for calculations
-    Way,
-
-    // Types for storage
-    Cargo,
-
-    // Types of machines
-    Machine_1,
-    Machine_2, 
-    Furnace_1,
-};
+#include "../cellTypes.hpp"
+#include "../../app/window.hpp"
 
 // Size of square side of cell (in pixels)
 const float cellSize = 50.f;

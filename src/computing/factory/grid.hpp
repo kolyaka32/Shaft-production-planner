@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GUI/GUI.hpp"
+#include "../../GUI/GUI.hpp"
 #include "indexedCell.hpp"
 
 

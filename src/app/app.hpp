@@ -1,7 +1,9 @@
 #pragma once
 
-#include "../workCycle.hpp"
+#include "../cycles/workCycle.hpp"
 
+
+// Main process in current app
 class App {
  private:
     Window window;

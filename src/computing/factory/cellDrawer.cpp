@@ -1,6 +1,4 @@
 #include "cellDrawer.hpp"
-#include "../testing.hpp"
-
 
 
 CellDrawer::CellDrawer()

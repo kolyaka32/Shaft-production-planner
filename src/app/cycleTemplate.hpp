@@ -2,6 +2,7 @@
 
 #include "window.hpp"
 #include "../GUI/GUI.hpp"
+#include "../cycles/cycles.hpp"
 
 
 // Template class for create and run cycles
