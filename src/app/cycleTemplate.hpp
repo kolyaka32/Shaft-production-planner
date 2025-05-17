@@ -1,7 +1,7 @@
 #pragma once
 
-#include "window.hpp"
 #include "../GUI/GUI.hpp"
+#include "../GUI/switchBox.cpp"
 #include "../cycles/cycles.hpp"
 
 

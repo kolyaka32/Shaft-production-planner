@@ -2,10 +2,10 @@
 #include <iostream>
 
 
-GUI::TextButton::TextButton(Window& win, float X, float Y, float W, float H, const std::vector<std::string> _texts)
+GUI::TextButton::TextButton(Window& win, float X, float Y, float W, float H, LanguagedText _texts)
 : rect({W, H}),
 texts(_texts),
-text(win.font, sf::String::fromUtf8(texts[win.language].begin(), texts[win.language].end())) {
+text(win.font, texts.getUTF8()) {
     // Creating and placing back rect
     rect.setPosition({X, Y});
     rect.setFillColor(sf::Color{120, 120, 120});
@@ -26,7 +26,7 @@ bool GUI::TextButton::isClicked(sf::Vector2i point) {
 }
 
 void GUI::TextButton::update(Window& window) {
-    text.setString(sf::String::fromUtf8(texts[window.language].begin(), texts[window.language].end()));
+    text.setString(texts.getUTF8());
     text.setOrigin({text.getGlobalBounds().size.x/2, text.getGlobalBounds().size.y/2+7});
 }
 

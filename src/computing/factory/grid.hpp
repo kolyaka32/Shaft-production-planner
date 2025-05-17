@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../GUI/GUI.hpp"
+#include "../../app/cycleTemplate.hpp"
 #include "indexedCell.hpp"
 
 

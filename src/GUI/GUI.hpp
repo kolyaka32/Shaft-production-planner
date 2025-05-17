@@ -8,23 +8,23 @@
 namespace GUI {
     class Text {
     private:
-        const std::vector<std::string> texts;
+        LanguagedText texts;
         sf::Text text;
 
     public:
-        Text(Window& window, float X, float Y, const std::vector<std::string>);
+        Text(Window& window, float X, float Y, LanguagedText texts);
         void update(Window& window);
         void draw(Window& window);
     };
     
     class TextButton {
     private:
-        const std::vector<std::string> texts;
+        LanguagedText texts;
         sf::RectangleShape rect;
         sf::Text text;
 
     public:
-        TextButton(Window& window, float X, float Y, float W, float H, const std::vector<std::string>);
+        TextButton(Window& window, float X, float Y, float W, float H, LanguagedText texts);
         bool isClicked(sf::Vector2i point);
         void update(Window& window);
         void draw(Window& window);
@@ -45,13 +45,13 @@ namespace GUI {
 
     class InfoBox {
     private:
-        const std::vector<std::string> texts;
+        LanguagedText texts;
         unsigned counter = 0;
         sf::Color color = sf::Color::White;
         sf::Text text;
 
     public:
-        InfoBox(Window& window, float X, float Y, const std::vector<std::string> texts);
+        InfoBox(Window& window, float X, float Y, LanguagedText texts);
         void draw(Window& window);
         void update(Window& window);
         void reset();
@@ -100,4 +100,21 @@ namespace GUI {
         std::string getString();
         float getNumber();
     };
+
+    // Class for selecting variants from list
+    template <unsigned count>
+    class SwitchBox {
+    private:
+        unsigned selected = 0;
+        bool opened = false;
+        // Draw options
+        sf::Text drawnText[count];
+        sf::RectangleShape backgroundBox;
+
+    public:
+        SwitchBox(Window& window, float X, float Y, LanguagedText texts[count]);
+        void draw(Window& window);
+        bool click(sf::Vector2i point);  // return true, when entered new value
+    };
+    
 }; // Namespace GUI

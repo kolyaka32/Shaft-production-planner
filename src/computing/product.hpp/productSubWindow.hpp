@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../GUI/GUI.hpp"
-
+#include "../../app/cycleTemplate.hpp"
 
 // Subwindow for create and set properties of part and final product
 class ProductSubWindow {
 private:
     GUI::ImageButton partPicture;
     GUI::TypeBox widthInput, heightInput;
+    GUI::SwitchBox<3> materialSwitch;
 
 public:
     ProductSubWindow(Window& window);

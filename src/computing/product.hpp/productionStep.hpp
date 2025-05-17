@@ -1,4 +1,4 @@
-#include "../../GUI/GUI.hpp"
+#include "../../app/cycleTemplate.hpp"
 
 
 // Class showing one process step of part production

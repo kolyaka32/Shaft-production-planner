@@ -4,7 +4,11 @@
 ProductSubWindow::ProductSubWindow(Window& window)
 : partPicture(340, 200, 673, 210, "machines/shaftBlueprint.png"),
 widthInput(window, 260, 260, 100, "120"),
-heightInput(window, 680, 95, 60, "40") {}
+heightInput(window, 680, 95, 60, "40"),
+materialSwitch(window, 700, 100, {
+    (LanguagedText){{"Steel", "Сталь"}},
+    (LanguagedText){{"Alloys","Цветные сплавы"}},
+    (LanguagedText){{"Heat-resistant steel","Жаропрочная сталь"}}}) {}
 
 void ProductSubWindow::LClick(Window& window, sf::Vector2i pos) {
     // Check, if stop input - update values
