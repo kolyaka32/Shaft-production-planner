@@ -3,15 +3,15 @@
 
 WorkCycle::WorkCycle(Window& window)
 : CycleTemplate(window),
-factory(window),
 product(window),
+factory(window),
 selectProductButton(window, 0, 0, 160, 50, {"Product", "Изделие"}),
 selectFactoryButton(window, 160, 0, 160, 50, {"Factory", "Цех"}) {}
 
 void WorkCycle::keyDown(sf::Event::KeyPressed state) {
     switch (target) {
     case currentWindow::Product:
-        //product.keyDown(state);
+        product.keyDown(state);
         break;
     
     case currentWindow::Factory:
@@ -29,7 +29,7 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
     } else {
         switch (target) {
         case currentWindow::Product:
-            //product.LClick(window, pos);
+            product.LClick(window, pos);
             break;
         
         case currentWindow::Factory:
@@ -42,7 +42,7 @@ void WorkCycle::mouseLClick(sf::Vector2i pos) {
 void WorkCycle::mouseLUnClick(sf::Vector2i pos) {
     switch (target) {
     case currentWindow::Product:
-        //product.LUnClick(pos);
+        product.LUnClick(pos);
         break;
     
     case currentWindow::Factory:
@@ -54,7 +54,7 @@ void WorkCycle::mouseLUnClick(sf::Vector2i pos) {
 void WorkCycle::mouseRClick(sf::Vector2i pos) {
     switch (target) {
     case currentWindow::Product:
-        //product.RClick(pos);
+        product.RClick(pos);
         break;
     
     case currentWindow::Factory:
@@ -66,7 +66,7 @@ void WorkCycle::mouseRClick(sf::Vector2i pos) {
 void WorkCycle::textInput(char32_t keyCode) {
     switch (target) {
     case currentWindow::Product:
-        //product.textInput(keyCode);
+        product.textInput(keyCode);
         break;
     
     case currentWindow::Factory:
@@ -78,7 +78,7 @@ void WorkCycle::textInput(char32_t keyCode) {
 void WorkCycle::update() {
     switch (target) {
     case currentWindow::Product:
-        //product.update(window);
+        product.update(window);
         break;
     
     case currentWindow::Factory:
@@ -100,7 +100,7 @@ void WorkCycle::draw() {
     case currentWindow::Product:
         product.draw(window);
         break;
-    
+
     case currentWindow::Factory:
         factory.draw(window);
         break;
@@ -108,4 +108,3 @@ void WorkCycle::draw() {
     // Display things on screen
     window.display();
 }
-

@@ -84,7 +84,7 @@ void FactorySubWindow::LClick(Window& window, sf::Vector2i pos) {
                 factory.setHeight(heightBox.getNumber());
             }
         }
-    } 
+    }
 }
 
 void FactorySubWindow::LUnClick(sf::Vector2i pos) {
