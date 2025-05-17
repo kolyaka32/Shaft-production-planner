@@ -6,7 +6,6 @@ Window::Window(unsigned _width, unsigned _height, std::string _name)
 font(resourcesDir() / "Arial.ttf") {
     // Setting frame limit
     setFramerateLimit(60);
-    
 }
 
 Window::~Window() {

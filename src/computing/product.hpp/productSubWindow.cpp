@@ -5,10 +5,8 @@ ProductSubWindow::ProductSubWindow(Window& window)
 : partPicture(340, 200, 673, 210, "machines/shaftBlueprint.png"),
 widthInput(window, 260, 260, 100, "120"),
 heightInput(window, 680, 95, 60, "40"),
-materialSwitch(window, 700, 100, {
-    (LanguagedText){{"Steel", "Сталь"}},
-    (LanguagedText){{"Alloys","Цветные сплавы"}},
-    (LanguagedText){{"Heat-resistant steel","Жаропрочная сталь"}}}) {}
+materialText(window, 850, 60, {"Material:", "Материал:"}),
+materialSwitch(window, 750, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}}) {}
 
 void ProductSubWindow::LClick(Window& window, sf::Vector2i pos) {
     // Check, if stop input - update values
@@ -17,6 +15,9 @@ void ProductSubWindow::LClick(Window& window, sf::Vector2i pos) {
     }
     if (heightInput.click(pos)) {
         //factory.setHeight(heightBox.getNumber());
+    }
+    if (materialSwitch.click(pos)) {
+        //pass
     }
 }
 
@@ -48,4 +49,6 @@ void ProductSubWindow::draw(Window& window) {
     partPicture.draw(window);
     widthInput.draw(window);
     heightInput.draw(window);
+    materialText.draw(window);
+    materialSwitch.draw(window);
 }

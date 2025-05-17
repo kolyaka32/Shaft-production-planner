@@ -4,15 +4,28 @@
 Language LanguagedText::currentLanguage = Language::Default;
 
 
-LanguagedText::LanguagedText(const std::string (&_texts)[(unsigned)Language::Count])
-: texts(_texts) {}
+LanguagedText::LanguagedText(const std::string engVar, const std::string rusVar)
+: eng(engVar), rus(rusVar) {}
 
-void LanguagedText::setCurrentLanguage(Language newLanguage) {
-    currentLanguage = newLanguage;
+bool LanguagedText::setCurrentLanguage(Language newLanguage) {
+    if (newLanguage != currentLanguage) {
+        currentLanguage = newLanguage;
+        return true;
+    }
+    return false;
 }
 
-std::string LanguagedText::getString() {
-    return texts[(unsigned)currentLanguage];
+const std::string& LanguagedText::getString() {
+    switch (currentLanguage) {
+    case Language::English:
+        return eng;
+    
+    case Language::Russian:
+        return rus;
+
+    default:
+        return eng;
+    }
 }
 
 sf::String LanguagedText::getUTF8() {

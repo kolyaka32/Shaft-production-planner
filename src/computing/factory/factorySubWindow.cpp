@@ -64,14 +64,12 @@ void FactorySubWindow::LClick(Window& window, sf::Vector2i pos) {
         } else if (loadButton.isClicked(pos)) {
             factory.loadGrid("grid.cfg");
         } else if (languageButtons[0].isClicked(pos)) {
-            if (window.language != (unsigned)Language::English) {
-                window.language = (unsigned)Language::English;
+            if (LanguagedText::setCurrentLanguage(Language::English)) {
                 // Updating all objects
                 updateLocation(window);
             }
         } else if (languageButtons[1].isClicked(pos)) {
-            if (window.language != (unsigned)Language::Russian) {
-                window.language = (unsigned)Language::Russian;
+            if (LanguagedText::setCurrentLanguage(Language::Russian)) {
                 // Updating all objects
                 updateLocation(window);
             }

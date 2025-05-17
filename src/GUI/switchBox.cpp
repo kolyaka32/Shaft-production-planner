@@ -4,12 +4,13 @@ template <unsigned count>
 GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText _texts[count]) {
     float maxWidth = 0;
     for (int i=0; i < count; ++i) {
-        drawnText[i] = sf::Text(window.font, _texts[i].getString());
-        drawnText[i].setPosition({X, Y+i*30+30});
-        maxWidth = std::max(maxWidth, drawnText[i].getGlobalBounds().size.x);
+        drawnTexts.emplace_back(window.font, _texts[i].getString());
+        drawnTexts[i].setPosition({X, Y+i*30-4});
+        drawnTexts[i].setFillColor(sf::Color::Black);
+        maxWidth = std::max(maxWidth, drawnTexts[i].getGlobalBounds().size.x);
     }
     // Setting background of active text
-    backgroundBox.setSize({maxWidth, 30});
+    backgroundBox.setSize({maxWidth+5, 30});
     backgroundBox.setPosition({X, Y});
 }
 
@@ -18,24 +19,31 @@ bool GUI::SwitchBox<count>::click(sf::Vector2i point) {
     if (opened) {
         if ((backgroundBox.getGlobalBounds().position.x < point.x)
         && (backgroundBox.getGlobalBounds().position.y < point.y)
-        && (backgroundBox.getGlobalBounds().position.x + backgroundBox.getGlobalBounds().size.x > point.x)
-        && (backgroundBox.getGlobalBounds().position.y + backgroundBox.getGlobalBounds().size.y > point.y)) {
-            opened = true;
-            backgroundBox;
+        && (backgroundBox.getGlobalBounds().position.x + backgroundBox.getSize().x > point.x)
+        && (backgroundBox.getGlobalBounds().position.y + backgroundBox.getSize().y > point.y)) {
+            // Finding new option
+            selected = (point.y - backgroundBox.getGlobalBounds().position.y) / 30;
+            opened = false;
+            backgroundBox.setSize({backgroundBox.getSize().x, 30});
+            drawnTexts[selected].move({0, -(float)selected*30.0f});
+            return true;
+        } else {
+            opened = false;
+            backgroundBox.setSize({backgroundBox.getSize().x, 30});
+            drawnTexts[selected].move({0, -(float)selected*30.0f});
         }
     } else {
         if ((backgroundBox.getGlobalBounds().position.x < point.x)
         && (backgroundBox.getGlobalBounds().position.y < point.y)
-        && (backgroundBox.getGlobalBounds().position.x + backgroundBox.getGlobalBounds().size.x > point.x)
-        && (backgroundBox.getGlobalBounds().position.y + backgroundBox.getGlobalBounds().size.y > point.y)) {
-            // Finding new option
-            selected = (point.x - backgroundBox.getGlobalBounds().position.y) / 30;
-
-            return true;
-        } else {
-            opened = false;
+        && (backgroundBox.getGlobalBounds().position.x + backgroundBox.getSize().x > point.x)
+        && (backgroundBox.getGlobalBounds().position.y + backgroundBox.getSize().y > point.y)) {
+            opened = true;
+            backgroundBox.setSize({backgroundBox.getSize().x, count*30});
+            // Resetting selected postion
+            drawnTexts[selected].move({0, (float)selected*30.0f});
         }
     }
+    return false;
 }
 
 template <unsigned count>
@@ -44,10 +52,10 @@ void GUI::SwitchBox<count>::draw(Window& window) {
     if (opened) {
         window.draw(backgroundBox);
         for (int i=0; i < count; ++i) {
-            window.draw(drawnText[i]);
+            window.draw(drawnTexts[i]);
         }
     } else {
-        window.draw(drawnText[selected]);
         window.draw(backgroundBox);
+        window.draw(drawnTexts[selected]);
     }
 }

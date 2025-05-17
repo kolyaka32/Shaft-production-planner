@@ -108,7 +108,7 @@ namespace GUI {
         unsigned selected = 0;
         bool opened = false;
         // Draw options
-        sf::Text drawnText[count];
+        std::vector<sf::Text> drawnTexts;
         sf::RectangleShape backgroundBox;
 
     public:

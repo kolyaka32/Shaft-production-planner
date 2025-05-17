@@ -21,11 +21,11 @@ enum class Language {
 class LanguagedText {
 private:
     static Language currentLanguage;
-    const std::string (&texts)[(unsigned)Language::Count];
+    const std::string rus, eng;
 
 public:
-    LanguagedText(const std::string (&text)[(unsigned)Language::Count]);
-    void setCurrentLanguage(Language newLanguage);
-    std::string getString();
+    LanguagedText(const std::string engVar, const std::string rusVar);
+    static bool setCurrentLanguage(Language newLanguage);
+    const std::string& getString();
     sf::String getUTF8();
 };

@@ -11,7 +11,6 @@
 class Window : public sf::RenderWindow {
 public:
     const sf::Font font;
-    unsigned language = (unsigned)Language::Default;
     
 public:
     Window(unsigned width, unsigned height, std::string name);

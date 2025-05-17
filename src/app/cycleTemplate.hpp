@@ -2,7 +2,7 @@
 
 #include "../GUI/GUI.hpp"
 #include "../GUI/switchBox.cpp"
-#include "../cycles/cycles.hpp"
+#include "../cycles.hpp"
 
 
 // Template class for create and run cycles

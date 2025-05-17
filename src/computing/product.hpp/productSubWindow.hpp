@@ -7,6 +7,7 @@ class ProductSubWindow {
 private:
     GUI::ImageButton partPicture;
     GUI::TypeBox widthInput, heightInput;
+    GUI::Text materialText;
     GUI::SwitchBox<3> materialSwitch;
 
 public:
