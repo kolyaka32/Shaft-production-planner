@@ -9,14 +9,17 @@ const std::filesystem::path resourcesDir() {
 #endif
 }
 
+bool App::running = true;
+Cycle App::nextCycle = Cycle::Default;
+
 App::App()
-: window(1024, 720, "Test window"),
-cycle(window) {
-    
-}
+: window(1024, 720, "Test window") {}
 
-App::~App() {}
+void App::stop() {
+    running = false;
+    nextCycle = Cycle::None
+;}
 
-void App::run() {
-    cycle.run();
+void App::startNext(Cycle newCycle) {
+    nextCycle = newCycle;
 }

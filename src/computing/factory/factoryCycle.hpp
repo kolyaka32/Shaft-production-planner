@@ -1,34 +1,33 @@
 #pragma once
 
+#include "../global/submenuCycle.hpp"
 #include "factory.hpp"
 
 // Subwindow for create and set parameters of factory grid
-class FactorySubWindow {
+class FactoryCycle : public SubmenuCycle {
 private:
     // Grid options
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
-    GUI::TextButton cellTypeButtons[5];
+    GUI::SwitchBox<5> cellTypeSwitch;
     GUI::TextButton updateLinkageButton;
     Factory factory;
 
     // Global options
     GUI::TextButton saveButton, loadButton;
     GUI::InfoBox saveInfo;
-    GUI::ImageButton languageButtons[2];
 
     // Current selected object to place
     bool selectObject = false;
     Cell cursorCell;
 
 public:
-    FactorySubWindow(Window& window);
-    void keyDown(sf::Event::KeyPressed state);
-    void LClick(Window& window, sf::Vector2i pos);
-    void LUnClick(sf::Vector2i pos);
-    void RClick(sf::Vector2i pos);
-    void textInput(char32_t keyCode);
-    void update(Window& window);
-    void draw(Window& window);
-    void updateLocation(Window& window);
+    FactoryCycle(Window& window);
+    void keyDown(sf::Event::KeyPressed state) override;
+    void LClick(sf::Vector2i pos) override;
+    void LUnClick(sf::Vector2i pos) override;
+    void RClick(sf::Vector2i pos) override;
+    void textInput(char32_t keyCode) override;
+    void update() override;
+    void draw() override;
 };

@@ -1,16 +1,18 @@
 #pragma once
 
-#include "../cycles/workCycle.hpp"
-
+#include "window.hpp"
+#include "../cycles.hpp"
 
 // Main process in current app
 class App {
  private:
     Window window;
-    WorkCycle cycle;
+    static bool running;
+    static Cycle nextCycle;
 
  public:
     App();
-    ~App();
     void run();
+    static void stop();
+    static void startNext(Cycle newCycle);
 };

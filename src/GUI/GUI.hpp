@@ -115,6 +115,8 @@ namespace GUI {
         SwitchBox(Window& window, float X, float Y, LanguagedText texts[count]);
         void draw(Window& window);
         bool click(sf::Vector2i point);  // return true, when entered new value
+        void set(unsigned value);
+        unsigned getValue();
     };
     
 }; // Namespace GUI

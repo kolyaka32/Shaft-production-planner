@@ -10,6 +10,8 @@ void CycleTemplate::getInput() {
         // Window closed: exit
         if (event->is<sf::Event::Closed>()) {
             window.close();
+            running = false;
+            App::stop();
             break;
         }
 
@@ -22,11 +24,11 @@ void CycleTemplate::getInput() {
             // Switching depend on pressed button, what to do
             switch (t->button) {
             case sf::Mouse::Button::Left:
-                mouseLClick(t->position);
+                LClick(t->position);
                 break;
-            
+
             case sf::Mouse::Button::Right:
-                mouseRClick(t->position);
+                RClick(t->position);
                 break;
             }
         }
@@ -34,11 +36,11 @@ void CycleTemplate::getInput() {
             // Switching depend on pressed button, what to do
             switch (t->button) {
             case sf::Mouse::Button::Left:
-                mouseLUnClick(t->position);
+                LUnClick(t->position);
                 break;
 
             case sf::Mouse::Button::Right:
-                mouseRUnClick(t->position);
+                RUnClick(t->position);
                 break;
             }
         }
@@ -49,8 +51,12 @@ void CycleTemplate::getInput() {
     }
 }
 
+void CycleTemplate::stop() {
+    running = false;
+}
+
 void CycleTemplate::run() {
-    while (window.isOpen()) {
+    while (running) {
         getInput();
         update();
         draw();

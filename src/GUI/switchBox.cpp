@@ -59,3 +59,25 @@ void GUI::SwitchBox<count>::draw(Window& window) {
         window.draw(drawnTexts[selected]);
     }
 }
+
+template <unsigned count>
+void GUI::SwitchBox<count>::set(unsigned value) {
+    if (opened) {
+        selected = value;
+        opened = false;
+        backgroundBox.setSize({backgroundBox.getSize().x, 30});
+        drawnTexts[selected].move({0, -(float)selected*30.0f});
+    } else {
+        // Resetting old option
+        drawnTexts[selected].move({0, (float)selected*30.0f});
+        
+        // Moving new option
+        selected = value;
+        drawnTexts[selected].move({0, (float)selected*-30.0f});
+    }
+}
+
+template <unsigned count>
+unsigned GUI::SwitchBox<count>::getValue() {
+    return selected;
+}
