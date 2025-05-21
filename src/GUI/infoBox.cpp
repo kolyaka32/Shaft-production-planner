@@ -20,12 +20,6 @@ void GUI::InfoBox::draw(Window& window) {
     }
 }
 
-void GUI::InfoBox::update(Window& window) {
-    // Changing location
-    text.setString(texts.getUTF8());
-    text.setOrigin({text.getGlobalBounds().size.x/2, 0});
-}
-
 void GUI::InfoBox::reset() {
     counter = 100;
 }

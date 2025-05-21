@@ -102,7 +102,6 @@ void FactoryCycle::draw() {
     window.clear(sf::Color(20, 20, 20));
     selectProductButton.draw(window);
     selectFactoryButton.draw(window);
-    settings.draw(window);
 
     // Draw input objects
     widthBox.draw(window);
@@ -120,6 +119,8 @@ void FactoryCycle::draw() {
     saveButton.draw(window);
     loadButton.draw(window);
     saveInfo.draw(window);
+
+    settings.draw(window);
 
     // Draw selected object
     if (selectObject) {

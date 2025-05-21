@@ -13,7 +13,6 @@ namespace GUI {
 
     public:
         Text(Window& window, float X, float Y, LanguagedText texts);
-        void update(Window& window);
         void draw(Window& window);
     };
     
@@ -26,7 +25,6 @@ namespace GUI {
     public:
         TextButton(Window& window, float X, float Y, float W, float H, LanguagedText texts);
         bool isClicked(sf::Vector2i point);
-        void update(Window& window);
         void draw(Window& window);
     };
 
@@ -53,7 +51,6 @@ namespace GUI {
     public:
         InfoBox(Window& window, float X, float Y, LanguagedText texts);
         void draw(Window& window);
-        void update(Window& window);
         void reset();
     };
 
@@ -112,7 +109,7 @@ namespace GUI {
         sf::RectangleShape backgroundBox;
 
     public:
-        SwitchBox(Window& window, float X, float Y, LanguagedText texts[count]);
+        SwitchBox(Window& window, float X, float Y, LanguagedText texts[count], unsigned startOption = 0);
         void draw(Window& window);
         bool click(sf::Vector2i point);  // return true, when entered new value
         void set(unsigned value);

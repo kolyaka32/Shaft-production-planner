@@ -63,7 +63,6 @@ void ProductCycle::draw() {
     window.clear(sf::Color(20, 20, 20));
     selectProductButton.draw(window);
     selectFactoryButton.draw(window);
-    settings.draw(window);
 
     // Draw main part
     partPicture.draw(window);
@@ -71,6 +70,8 @@ void ProductCycle::draw() {
     heightInput.draw(window);
     materialText.draw(window);
     materialSwitch.draw(window);
+
+    settings.draw(window);
 
     // Display things on screen
     window.display();

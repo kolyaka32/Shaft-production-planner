@@ -25,11 +25,6 @@ bool GUI::TextButton::isClicked(sf::Vector2i point) {
         && (rect.getPosition().y + rect.getSize().y > point.y);
 }
 
-void GUI::TextButton::update(Window& window) {
-    text.setString(texts.getUTF8());
-    text.setOrigin({text.getGlobalBounds().size.x/2, text.getGlobalBounds().size.y/2+7});
-}
-
 void GUI::TextButton::draw(Window& window) {
     window.draw(rect);
     window.draw(text);

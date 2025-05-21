@@ -12,7 +12,7 @@ set(SFML_STATIC_LIBRARIES TRUE)
 project(Simulator)
 
 # Hidding console
-#set(CMAKE_CXX_FLAGS "-mwindows -static")
+set(CMAKE_CXX_FLAGS "-mwindows -static")
 
 # Add all source files (that needed) under the src directory
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp" "src/*.rc")

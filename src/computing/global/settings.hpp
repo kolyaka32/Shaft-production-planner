@@ -5,12 +5,14 @@
 
 class Settings {
 private:
-    /* data */
-    /*GUI::ImageButton languageButtons[2];*/
+    GUI::Text settingText;
+    GUI::ImageButton activateButton;
+    sf::RectangleShape background;
+    GUI::ImageButton languageButtons[2];
+    bool selected = false;
 
 public:
-    Settings();
-    ~Settings();
+    Settings(Window& window);
     void draw(Window& window);
     bool click(sf::Vector2i pos);
 };

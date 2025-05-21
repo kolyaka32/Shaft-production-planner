@@ -1,14 +1,15 @@
 #include "GUI.hpp"
 
 template <unsigned count>
-GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText _texts[count]) {
+GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText _texts[count], unsigned startOption) {
     float maxWidth = 0;
     for (int i=0; i < count; ++i) {
-        drawnTexts.emplace_back(window.font, _texts[i].getString());
+        drawnTexts.emplace_back(window.font, _texts[i].getUTF8());
         drawnTexts[i].setPosition({X, Y+i*30-4});
         drawnTexts[i].setFillColor(sf::Color::Black);
         maxWidth = std::max(maxWidth, drawnTexts[i].getGlobalBounds().size.x);
     }
+    selected = startOption;
     // Setting background of active text
     backgroundBox.setSize({maxWidth+5, 30});
     backgroundBox.setPosition({X, Y});
