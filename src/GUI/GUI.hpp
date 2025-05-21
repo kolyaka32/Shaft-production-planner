@@ -36,6 +36,7 @@ namespace GUI {
 
     public:
         ImageButton(float X, float Y, float W, float H, const std::string fileName);
+        ImageButton(float X, float Y, const std::string fileName);
         bool isClicked(sf::Vector2i point);
         void draw(Window& window);
     };

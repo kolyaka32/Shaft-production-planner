@@ -10,6 +10,13 @@ sprite(texture) {
     sprite.setPosition({X, Y});
 }
 
+GUI::ImageButton::ImageButton(float X, float Y, const std::string fileName)
+: texture(resourcesDir() / fileName),
+sprite(texture) {
+    //sprite.setOrigin({sprite.getGlobalBounds().size.x/2, sprite.getGlobalBounds().size.y/2});
+    sprite.setPosition({X, Y});
+}
+
 bool GUI::ImageButton::isClicked(sf::Vector2i point) {
     return (sprite.getGlobalBounds().position.x < point.x)
         && (sprite.getGlobalBounds().position.y < point.y)

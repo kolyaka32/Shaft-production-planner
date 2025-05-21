@@ -14,7 +14,7 @@ enum class Language {
     Count,
 
     // Standart pre-selected language
-    Default = English,
+    Default = Russian
 };
 
 // Class, storing one text variant in different locations

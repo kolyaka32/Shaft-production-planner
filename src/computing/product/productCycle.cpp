@@ -3,11 +3,17 @@
 
 ProductCycle::ProductCycle(Window& window)
 : SubmenuCycle(window),
-partPicture(340, 200, 673, 210, "machines/shaftBlueprint.png"),
-widthInput(window, 260, 260, 100, "120"),
-heightInput(window, 680, 95, 60, "40"),
+partPicture(0, 60, "machines/shaftBlueprint.png"),
+partWidthInput(window, 250, 245, 100, "120"),
+partHeightInput(window, 655, 115, 60, "80"),
+partRoughnessInput(window, 655, 65, 60, "40"),
+blankPicture(0, 300, "machines/blankBlueprint.png"),
+blankWidthInput(window, 250, 445, 100, "120"),
+blankHeightInput(window, 620, 350, 60, "80"),
+blankRoughnessInput(window, 620, 310, 60, "40"),
 materialText(window, 850, 60, {"Material:", "Материал:"}),
-materialSwitch(window, 750, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}}) {}
+materialSwitch(window, 720, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}})
+{}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
     // Checking global objects
@@ -23,7 +29,7 @@ void ProductCycle::LClick(sf::Vector2i pos) {
 
     // Current part
     // Check, if stop input - update values
-    if (widthInput.click(pos)) {
+    /*if (widthInput.click(pos)) {
         //factory.setWidth(widthBox.getNumber());
     }
     if (heightInput.click(pos)) {
@@ -32,11 +38,18 @@ void ProductCycle::LClick(sf::Vector2i pos) {
     if (materialSwitch.click(pos)) {
         //pass
     }
+    if (roughnessInput.click(pos)) {
+        //pass
+    }*/
 }
 
 void ProductCycle::LUnClick(sf::Vector2i pos) {
-    widthInput.unClick();
-    heightInput.unClick();
+    partWidthInput.unClick();
+    partHeightInput.unClick();
+    partRoughnessInput.unClick();
+    blankWidthInput.unClick();
+    blankHeightInput.unClick();
+    blankRoughnessInput.unClick();
 }
 
 void ProductCycle::RClick(sf::Vector2i pos) {
@@ -44,18 +57,30 @@ void ProductCycle::RClick(sf::Vector2i pos) {
 }
 
 void ProductCycle::keyDown(sf::Event::KeyPressed state) {
-    widthInput.keyPress(state);
-    heightInput.keyPress(state);
+    partWidthInput.keyPress(state);
+    partHeightInput.keyPress(state);
+    partRoughnessInput.keyPress(state);
+    blankWidthInput.keyPress(state);
+    blankHeightInput.keyPress(state);
+    blankRoughnessInput.keyPress(state);
 }
 
 void ProductCycle::textInput(char32_t keyCode) {
-    widthInput.inputText(keyCode);
-    heightInput.inputText(keyCode);
+    partWidthInput.inputText(keyCode);
+    partHeightInput.inputText(keyCode);
+    partRoughnessInput.inputText(keyCode);
+    blankWidthInput.inputText(keyCode);
+    blankHeightInput.inputText(keyCode);
+    blankRoughnessInput.inputText(keyCode);
 }
 
 void ProductCycle::update() {
-    widthInput.update(sf::Mouse::getPosition(window));
-    heightInput.update(sf::Mouse::getPosition(window));
+    partWidthInput.update(sf::Mouse::getPosition(window));
+    partHeightInput.update(sf::Mouse::getPosition(window));
+    partRoughnessInput.update(sf::Mouse::getPosition(window));
+    blankWidthInput.update(sf::Mouse::getPosition(window));
+    blankHeightInput.update(sf::Mouse::getPosition(window));
+    blankRoughnessInput.update(sf::Mouse::getPosition(window));
 }
 
 void ProductCycle::draw() {
@@ -66,8 +91,13 @@ void ProductCycle::draw() {
 
     // Draw main part
     partPicture.draw(window);
-    widthInput.draw(window);
-    heightInput.draw(window);
+    partWidthInput.draw(window);
+    partHeightInput.draw(window);
+    partRoughnessInput.draw(window);
+    blankPicture.draw(window);
+    blankWidthInput.draw(window);
+    blankHeightInput.draw(window);
+    blankRoughnessInput.draw(window);
     materialText.draw(window);
     materialSwitch.draw(window);
 

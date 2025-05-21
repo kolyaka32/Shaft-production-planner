@@ -2,10 +2,10 @@
 
 Settings::Settings(Window& window)
 : settingText(window, 512, 120, {"Settings", "Настройки"}),
-activateButton(960, 25, 32, 32, "GUI/esc_button.png"),
+activateButton(960, 25, "GUI/esc_button.png"),
 languageButtons {
-    {512, 200, 120, 80, "GUI/Flag_ENG.png"},
-    {512, 300, 120, 80, "GUI/Flag_RUS.png"},
+    {512, 200, "GUI/Flag_ENG.png"},
+    {512, 300, "GUI/Flag_RUS.png"},
 } {
     // Setting background part
     background.setFillColor(sf::Color{120, 120, 120});

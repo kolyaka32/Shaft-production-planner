@@ -8,6 +8,4 @@ font(resourcesDir() / "Arial.ttf") {
     setFramerateLimit(60);
 }
 
-Window::~Window() {
-    
-}
+Window::~Window() {}

@@ -5,8 +5,14 @@
 // Subwindow for create and set properties of part and final product
 class ProductCycle : public SubmenuCycle {
 private:
+    // Part parameters
     GUI::ImageButton partPicture;
-    GUI::TypeBox widthInput, heightInput;
+    GUI::TypeBox partWidthInput, partHeightInput, partRoughnessInput;
+    
+
+    // Blank parameters
+    GUI::ImageButton blankPicture;
+    GUI::TypeBox blankWidthInput, blankHeightInput, blankRoughnessInput;
     GUI::Text materialText;
     GUI::SwitchBox<3> materialSwitch;
 
