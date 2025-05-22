@@ -1,14 +1,17 @@
 #pragma once
 
 #include "../global/submenuCycle.hpp"
+#include "productProcess.hpp"
 
 // Subwindow for create and set properties of part and final product
 class ProductCycle : public SubmenuCycle {
 private:
+    // Main process parameters and solver
+    ProductProcess process;
+
     // Part parameters
     GUI::ImageButton partPicture;
     GUI::TypeBox partWidthInput, partHeightInput, partRoughnessInput;
-    
 
     // Blank parameters
     GUI::ImageButton blankPicture;

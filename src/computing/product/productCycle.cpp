@@ -3,16 +3,17 @@
 
 ProductCycle::ProductCycle(Window& window)
 : SubmenuCycle(window),
+process(window),
 partPicture(0, 60, "machines/shaftBlueprint.png"),
 partWidthInput(window, 250, 245, 100, "120"),
-partHeightInput(window, 655, 115, 60, "80"),
-partRoughnessInput(window, 655, 65, 60, "40"),
+partHeightInput(window, 655, 115, 70, "80"),
+partRoughnessInput(window, 655, 65, 70, process.getTargetRoughness()),
 blankPicture(0, 300, "machines/blankBlueprint.png"),
 blankWidthInput(window, 250, 445, 100, "120"),
-blankHeightInput(window, 620, 350, 60, "80"),
-blankRoughnessInput(window, 620, 310, 60, "40"),
-materialText(window, 850, 60, {"Material:", "Материал:"}),
-materialSwitch(window, 720, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}})
+blankHeightInput(window, 620, 350, 70, "80"),
+blankRoughnessInput(window, 620, 305, 70, process.getBaseRoughness()),
+materialText(window, 880, 60, {"Material:", "Материал:"}),
+materialSwitch(window, 740, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}})
 {}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
@@ -29,18 +30,27 @@ void ProductCycle::LClick(sf::Vector2i pos) {
 
     // Current part
     // Check, if stop input - update values
-    /*if (widthInput.click(pos)) {
+    if (partWidthInput.click(pos)) {
         //factory.setWidth(widthBox.getNumber());
     }
-    if (heightInput.click(pos)) {
+    if (partHeightInput.click(pos)) {
         //factory.setHeight(heightBox.getNumber());
+    }
+    if (partRoughnessInput.click(pos)) {
+        process.setTargetRoughness(partRoughnessInput.getNumber());
+    }
+    if (blankWidthInput.click(pos)) {
+        //factory.setWidth(widthBox.getNumber());
+    }
+    if (blankHeightInput.click(pos)) {
+        //factory.setHeight(heightBox.getNumber());
+    }
+    if (blankRoughnessInput.click(pos)) {
+        process.setBaseRoughness(blankRoughnessInput.getNumber());
     }
     if (materialSwitch.click(pos)) {
         //pass
     }
-    if (roughnessInput.click(pos)) {
-        //pass
-    }*/
 }
 
 void ProductCycle::LUnClick(sf::Vector2i pos) {
@@ -100,6 +110,8 @@ void ProductCycle::draw() {
     blankRoughnessInput.draw(window);
     materialText.draw(window);
     materialSwitch.draw(window);
+
+    process.draw(window);
 
     settings.draw(window);
 

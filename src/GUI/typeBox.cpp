@@ -289,7 +289,7 @@ std::string GUI::TypeBox::getString() {
 }
 
 float GUI::TypeBox::getNumber() {
-    return std::stoi((std::string)drawText.getString());
+    return std::stof((std::string)drawText.getString());
     // At this moment - simple function
     // TODO: create improved parser for understand +-*/()^
 }
