@@ -8,10 +8,10 @@ length(length) {
 
 }
 
-time Part::calculateThermalTime() {
+float Part::calculateThermalTime() {
     return 1 + diameter/2/25 + material.recristalisationTemp/20;
 }
 
-time Part::calculateProcessTime() {
+float Part::calculateProcessTime() {
     return calculateThermalTime();
 }

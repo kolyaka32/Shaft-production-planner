@@ -13,6 +13,6 @@ private:
 
 public:
     Part(Material mat, float diameter, float length);
-    time calculateThermalTime();
-    time calculateProcessTime();
+    float calculateThermalTime();
+    float calculateProcessTime();
 };

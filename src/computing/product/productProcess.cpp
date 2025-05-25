@@ -2,18 +2,22 @@
 
 float ProductProcess::targetRoughness = 10;
 float ProductProcess::baseRoughness = 40;
-int ProductProcess::stepCount = 2;
+int ProductProcess::stepCount = 4;
+Material ProductProcess::material = Material::machineSteel;
+unsigned ProductProcess::materialIndex = 1;
 
 
 ProductProcess::ProductProcess(Window& window)
 : step {
-    {window,  20, 540, 40, {"", "Черновая"}},
-    {window, 240, 540, 20, {"", "Основная"}},
-    {window, 460, 540, 10, {"", "Отделочная"}},
-    {window, 680, 540, 10, {"", "Чистовая"}}
+    {window,  20, 540, 40, {"Rough", "Черновая"}},
+    {window, 240, 540, 20, {"Main", "Основная"}},
+    {window, 460, 540, 10, {"Trimming", "Отделочная"}},
+    {window, 680, 540, 10, {"Finishing", "Чистовая"}}
 },
 arrowTexture(resourcesDir() / "GUI/arrow.png"),
-arrowSprite(arrowTexture) {}
+arrowSprite(arrowTexture) {
+    setMaterial(materialIndex);
+}
 
 void ProductProcess::setTargetRoughness(float _targetRoughness) {
     targetRoughness = _targetRoughness;
@@ -21,6 +25,22 @@ void ProductProcess::setTargetRoughness(float _targetRoughness) {
 
 void ProductProcess::setBaseRoughness(float _baseRoughness) {
     baseRoughness = _baseRoughness;
+}
+
+void ProductProcess::setMaterial(unsigned index) {
+    switch (index) {
+    case 1:
+        material = Material::machineSteel;
+        break;
+
+    case 2:
+        material = Material::alloys;
+        break;
+
+    case 3:
+        material = Material::heatResistantSteel;
+        break;
+    }
 }
 
 std::string ProductProcess::getTargetRoughness() {
@@ -35,6 +55,10 @@ std::string ProductProcess::getBaseRoughness() {
     return oss.str();
 }
 
+unsigned ProductProcess::getMaterial() {
+    return materialIndex;
+}
+
 void ProductProcess::draw(Window& window) {
     arrowSprite.setPosition({175, 600});
     for (int i=0; i < stepCount; ++i) {
@@ -42,6 +66,6 @@ void ProductProcess::draw(Window& window) {
     }
     for (int i=0; i < stepCount-1; ++i) {
         window.draw(arrowSprite);
-        arrowSprite.move({200, 0});
+        arrowSprite.move({220, 0});
     }
 }
