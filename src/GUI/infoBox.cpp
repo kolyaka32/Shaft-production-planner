@@ -2,8 +2,7 @@
 
 
 GUI::InfoBox::InfoBox(Window& window, float X, float Y, LanguagedText _texts)
-: texts(_texts),
-text(window.font, texts.getUTF8()) {
+: text(window.font, _texts.getUTF8()) {
     // Setting position
     text.setOrigin({text.getGlobalBounds().size.x/2, 0});
     text.setPosition({X, Y});

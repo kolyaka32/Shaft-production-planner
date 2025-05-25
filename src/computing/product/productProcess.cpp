@@ -1,12 +1,17 @@
 #include "productProcess.hpp"
 
-float ProductProcess::targetRoughness = 4;
-float ProductProcess::baseRoughness = 40;
+
+// Static global process options
+
 int ProductProcess::stepCount = 4;
 Material ProductProcess::material = Material::machineSteel;
 unsigned ProductProcess::materialIndex = 1;
+float ProductProcess::targetRoughness = 4;
 float ProductProcess::targetDiameter = 60;
 float ProductProcess::targetLength = 200;
+float ProductProcess::blankRoughness = 40;
+float ProductProcess::blankDiameter = 80;
+float ProductProcess::blankLength = 220;
 
 
 ProductProcess::ProductProcess(Window& window)
@@ -20,18 +25,16 @@ steps {
     {window, 170, 540, {"Rough", "Черновая"}},
     {window, 400, 540, {"Main", "Основная"}},
     {window, 630, 540, {"Trimming", "Отделочная"}},
-    {window, 860, 540, {"Finishing", "Чистовая"}}
-} {
+    {window, 860, 540, {"Finishing", "Чистовая"}}},
+warningLowLength(window, 750, 300, {"Insufficient length", "Недостаточная длинна"}, "machines/danger-icon.png"),
+warningLowDiameter(window, 750, 350, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
+warningHighLength(window, 750, 300, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
+warningHighDiameter(window, 750, 350, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png") {
     setMaterial(materialIndex);
 }
 
 void ProductProcess::setTargetRoughness(float _targetRoughness) {
     targetRoughness = _targetRoughness;
-    updateProcessParameters();
-}
-
-void ProductProcess::setBaseRoughness(float _baseRoughness) {
-    baseRoughness = _baseRoughness;
     updateProcessParameters();
 }
 
@@ -42,6 +45,21 @@ void ProductProcess::setTargetDiameter(float _targetDiameter) {
 
 void ProductProcess::setTargetLength(float _targetLength) {
     targetLength = _targetLength;
+    updateProcessParameters();
+}
+
+void ProductProcess::setBlankRoughness(float _roughness) {
+    blankRoughness = _roughness;
+    updateProcessParameters();
+}
+
+void ProductProcess::setBlankLength(float _length) {
+    blankLength = _length;
+    updateProcessParameters();
+}
+
+void ProductProcess::setBlankDiameter(float _diameter) {
+    blankDiameter = _diameter;
     updateProcessParameters();
 }
 
@@ -62,48 +80,82 @@ void ProductProcess::setMaterial(unsigned index) {
     updateProcessParameters();
 }
 
+unsigned ProductProcess::getMaterial() {
+    return materialIndex;
+}
+
 std::string ProductProcess::getTargetRoughness() {
     return std::format("{:.1f}", targetRoughness);
-}
-
-std::string ProductProcess::getBaseRoughness() {
-    return std::format("{:.1f}", baseRoughness);
-}
-
-std::string ProductProcess::getTargetDiameter() {
-    return std::format("{:.1f}", targetDiameter);
 }
 
 std::string ProductProcess::getTargetLength() {
     return std::format("{:.0f}", targetLength);
 }
 
-unsigned ProductProcess::getMaterial() {
-    return materialIndex;
+std::string ProductProcess::getTargetDiameter() {
+    return std::format("{:.1f}", targetDiameter);
+}
+
+std::string ProductProcess::getBlankRoughness() {
+    return std::format("{:.1f}", blankRoughness);
+}
+
+std::string ProductProcess::getBlankLength() {
+    return std::format("{:.0f}", blankLength);
+}
+
+std::string ProductProcess::getBlankDiameter() {
+    return std::format("{:.1f}", blankDiameter);
 }
 
 
 void ProductProcess::draw(Window& window) {
+    // Draw main steps
     for (int i=0; i <= stepCount; ++i) {
         semiproducts[i].draw(window);
     }
     for (int i=0; i < stepCount; ++i) {
         steps[i].draw(window);
     }
+    // Draw warnings
+    warningLowLength.draw(window);
+    warningLowDiameter.draw(window);
+    warningHighLength.draw(window);
+    warningHighDiameter.draw(window);
 }
 
 
 void ProductProcess::updateProcessParameters() {
+    // Resetting warnings
+    warningLowLength.deactivate();
+    warningLowDiameter.deactivate();
+    warningHighLength.deactivate();
+    warningHighDiameter.deactivate();
+
     // Update step count
     updateStepCount();
 
     // Update input diameters
     float inputDiameter = targetDiameter;
     float inputLength = targetLength;
-    for (int i=stepCount; i >= 0; --i) {
+    for (int i=stepCount; i > 0; --i) {
         semiproducts[i].setNewParameters(inputDiameter, inputLength, material);
         inputDiameter = getInputDiameter(i, inputDiameter);
         inputLength = getInputLength(i, inputLength);
+    }
+    // Update extra blank object
+    semiproducts[0].setNewParameters(inputDiameter, inputLength, material);
+
+    // Checking, if blank parameters allowable and optimal
+    if (inputLength > blankLength) {
+        warningLowLength.activate();
+    } else if (blankLength > inputLength*1.2) {
+        warningHighLength.activate();
+    }
+    if (inputDiameter > blankDiameter) {
+        warningLowDiameter.activate();
+    } else if (blankDiameter > inputDiameter*1.2) {
+        warningHighDiameter.activate();
     }
 }
 

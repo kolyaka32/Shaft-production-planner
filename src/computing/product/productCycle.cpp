@@ -9,14 +9,14 @@ partWidthInput(window, 250, 245, 100, process.getTargetLength()),
 partHeightInput(window, 655, 115, 70, process.getTargetDiameter()),
 partRoughnessInput(window, 655, 65, 70, process.getTargetRoughness()),
 blankPicture(0, 300, "machines/blankBlueprint.png"),
-blankWidthInput(window, 250, 445, 100, "120"),
-blankHeightInput(window, 620, 350, 70, "80"),
-blankRoughnessInput(window, 620, 305, 70, process.getBaseRoughness()),
+blankWidthInput(window, 250, 445, 100, process.getBlankLength()),
+blankHeightInput(window, 620, 350, 70, process.getBlankDiameter()),
+blankRoughnessInput(window, 620, 305, 70, process.getBlankRoughness()),
 materialText(window, 880, 60, {"Material:", "Материал:"}),
 materialSwitch(window, 740, 100, (LanguagedText[]){
-        {"Steel", "Сталь"},
-        {"Alloys", "Цветные сплавы"},
-        {"Heat-resistant steel", "Жаропрочная сталь"}})
+    {"Steel", "Сталь"},
+    {"Alloys", "Цветные сплавы"},
+    {"Heat-resistant steel", "Жаропрочная сталь"}})
 {}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
@@ -31,7 +31,6 @@ void ProductCycle::LClick(sf::Vector2i pos) {
         return;
     }
 
-    // Current part
     // Check, if stop input - update values
     if (partWidthInput.click(pos)) {
         process.setTargetLength(partWidthInput.getNumber());
@@ -43,13 +42,13 @@ void ProductCycle::LClick(sf::Vector2i pos) {
         process.setTargetRoughness(partRoughnessInput.getNumber());
     }
     if (blankWidthInput.click(pos)) {
-        // factory.setWidth(widthBox.getNumber());
+        process.setBlankLength(blankWidthInput.getNumber());
     }
     if (blankHeightInput.click(pos)) {
-        // factory.setHeight(heightBox.getNumber());
+        process.setBlankDiameter(blankHeightInput.getNumber());;
     }
     if (blankRoughnessInput.click(pos)) {
-        process.setBaseRoughness(blankRoughnessInput.getNumber());
+        process.setBlankRoughness(blankRoughnessInput.getNumber());
     }
     if (materialSwitch.click(pos)) {
         process.setMaterial(materialSwitch.getValue());

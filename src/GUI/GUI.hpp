@@ -43,16 +43,29 @@ namespace GUI {
 
 
     class InfoBox {
-    private:
-        LanguagedText texts;
+     private:
         unsigned counter = 0;
         sf::Color color = sf::Color::White;
         sf::Text text;
 
-    public:
+     public:
         InfoBox(Window& window, float X, float Y, LanguagedText texts);
         void draw(Window& window);
         void reset();
+    };
+
+    class WarningBox {
+     private:
+        sf::Text text;
+		const sf::Texture texture;
+        sf::Sprite sprite;
+		bool active = false;
+
+     public:
+      	WarningBox(Window& window, float X, float Y, LanguagedText texts, const std::string imageFile);
+		void draw(Window& window);
+		void activate();
+		void deactivate();
     };
 
 
