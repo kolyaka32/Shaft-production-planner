@@ -19,7 +19,7 @@ void App::run() {
                 cycle.run();
             }
             break;
-        
+
         case Cycle::None:
         default:
             stop();

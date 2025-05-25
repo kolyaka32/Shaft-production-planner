@@ -71,7 +71,7 @@ void GUI::SwitchBox<count>::set(unsigned value) {
     } else {
         // Resetting old option
         drawnTexts[selected].move({0, (float)selected*30.0f});
-        
+
         // Moving new option
         selected = value;
         drawnTexts[selected].move({0, (float)selected*-30.0f});

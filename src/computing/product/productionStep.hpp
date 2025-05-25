@@ -1,16 +1,19 @@
+#pragma once
+
 #include "../../app/cycleTemplate.hpp"
+#include "material.hpp"
 
 
 // Class showing one process step of part production
 class ProductionStep {
-private:
+ private:
     sf::RectangleShape background;
     GUI::Text stepText;
-    bool visability = false;
-    float roughness;
+    sf::Text diameterText;
+    sf::Text massText;
 
-public:
-    ProductionStep(Window& window, float X, float Y, float checkRoughness, LanguagedText text);
-    void setNew(float roughness);
+ public:
+    ProductionStep(Window& window, float X, float Y, LanguagedText text);
     void draw(Window& window);
+    void setNewParameters(float diameter, float length, const Material material);
 };

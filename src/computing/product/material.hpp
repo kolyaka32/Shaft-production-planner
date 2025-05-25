@@ -8,7 +8,7 @@ public:
 
     // Properties of material
     float recristalisationTemp;
-    float density;
+    float density;  // Density in kg/m^3
 
     // Standart materials to use
     static const Material machineSteel;

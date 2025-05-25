@@ -4,7 +4,7 @@
 
 
 // Specified cell, which nown, in to which network it connected
-class IndexedCell : public Cell{
+class IndexedCell : public Cell {
 private:
     unsigned index = 0;  // 0 index represent none-cennction, other - index of network
 

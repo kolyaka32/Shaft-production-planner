@@ -5,15 +5,18 @@ ProductCycle::ProductCycle(Window& window)
 : SubmenuCycle(window),
 process(window),
 partPicture(0, 60, "machines/shaftBlueprint.png"),
-partWidthInput(window, 250, 245, 100, "120"),
-partHeightInput(window, 655, 115, 70, "80"),
+partWidthInput(window, 250, 245, 100, process.getTargetLength()),
+partHeightInput(window, 655, 115, 70, process.getTargetDiameter()),
 partRoughnessInput(window, 655, 65, 70, process.getTargetRoughness()),
 blankPicture(0, 300, "machines/blankBlueprint.png"),
 blankWidthInput(window, 250, 445, 100, "120"),
 blankHeightInput(window, 620, 350, 70, "80"),
 blankRoughnessInput(window, 620, 305, 70, process.getBaseRoughness()),
 materialText(window, 880, 60, {"Material:", "Материал:"}),
-materialSwitch(window, 740, 100, (LanguagedText[]){{"Steel", "Сталь"}, {"Alloys","Цветные сплавы"}, {"Heat-resistant steel","Жаропрочная сталь"}})
+materialSwitch(window, 740, 100, (LanguagedText[]){
+        {"Steel", "Сталь"},
+        {"Alloys", "Цветные сплавы"},
+        {"Heat-resistant steel", "Жаропрочная сталь"}})
 {}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
@@ -31,25 +34,25 @@ void ProductCycle::LClick(sf::Vector2i pos) {
     // Current part
     // Check, if stop input - update values
     if (partWidthInput.click(pos)) {
-        //factory.setWidth(widthBox.getNumber());
+        process.setTargetLength(partWidthInput.getNumber());
     }
     if (partHeightInput.click(pos)) {
-        //factory.setHeight(heightBox.getNumber());
+        process.setTargetDiameter(partHeightInput.getNumber());
     }
     if (partRoughnessInput.click(pos)) {
         process.setTargetRoughness(partRoughnessInput.getNumber());
     }
     if (blankWidthInput.click(pos)) {
-        //factory.setWidth(widthBox.getNumber());
+        // factory.setWidth(widthBox.getNumber());
     }
     if (blankHeightInput.click(pos)) {
-        //factory.setHeight(heightBox.getNumber());
+        // factory.setHeight(heightBox.getNumber());
     }
     if (blankRoughnessInput.click(pos)) {
         process.setBaseRoughness(blankRoughnessInput.getNumber());
     }
     if (materialSwitch.click(pos)) {
-        //pass
+        process.setMaterial(materialSwitch.getValue());
     }
 }
 

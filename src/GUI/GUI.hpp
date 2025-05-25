@@ -1,28 +1,28 @@
 #pragma once
 
-#include "../app/window.hpp"
 #include <vector>
 #include <string>
+#include "../app/window.hpp"
 
 
 namespace GUI {
     class Text {
-    private:
+     private:
         LanguagedText texts;
         sf::Text text;
 
-    public:
+     public:
         Text(Window& window, float X, float Y, LanguagedText texts);
         void draw(Window& window);
     };
-    
+
     class TextButton {
-    private:
+     private:
         LanguagedText texts;
         sf::RectangleShape rect;
         sf::Text text;
 
-    public:
+     public:
         TextButton(Window& window, float X, float Y, float W, float H, LanguagedText texts);
         bool isClicked(sf::Vector2i point);
         void draw(Window& window);
@@ -30,11 +30,11 @@ namespace GUI {
 
 
     class ImageButton {
-    private:
+     private:
         const sf::Texture texture;
         sf::Sprite sprite;
 
-    public:
+     public:
         ImageButton(float X, float Y, float W, float H, const std::string fileName);
         ImageButton(float X, float Y, const std::string fileName);
         bool isClicked(sf::Vector2i point);
@@ -102,19 +102,19 @@ namespace GUI {
     // Class for selecting variants from list
     template <unsigned count>
     class SwitchBox {
-    private:
+     private:
         unsigned selected = 0;
         bool opened = false;
         // Draw options
         std::vector<sf::Text> drawnTexts;
         sf::RectangleShape backgroundBox;
 
-    public:
+     public:
         SwitchBox(Window& window, float X, float Y, LanguagedText texts[count], unsigned startOption = 0);
         void draw(Window& window);
         bool click(sf::Vector2i point);  // return true, when entered new value
         void set(unsigned value);
         unsigned getValue();
     };
-    
+
 }; // Namespace GUI

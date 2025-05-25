@@ -16,6 +16,6 @@ enum class CellType {
 
     // Types of machines
     Machine_1,
-    Machine_2, 
+    Machine_2,
     Furnace_1,
 };

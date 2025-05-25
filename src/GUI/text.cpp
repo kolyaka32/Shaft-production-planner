@@ -1,6 +1,6 @@
+#include <iostream>
 #include "GUI.hpp"
 
-#include <iostream>
 
 GUI::Text::Text(Window& window, float X, float Y, LanguagedText _texts)
 : texts(_texts),
