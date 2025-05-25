@@ -2,13 +2,13 @@
 
 #include <string>
 #include "productionStep.hpp"
+#include "productionSemiproduct.hpp"
 
 //
 class ProductProcess {
  private:
-    ProductionStep step[4];
-    const sf::Texture arrowTexture;
-    sf::Sprite arrowSprite;
+    ProductionStep steps[4];
+    ProductionSemiproduct semiproducts[5];
     static float targetRoughness;
     static float baseRoughness;
     static int stepCount;

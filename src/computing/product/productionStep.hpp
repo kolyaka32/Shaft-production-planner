@@ -7,13 +7,11 @@
 // Class showing one process step of part production
 class ProductionStep {
  private:
-    sf::RectangleShape background;
     GUI::Text stepText;
-    sf::Text diameterText;
-    sf::Text massText;
+    const sf::Texture arrowTexture;
+    sf::Sprite arrowSprite;
 
  public:
     ProductionStep(Window& window, float X, float Y, LanguagedText text);
     void draw(Window& window);
-    void setNewParameters(float diameter, float length, const Material material);
 };

@@ -10,14 +10,18 @@ float ProductProcess::targetLength = 200;
 
 
 ProductProcess::ProductProcess(Window& window)
-: step {
-    {window,  20, 540, {"Rough", "Черновая"}},
-    {window, 240, 540, {"Main", "Основная"}},
-    {window, 460, 540, {"Trimming", "Отделочная"}},
-    {window, 680, 540, {"Finishing", "Чистовая"}}
-},
-arrowTexture(resourcesDir() / "GUI/arrow.png"),
-arrowSprite(arrowTexture) {
+: semiproducts {
+    {window,  20, 540},
+    {window, 250, 540},
+    {window, 480, 540},
+    {window, 710, 540},
+    {window, 940, 540}},
+steps {
+    {window, 170, 540, {"Rough", "Черновая"}},
+    {window, 400, 540, {"Main", "Основная"}},
+    {window, 630, 540, {"Trimming", "Отделочная"}},
+    {window, 860, 540, {"Finishing", "Чистовая"}}
+} {
     setMaterial(materialIndex);
 }
 
@@ -80,13 +84,11 @@ unsigned ProductProcess::getMaterial() {
 
 
 void ProductProcess::draw(Window& window) {
-    arrowSprite.setPosition({175, 600});
-    for (int i=0; i < stepCount; ++i) {
-        step[i].draw(window);
+    for (int i=0; i <= stepCount; ++i) {
+        semiproducts[i].draw(window);
     }
-    for (int i=0; i < stepCount-1; ++i) {
-        window.draw(arrowSprite);
-        arrowSprite.move({220, 0});
+    for (int i=0; i < stepCount; ++i) {
+        steps[i].draw(window);
     }
 }
 
@@ -98,10 +100,10 @@ void ProductProcess::updateProcessParameters() {
     // Update input diameters
     float inputDiameter = targetDiameter;
     float inputLength = targetLength;
-    for (int i=stepCount-1; i >= 0; --i) {
+    for (int i=stepCount; i >= 0; --i) {
+        semiproducts[i].setNewParameters(inputDiameter, inputLength, material);
         inputDiameter = getInputDiameter(i, inputDiameter);
-        targetLength = getInputLength(i, inputLength);
-        step[i].setNewParameters(inputDiameter, inputLength, material);
+        inputLength = getInputLength(i, inputLength);
     }
 }
 
@@ -134,7 +136,19 @@ float ProductProcess::getInputDiameter(unsigned step, float outDiameter) {
 }
 
 float ProductProcess::getInputLength(unsigned step, float outLength) {
-    return outLength;
+    switch (step) {
+    case 4:
+        return outLength+getCutFinishingDistance(outLength);
+
+    case 3:
+        return outLength+getCutTrimmingDistance(outLength);
+
+    case 2:
+        return outLength+getCutMainDistance(outLength);
+
+    default:
+        return outLength+getCutRoughDistance(outLength);
+    }
 }
 
 
