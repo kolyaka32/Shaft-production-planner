@@ -9,13 +9,9 @@ private:
     // Grid options
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
-    GUI::SwitchBox<5> cellTypeSwitch;
+    GUI::SwitchBox<6> cellTypeSwitch;
     GUI::TextButton updateLinkageButton;
     Factory factory;
-
-    // Global options
-    GUI::TextButton saveButton, loadButton;
-    GUI::InfoBox saveInfo;
 
     // Current selected object to place
     bool selectObject = false;

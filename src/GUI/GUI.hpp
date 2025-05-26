@@ -108,6 +108,7 @@ namespace GUI {
         // Drawing at screen
         void draw(Window& window);
         // Getting entered text
+        void setString(std::string str);
         std::string getString();
         float getNumber();
     };

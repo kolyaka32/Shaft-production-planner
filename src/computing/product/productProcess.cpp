@@ -65,19 +65,7 @@ void ProductProcess::setBlankDiameter(float _diameter) {
 
 void ProductProcess::setMaterial(unsigned _index) {
     materialIndex = _index;
-    switch (materialIndex) {
-    case 0:
-        material = Material::machineSteel;
-        break;
-
-    case 1:
-        material = Material::alloys;
-        break;
-
-    case 2:
-        material = Material::heatResistantSteel;
-        break;
-    }
+    updateMaterialProperties();
     updateProcessParameters();
 }
 
@@ -161,6 +149,22 @@ void ProductProcess::updateProcessParameters() {
     }
 }
 
+void ProductProcess::updateMaterialProperties() {
+    switch (materialIndex) {
+    case 0:
+        material = Material::machineSteel;
+        break;
+
+    case 1:
+        material = Material::alloys;
+        break;
+
+    case 2:
+        material = Material::heatResistantSteel;
+        break;
+    }
+}
+
 int ProductProcess::getStepCount(float rougness) {
     if (rougness < 6.4) {
         return 3;
@@ -191,7 +195,6 @@ float ProductProcess::getInputDiameter(unsigned step, float outDiameter) {
 float ProductProcess::getInputLength(unsigned step, float outLength) {
     return outLength;
 }
-
 
 float ProductProcess::getCutRoughDistance(float diameter) {
     if (diameter < 18) {
@@ -265,4 +268,39 @@ float ProductProcess::getCutFinishingDistance(float diameter) {
         return 0.4;
     }
     return 0.5;
+}
+
+void ProductProcess::save(std::ofstream& fout) {
+    // Writing system data
+    fout << '\n';
+    fout << "Part\n";
+    // Writing part data
+    fout << targetDiameter << ' ' << targetLength << ' ' << targetRoughness << '\n';
+
+    // Writing blank data
+    fout << blankDiameter << ' ' << blankLength << ' ' << blankRoughness << '\n';
+
+    // Writing other part data
+    fout << materialIndex << '\n';
+}
+
+void ProductProcess::load(std::ifstream& fin) {
+    // Current reading line
+    std::string line;
+
+    // Skipping first 2 lines (empty and title)
+    std::getline(fin, line);
+    std::getline(fin, line);
+
+    // Getting part data
+    fin >> targetDiameter >> targetLength >> targetRoughness;
+
+    // Getting blank data
+    fin >> blankDiameter >> blankLength >> blankRoughness;
+
+    // Getting other part data
+    fin >> materialIndex;
+
+    // Recalculating all values and processes
+    updateMaterialProperties();
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <string>
 #include "productionStep.hpp"
 #include "productionSemiproduct.hpp"
@@ -34,10 +35,10 @@ class ProductProcess {
     static float getCutMainDistance(float diameter);
     static float getCutTrimmingDistance(float diameter);
     static float getCutFinishingDistance(float diameter);
-    float getInputDiameter(unsigned step, float outDiameter);
-    float getInputLength(unsigned step, float outLength);
-    void updateProcessParameters();
-    int getStepCount(float rougness);
+    static float getInputDiameter(unsigned step, float outDiameter);
+    static float getInputLength(unsigned step, float outLength);
+    static int getStepCount(float rougness);
+    static void updateMaterialProperties();
 
  public:
     ProductProcess(Window& window);
@@ -55,5 +56,8 @@ class ProductProcess {
     std::string getBlankLength();
     std::string getBlankDiameter();
     unsigned getMaterial();
+    void updateProcessParameters();
     void draw(Window& window);
+    static void save(std::ofstream& fout);
+    static void load(std::ifstream& fin);
 };

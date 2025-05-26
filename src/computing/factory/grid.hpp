@@ -1,23 +1,17 @@
 #pragma once
 
+#include "field.hpp"
 #include "../../app/cycleTemplate.hpp"
-#include "indexedCell.hpp"
 
 
 // Class for draw and calculate objects at the grid
 class Grid {
 private:
-    // Array with all cells
-    IndexedCell* grid;
     // Absolute position of first element
     const sf::Vector2f pos;
 
 protected:
-    // Dimensions of grid
-    unsigned width, height;
-
-    // Functions for getting cell at need position
-    IndexedCell& getCell(sf::Vector2i pos);
+    static Field field;
 
     // Getting local position (in cells) from absolute coordinate
     sf::Vector2i getLocal(sf::Vector2i absPos);
@@ -25,12 +19,13 @@ protected:
     sf::Vector2f getAbs(sf::Vector2i localPos);
 
 public:
-    Grid(unsigned width, unsigned height, sf::Vector2f position);
-    ~Grid();
+    Grid(sf::Vector2f position);
     void blit(Window& window);
     bool isSelected(sf::Vector2i pos);
-    void setWidth(unsigned width);
-    void setHeight(unsigned height);
-    void saveGrid(std::string name);
-    void loadGrid(std::string name);
+    static void setWidth(unsigned width);
+    static void setHeight(unsigned height);
+    static std::string getWidth();
+    static std::string getHeight();
+    static void save(std::ofstream& fout);
+    static void load(std::ifstream& fin);
 };

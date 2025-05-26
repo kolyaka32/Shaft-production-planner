@@ -6,12 +6,17 @@
 
 //
 class SubmenuCycle : public CycleTemplate {
-protected:
+ protected:
     // Buttons for switch between subwindows
     GUI::TextButton selectProductButton, selectFactoryButton;
     // Global settings
     Settings settings;
+    // Saving options
+    GUI::TextButton saveButton, loadButton;
+    GUI::InfoBox saveInfo;
+    void save();
+    void load();
 
-public:
+ public:
     SubmenuCycle(Window& window);
 };

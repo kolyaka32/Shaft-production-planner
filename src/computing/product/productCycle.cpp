@@ -17,7 +17,7 @@ materialSwitch(window, 740, 100, (LanguagedText[]) {
     {"Steel", "Сталь"},
     {"Alloys", "Цветные сплавы"},
     {"Heat-resistant steel", "Жаропрочная сталь"}},
-    process.getMaterial())
+process.getMaterial())
 {}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
@@ -28,6 +28,17 @@ void ProductCycle::LClick(sf::Vector2i pos) {
         return;
     }
     if (settings.click(pos)) {
+        stop();
+        return;
+    }
+    if (saveButton.isClicked(pos)) {
+        save();
+        saveInfo.reset();
+        return;
+    }
+    if (loadButton.isClicked(pos)) {
+        load();
+        // Restarting cycle
         stop();
         return;
     }
@@ -114,6 +125,9 @@ void ProductCycle::draw() {
     window.clear(sf::Color(20, 20, 20));
     selectProductButton.draw(window);
     selectFactoryButton.draw(window);
+    saveButton.draw(window);
+    loadButton.draw(window);
+    saveInfo.draw(window);
 
     // Draw main part
     partPicture.draw(window);

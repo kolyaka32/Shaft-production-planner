@@ -1,25 +1,12 @@
 #include "grid.hpp"
-#include <fstream>
 
 
-Grid::Grid(unsigned _width, unsigned _height, sf::Vector2f _pos)
-: width(_width),
-height(_height),
-grid(new IndexedCell[_width*_height]),
-pos(_pos) {
-    // Clearing grid
-    for (int i=0; i < _width*_height; ++i) {
-        grid[i].setType(CellType::None);
-    }
-}
+// Static class values
+Field Grid::field{10, 5};
 
-Grid::~Grid() {
-    delete[] grid;
-}
 
-IndexedCell& Grid::getCell(sf::Vector2i pos) {
-    return grid[pos.x + pos.y*width];
-}
+Grid::Grid(sf::Vector2f _pos)
+: pos(_pos) {}
 
 sf::Vector2i Grid::getLocal(sf::Vector2i absPos) {
     return {int((absPos.x-pos.x)/cellSize), int((absPos.y-pos.y)/cellSize)};
@@ -34,23 +21,23 @@ void Grid::blit(Window& window) {
     square.setPosition(pos);
 
     // Draw cells
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
-            // Checking, if cell 
-            if (getCell({x, y}).getType() != CellType::Void) {
-                getCell({x, y}).draw(window, getAbs({x, y}));
+    for (int y=0; y < field.getHeight(); ++y) {
+        for (int x=0; x < field.getWidth(); ++x) {
+            // Checking, if cell
+            if (field.getCell({x, y}).getType() != CellType::Void) {
+                field.getCell({x, y}).draw(window, getAbs({x, y}));
             }
             square.move({cellSize, 0});
         }
-        square.move({-cellSize*width, cellSize});
+        square.move({-cellSize*field.getWidth(), cellSize});
     }
 
     // Draw vertical lines
     sf::Vertex vertLine[] {
         {pos, sf::Color::Black, {0.f, 0.f}},
-        {{pos.x, pos.y + cellSize*height}, sf::Color::Black, {0.f, 0.f}}
+        {{pos.x, pos.y + cellSize*field.getHeight()}, sf::Color::Black, {0.f, 0.f}}
     };
-    for (int x=0; x < width+1; ++x) {
+    for (int x=0; x < field.getWidth()+1; ++x) {
         window.draw(vertLine, 2, sf::PrimitiveType::Lines);
         vertLine[0].position.x += cellSize;
         vertLine[1].position.x += cellSize;
@@ -59,9 +46,9 @@ void Grid::blit(Window& window) {
     // Draw horizontal lines
     sf::Vertex horLine[] {
         {pos, sf::Color::Black, {0.f, 0.f}},
-        {{pos.x + cellSize*width, pos.y}, sf::Color::Black, {0.f, 0.f}}
+        {{pos.x + cellSize*field.getWidth(), pos.y}, sf::Color::Black, {0.f, 0.f}}
     };
-    for (int y=0; y < height+1; ++y) {
+    for (int y=0; y < field.getHeight()+1; ++y) {
         window.draw(horLine, 2, sf::PrimitiveType::Lines);
         horLine[0].position.y += cellSize;
         horLine[1].position.y += cellSize;
@@ -71,84 +58,41 @@ void Grid::blit(Window& window) {
 bool Grid::isSelected(sf::Vector2i point) {
     return (pos.x < point.x)
     && (pos.y < point.y)
-    && (pos.x + width*cellSize > point.x)
-    && (pos.y + height*cellSize > point.y);
+    && (pos.x + field.getWidth()*cellSize > point.x)
+    && (pos.y + field.getHeight()*cellSize > point.y);
 }
 
 void Grid::setWidth(unsigned _width) {
-    // Creating new array of cells
-    IndexedCell* newGrid = new IndexedCell[height*_width];
-    for (int y=0; y < height; ++y) {
-        // Copying line (or as much as can) to new array
-        memcpy(newGrid+y*_width, grid+y*width, std::min(width, _width)*sizeof(IndexedCell));
-    }
-    // Setting new options
-    delete[] grid;
-    grid = newGrid;
-    width = _width;
+    field.setWidth(_width);
 }
 
 void Grid::setHeight(unsigned _height) {
-    // Creating new array of cells
-    IndexedCell* newGrid = new IndexedCell[_height*width]{};
-    
-    // Copying as much elements as we could
-    if (_height > height) {
-        memcpy(newGrid, grid, height*width*sizeof(IndexedCell));
-    } else {
-        memcpy(newGrid, grid, _height*width*sizeof(IndexedCell));
-    }
-
-    // Setting new options
-    delete[] grid;
-    grid = newGrid;
-    height = _height;
+    field.setHeight(_height);
 }
 
-void Grid::saveGrid(std::string name) {
-    // File for saving current state of grid
-    std::ofstream fout(name);
+std::string Grid::getWidth() {
+    return std::to_string(field.getWidth());
+}
 
+std::string Grid::getHeight() {
+    return std::to_string(field.getHeight());
+}
+
+void Grid::save(std::ofstream& fout) {
     // Writing system data
-    fout << name << '\n';
-    fout << width << ' ' << height << '\n';
-
-    // Writing grid data
-    for (int y=0; y < height; ++y) {
-        for (int x=0; x < width; ++x) {
-            fout << getCell({x, y}).saveAs();
-        }
-        fout << '\n';
-    }
-
-    fout.close();
-
+    fout << '\n';
+    fout << "Grid\n";
+    field.save(fout);
 }
 
-void Grid::loadGrid(std::string name) {
-    // Reading data of grid from file
-    std::ifstream fin(name);
-
+void Grid::load(std::ifstream& fin) {
     // Current reading line
     std::string line;
 
-    // Skipping first line (name)
+    // Skipping first 2 lines (empty and title)
     std::getline(fin, line);
-    
-    // Getting width and height
-    fin >> width >> height;
+    std::getline(fin, line);
 
-    // Reading all other lines with grid data
-    int y=0;
-    while (std::getline(fin, line)) {
-        // Read all need charachters or less, if haven't
-        for (int x=0; x < std::min(width, (unsigned)line.length()); ++x) {
-            //
-            getCell({x, y}).loadFrom(line[x]);
-        }
-        // Check, if read all lines
-        if (++y == height) {
-            break;
-        }
-    }
+    // Load data to field
+    field.load(fin);
 }

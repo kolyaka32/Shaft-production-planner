@@ -289,6 +289,17 @@ void GUI::TypeBox::draw(Window& window) {
     }
 }
 
+void GUI::TypeBox::setString(std::string _str) {
+    // Resetting values
+    selected = false;
+    selectLength = 0;
+    showCaret = false;
+    clock.stop();
+
+    // Setting new text
+    drawText.setString(_str);
+}
+
 // Getting result
 std::string GUI::TypeBox::getString() {
     return drawText.getString();
