@@ -26,10 +26,11 @@ steps {
     {window, 400, 540, {"Main", "Получистовая"}},
     {window, 630, 540, {"Trimming", "Чистовая"}},
     {window, 860, 540, {"Finishing", "Отделочная"}}},
-warningLowLength(window, 780, 300, {"Insufficient length", "Недостаточная длинна"}, "machines/danger-icon.png"),
-warningLowDiameter(window, 780, 350, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
-warningHighLength(window, 780, 300, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
-warningHighDiameter(window, 780, 350, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png") {
+warningLowLength(window, 750, 350, {"Insufficient length", "Недостаточная длинна"}, "machines/danger-icon.png"),
+warningLowDiameter(window, 750, 400, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
+warningHighLength(window, 750, 350, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
+warningHighDiameter(window, 750, 400, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png"),
+warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слишком малая шероховатость"}, "machines/warning-icon.png") {
     setMaterial(materialIndex);
 }
 
@@ -111,6 +112,7 @@ void ProductProcess::draw(Window& window) {
     warningLowDiameter.draw(window);
     warningHighLength.draw(window);
     warningHighDiameter.draw(window);
+    warningHighBlankRoughness.draw(window);
 }
 
 
@@ -120,10 +122,22 @@ void ProductProcess::updateProcessParameters() {
     warningLowDiameter.deactivate();
     warningHighLength.deactivate();
     warningHighDiameter.deactivate();
+    warningHighBlankRoughness.deactivate();
 
     // Update step count
     stepCount = getStepCount(targetRoughness)+1;
-    startStep = getStepCount(blankRoughness);
+    
+    if (blankRoughness < targetRoughness) {
+        startStep = stepCount-1;
+        warningHighBlankRoughness.activate();
+    } else {
+        startStep = getStepCount(blankRoughness);
+        // Check, if at same step
+        if (startStep+1 == stepCount) {
+            startStep = stepCount-1;
+        }
+    }
+    
 
     // Update input diameters
     float inputDiameter = targetDiameter;
