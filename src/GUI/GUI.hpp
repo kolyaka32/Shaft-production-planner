@@ -102,7 +102,7 @@ namespace GUI {
         // Getting input
         bool click(sf::Vector2i point);  // Return true, when stop inputing
         void unClick();
-        void keyPress(sf::Event::KeyPressed state);
+        bool keyPress(sf::Event::KeyPressed state);
         void inputText(char32_t ch);
         void update(sf::Vector2i point);
         // Drawing at screen

@@ -97,7 +97,7 @@ void GUI::TypeBox::unClick() {
     pressed = false;
 }
 
-void GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
+bool GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
     if (selected) {
         pressed = false;
         const sf::String& str = drawText.getString();
@@ -215,10 +215,16 @@ void GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
             }
             break;
 
-        default:
-            break;
+        case sf::Keyboard::Key::Enter:
+            // Finishing entering text
+            selected = false;
+            selectLength = 0;
+            showCaret = false;
+            clock.stop();
+            return true;
         }
     }
+    return false;
 }
 
 void GUI::TypeBox::inputText(char32_t ch) {
@@ -289,7 +295,31 @@ std::string GUI::TypeBox::getString() {
 }
 
 float GUI::TypeBox::getNumber() {
-    return std::stof((std::string)drawText.getString());
+    // Clearing all none-number charachters
+    sf::String s = drawText.getString();
+    std::string outStr(s.getSize(), '\0');
+    int l=0;
+
+    // Getting corrected string number
+    for (int i=0; i < s.getSize(); ++i) {
+        if (s[i] >= '0' && s[i] <= '9') {
+            outStr[l] = s[i];
+            l++;
+        }
+    }
+
+    // Getting number itself
+    float number = 0;
+    if (l==0) {
+        number = 0;
+        drawText.setString("0");
+    } else {
+        outStr = outStr.substr(0, l);
+        number = std::stof(outStr);
+        drawText.setString(outStr);
+    }
+    return number;
+
     // At this moment - simple function
     // TODO: create improved parser for understand +-*/()^
 }

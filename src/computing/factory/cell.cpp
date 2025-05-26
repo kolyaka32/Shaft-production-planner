@@ -23,7 +23,7 @@ void Cell::draw(Window& window, sf::Vector2f absPos) {
 }
 
 void Cell::draw(Window& window, sf::Vector2i absPos) {
-    drawer.draw(window, type, {(float)absPos.x, (float)absPos.y});
+    drawer.draw(window, type, {(float)absPos.x-cellSize/2, (float)absPos.y-cellSize/2});
 }
 
 void Cell::loadFrom(char letter) {

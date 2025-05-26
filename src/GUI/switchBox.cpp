@@ -9,7 +9,10 @@ GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText
         drawnTexts[i].setFillColor(sf::Color::Black);
         maxWidth = std::max(maxWidth, drawnTexts[i].getGlobalBounds().size.x);
     }
+    // Updating start option
     selected = startOption;
+    drawnTexts[selected].move({0, -(float)selected*30.0f});
+
     // Setting background of active text
     backgroundBox.setSize({maxWidth+5, 30});
     backgroundBox.setPosition({X, Y});
@@ -24,9 +27,9 @@ bool GUI::SwitchBox<count>::click(sf::Vector2i point) {
         && (backgroundBox.getGlobalBounds().position.y + backgroundBox.getSize().y > point.y)) {
             // Finding new option
             selected = (point.y - backgroundBox.getGlobalBounds().position.y) / 30;
+            drawnTexts[selected].move({0, -(float)selected*30.0f});
             opened = false;
             backgroundBox.setSize({backgroundBox.getSize().x, 30});
-            drawnTexts[selected].move({0, -(float)selected*30.0f});
             return true;
         } else {
             opened = false;

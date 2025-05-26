@@ -9,6 +9,7 @@ class ProductProcess {
  private:
     // Getted options
     static int stepCount;
+    static int startStep;
     static Material material;
     static unsigned materialIndex;
 
@@ -36,7 +37,7 @@ class ProductProcess {
     float getInputDiameter(unsigned step, float outDiameter);
     float getInputLength(unsigned step, float outLength);
     void updateProcessParameters();
-    void updateStepCount();
+    int getStepCount(float rougness);
 
  public:
     ProductProcess(Window& window);

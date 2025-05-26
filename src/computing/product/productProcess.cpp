@@ -2,14 +2,14 @@
 
 
 // Static global process options
-
-int ProductProcess::stepCount = 4;
+int ProductProcess::stepCount = -1;
+int ProductProcess::startStep = -1;
 Material ProductProcess::material = Material::machineSteel;
-unsigned ProductProcess::materialIndex = 1;
+unsigned ProductProcess::materialIndex = 0;
 float ProductProcess::targetRoughness = 4;
 float ProductProcess::targetDiameter = 60;
 float ProductProcess::targetLength = 200;
-float ProductProcess::blankRoughness = 40;
+float ProductProcess::blankRoughness = 240;
 float ProductProcess::blankDiameter = 80;
 float ProductProcess::blankLength = 220;
 
@@ -23,13 +23,13 @@ ProductProcess::ProductProcess(Window& window)
     {window, 940, 540}},
 steps {
     {window, 170, 540, {"Rough", "Черновая"}},
-    {window, 400, 540, {"Main", "Основная"}},
-    {window, 630, 540, {"Trimming", "Отделочная"}},
-    {window, 860, 540, {"Finishing", "Чистовая"}}},
-warningLowLength(window, 750, 300, {"Insufficient length", "Недостаточная длинна"}, "machines/danger-icon.png"),
-warningLowDiameter(window, 750, 350, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
-warningHighLength(window, 750, 300, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
-warningHighDiameter(window, 750, 350, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png") {
+    {window, 400, 540, {"Main", "Получистовая"}},
+    {window, 630, 540, {"Trimming", "Чистовая"}},
+    {window, 860, 540, {"Finishing", "Отделочная"}}},
+warningLowLength(window, 780, 300, {"Insufficient length", "Недостаточная длинна"}, "machines/danger-icon.png"),
+warningLowDiameter(window, 780, 350, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
+warningHighLength(window, 780, 300, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
+warningHighDiameter(window, 780, 350, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png") {
     setMaterial(materialIndex);
 }
 
@@ -63,17 +63,18 @@ void ProductProcess::setBlankDiameter(float _diameter) {
     updateProcessParameters();
 }
 
-void ProductProcess::setMaterial(unsigned index) {
-    switch (index) {
-    case 1:
+void ProductProcess::setMaterial(unsigned _index) {
+    materialIndex = _index;
+    switch (materialIndex) {
+    case 0:
         material = Material::machineSteel;
         break;
 
-    case 2:
+    case 1:
         material = Material::alloys;
         break;
 
-    case 3:
+    case 2:
         material = Material::heatResistantSteel;
         break;
     }
@@ -111,10 +112,10 @@ std::string ProductProcess::getBlankDiameter() {
 
 void ProductProcess::draw(Window& window) {
     // Draw main steps
-    for (int i=0; i <= stepCount; ++i) {
+    for (int i=startStep; i <= stepCount; ++i) {
         semiproducts[i].draw(window);
     }
-    for (int i=0; i < stepCount; ++i) {
+    for (int i=startStep; i < stepCount; ++i) {
         steps[i].draw(window);
     }
     // Draw warnings
@@ -133,12 +134,13 @@ void ProductProcess::updateProcessParameters() {
     warningHighDiameter.deactivate();
 
     // Update step count
-    updateStepCount();
+    stepCount = getStepCount(targetRoughness)+1;
+    startStep = getStepCount(blankRoughness);
 
     // Update input diameters
     float inputDiameter = targetDiameter;
     float inputLength = targetLength;
-    for (int i=stepCount; i > 0; --i) {
+    for (int i=stepCount; i > startStep; --i) {
         semiproducts[i].setNewParameters(inputDiameter, inputLength, material);
         inputDiameter = getInputDiameter(i, inputDiameter);
         inputLength = getInputLength(i, inputLength);
@@ -159,16 +161,15 @@ void ProductProcess::updateProcessParameters() {
     }
 }
 
-void ProductProcess::updateStepCount() {
-    if (targetRoughness < 6.4) {
-        stepCount = 4;
-    } else if (targetRoughness < 12.8) {
-        stepCount = 3;
-    } else if (targetRoughness < 50) {
-        stepCount = 2;
-    } else {
-        stepCount = 1;
+int ProductProcess::getStepCount(float rougness) {
+    if (rougness < 6.4) {
+        return 3;
+    } else if (rougness < 12.8) {
+        return 2;
+    } else if (rougness < 50) {
+        return 1;
     }
+    return 0;
 }
 
 float ProductProcess::getInputDiameter(unsigned step, float outDiameter) {
@@ -188,19 +189,7 @@ float ProductProcess::getInputDiameter(unsigned step, float outDiameter) {
 }
 
 float ProductProcess::getInputLength(unsigned step, float outLength) {
-    switch (step) {
-    case 4:
-        return outLength+getCutFinishingDistance(outLength);
-
-    case 3:
-        return outLength+getCutTrimmingDistance(outLength);
-
-    case 2:
-        return outLength+getCutMainDistance(outLength);
-
-    default:
-        return outLength+getCutRoughDistance(outLength);
-    }
+    return outLength;
 }
 
 

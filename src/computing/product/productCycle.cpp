@@ -4,19 +4,20 @@
 ProductCycle::ProductCycle(Window& window)
 : SubmenuCycle(window),
 process(window),
-partPicture(0, 60, "machines/shaftBlueprint.png"),
-partWidthInput(window, 250, 245, 100, process.getTargetLength()),
-partHeightInput(window, 655, 115, 70, process.getTargetDiameter()),
-partRoughnessInput(window, 655, 65, 70, process.getTargetRoughness()),
-blankPicture(0, 300, "machines/blankBlueprint.png"),
-blankWidthInput(window, 250, 445, 100, process.getBlankLength()),
-blankHeightInput(window, 620, 350, 70, process.getBlankDiameter()),
-blankRoughnessInput(window, 620, 305, 70, process.getBlankRoughness()),
+blankPicture(0, 60, "machines/blankBlueprint.png"),
+blankWidthInput(window, 250, 205, 100, process.getBlankLength()),
+blankHeightInput(window, 620, 110, 80, process.getBlankDiameter()),
+blankRoughnessInput(window, 620, 65, 80, process.getBlankRoughness()),
+partPicture(0, 260, "machines/shaftBlueprint.png"),
+partWidthInput(window, 250, 410, 100, process.getTargetLength()),
+partHeightInput(window, 655, 315, 80, process.getTargetDiameter()),
+partRoughnessInput(window, 655, 265, 80, process.getTargetRoughness()),
 materialText(window, 880, 60, {"Material:", "Материал:"}),
-materialSwitch(window, 740, 100, (LanguagedText[]){
+materialSwitch(window, 740, 100, (LanguagedText[]) {
     {"Steel", "Сталь"},
     {"Alloys", "Цветные сплавы"},
-    {"Heat-resistant steel", "Жаропрочная сталь"}})
+    {"Heat-resistant steel", "Жаропрочная сталь"}},
+    process.getMaterial())
 {}
 
 void ProductCycle::LClick(sf::Vector2i pos) {
@@ -69,12 +70,25 @@ void ProductCycle::RClick(sf::Vector2i pos) {
 }
 
 void ProductCycle::keyDown(sf::Event::KeyPressed state) {
-    partWidthInput.keyPress(state);
-    partHeightInput.keyPress(state);
-    partRoughnessInput.keyPress(state);
-    blankWidthInput.keyPress(state);
-    blankHeightInput.keyPress(state);
-    blankRoughnessInput.keyPress(state);
+    // Check, if stop input - update values
+    if (partWidthInput.keyPress(state)) {
+        process.setTargetLength(partWidthInput.getNumber());
+    }
+    if (partHeightInput.keyPress(state)) {
+        process.setTargetDiameter(partHeightInput.getNumber());
+    }
+    if (partRoughnessInput.keyPress(state)) {
+        process.setTargetRoughness(partRoughnessInput.getNumber());
+    }
+    if (blankWidthInput.keyPress(state)) {
+        process.setBlankLength(blankWidthInput.getNumber());
+    }
+    if (blankHeightInput.keyPress(state)) {
+        process.setBlankDiameter(blankHeightInput.getNumber());;
+    }
+    if (blankRoughnessInput.keyPress(state)) {
+        process.setBlankRoughness(blankRoughnessInput.getNumber());
+    }
 }
 
 void ProductCycle::textInput(char32_t keyCode) {
