@@ -313,7 +313,7 @@ float GUI::TypeBox::getNumber() {
 
     // Getting corrected string number
     for (int i=0; i < s.getSize(); ++i) {
-        if (s[i] >= '0' && s[i] <= '9') {
+        if ((s[i] >= '0' && s[i] <= '9') || (s[i] == '.')) {
             outStr[l] = s[i];
             l++;
         }

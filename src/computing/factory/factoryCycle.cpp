@@ -10,12 +10,16 @@ heightBox(window, 160, 140, 80, Factory::getHeight()),
 cellTypeSwitch(window, 20, 200, (LanguagedText[]){{"None", "Ничего"},{"Path tile", "Клетка пути"},
     {"Cargo", "Склад"},{"Machine 1", "Станок 1"},{"Machine 2", "Станок 2"},{"Furnace 1", "Печь 1"}}),
 updateLinkageButton(window, 20, 450, 150, 40, {"Update", "Обновить"}),
-factory({200, 200}),
+factory(window, {200, 200}),
 cursorCell() {}
 
 void FactoryCycle::keyDown(sf::Event::KeyPressed state) {
-    widthBox.keyPress(state);
-    heightBox.keyPress(state);
+    if (widthBox.keyPress(state)) {
+        factory.setWidth(widthBox.getNumber());
+    }
+    if (heightBox.keyPress(state)) {
+        factory.setHeight(heightBox.getNumber());
+    }
 }
 
 void FactoryCycle::LClick(sf::Vector2i pos) {

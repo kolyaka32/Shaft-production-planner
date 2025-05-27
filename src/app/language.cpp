@@ -15,6 +15,10 @@ bool LanguagedText::setCurrentLanguage(Language newLanguage) {
     return false;
 }
 
+Language LanguagedText::getLanguage() {
+    return currentLanguage;
+}
+
 const std::string& LanguagedText::getString() {
     switch (currentLanguage) {
     case Language::English:

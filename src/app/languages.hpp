@@ -26,6 +26,7 @@ private:
 public:
     LanguagedText(const std::string engVar, const std::string rusVar);
     static bool setCurrentLanguage(Language newLanguage);
+    static Language getLanguage();
     const std::string& getString();
     sf::String getUTF8();
 };

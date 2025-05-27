@@ -98,6 +98,10 @@ std::string ProductProcess::getBlankDiameter() {
     return std::format("{:.1f}", blankDiameter);
 }
 
+int ProductProcess::getMachineCount() {
+    return stepCount - startStep;
+}
+
 
 void ProductProcess::draw(Window& window) {
     // Draw main steps

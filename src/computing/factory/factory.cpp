@@ -1,8 +1,11 @@
 #include "factory.hpp"
 
 
-Factory::Factory(sf::Vector2f _pos)
-: Grid(_pos) {}
+Factory::Factory(Window& window, sf::Vector2f _pos)
+: Grid(window, _pos) {
+    // First updation of existing grid
+    checkConnections();
+}
 
 void Factory::draw(Window& window) {
     // Draw back part with grid
@@ -14,27 +17,84 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
     if (field.getCell(getLocal(absPos)).getType() == CellType::Void) {
         field.getCell(getLocal(absPos)).setType(CellType::None);
     } else {
+        // Reset, if set on existing cell
+        switch (field.getCell(getLocal(absPos)).getType()) {
+        // Update counters
+        case CellType::Machine_1:
+        case CellType::Machine_2:
+            machineCount--;
+            updateMachineText();
+            break;
+
+        case CellType::Furnace_1:
+            furnaceCount--;
+            updateFurnaceText();
+            break;
+
+        case CellType::Cargo:
+            cargoCount--;
+            updateCargoText();
+            break;
+        }
         // Setting selected cell to matched type
         field.getCell(getLocal(absPos)).setType(_type);
+        // Increase counters
+        switch (_type) {
+        case CellType::Machine_1:
+        case CellType::Machine_2:
+            machineCount++;
+            updateMachineText();
+            break;
+
+        case CellType::Furnace_1:
+            furnaceCount++;
+            updateFurnaceText();
+            break;
+
+        case CellType::Cargo:
+            cargoCount++;
+            updateCargoText();
+            break;
+        }
+        // Update linkage of field
+        checkConnections();
     }
 }
 
 void Factory::remove(sf::Vector2i absPos) {
     switch (field.getCell(getLocal(absPos)).getType()) {
     case CellType::Void:
-        // Special action in void cell - do nothing
-        break;
+        // Special action in void cell - can't remove that doesn't exist
+        return;
 
     case CellType::None:
         // Special action in void none - none in building
         field.getCell(getLocal(absPos)).setType(CellType::Void);
+        // Update linkage of field
+        checkConnections();
+        return;
+
+    // Update counters
+    case CellType::Machine_1:
+    case CellType::Machine_2:
+        machineCount--;
+        updateMachineText();
         break;
 
-    default:
-        // In any normal machine/way - reset to none-type
-        field.getCell(getLocal(absPos)).setType(CellType::None);
+    case CellType::Furnace_1:
+        furnaceCount--;
+        updateFurnaceText();
+        break;
+
+    case CellType::Cargo:
+        cargoCount--;
+        updateCargoText();
         break;
     }
+    // In any normal machine/way - reset to none-type
+    field.getCell(getLocal(absPos)).setType(CellType::None);
+    // Update linkage of field
+    checkConnections();
 }
 
 void Factory::reset(sf::Vector2i absPos) {

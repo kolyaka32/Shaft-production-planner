@@ -8,7 +8,6 @@
 namespace GUI {
     class Text {
      private:
-        LanguagedText texts;
         sf::Text text;
 
      public:
@@ -18,7 +17,6 @@ namespace GUI {
 
     class TextButton {
      private:
-        LanguagedText texts;
         sf::RectangleShape rect;
         sf::Text text;
 
@@ -62,7 +60,7 @@ namespace GUI {
 		bool active = false;
 
      public:
-      	WarningBox(Window& window, float X, float Y, LanguagedText texts, const std::string imageFile);
+      WarningBox(Window& window, float X, float Y, LanguagedText texts, const std::string imageFile);
 		void draw(Window& window);
 		void activate();
 		void deactivate();

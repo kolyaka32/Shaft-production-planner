@@ -68,6 +68,14 @@ IndexedCell& Field::getCell(sf::Vector2i pos) {
     return grid[pos.x + pos.y*width];
 }
 
+IndexedCell& Field::operator[](sf::Vector2i pos) {
+    return grid[pos.x + pos.y*width];
+}
+
+IndexedCell& Field::operator[](unsigned _pos) {
+    return grid[_pos];
+}
+
 void Field::save(std::ofstream& fout) {
     fout << width << ' ' << height << '\n';
 
@@ -93,6 +101,8 @@ void Field::load(std::ifstream& fin) {
     // Reading all other lines with grid data
     int y=0;
     std::string line;
+    // Skipping extra line
+    std::getline(fin, line);
     while (std::getline(fin, line)) {
         // Read all need charachters or less, if haven't
         for (int x=0; x < std::min(width, (unsigned)line.length()); ++x) {

@@ -4,8 +4,7 @@
 
 GUI::TextButton::TextButton(Window& win, float X, float Y, float W, float H, LanguagedText _texts)
 : rect({W, H}),
-texts(_texts),
-text(win.font, texts.getUTF8()) {
+text(win.font, _texts.getUTF8()) {
     // Creating and placing back rect
     rect.setPosition({X, Y});
     rect.setFillColor(sf::Color{120, 120, 120});

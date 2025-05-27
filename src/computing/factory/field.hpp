@@ -22,6 +22,8 @@ public:
     unsigned getHeight();
     // Functions for getting cell at need position
     IndexedCell& getCell(sf::Vector2i pos);
+    IndexedCell& operator[](sf::Vector2i pos);
+    IndexedCell& operator[](unsigned pos);
     void save(std::ofstream& fout);
     void load(std::ifstream& fin);
 };
