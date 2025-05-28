@@ -7,16 +7,14 @@ CellDrawer::CellDrawer()
     {(sf::Texture)(resourcesDir() / "machines/cargo1.png")},
     {(sf::Texture)(resourcesDir() / "machines/machine1.png")},
     {(sf::Texture)(resourcesDir() / "machines/machine2.png")},
-    {(sf::Texture)(resourcesDir() / "machines/machine3.png")},
-},
+    {(sf::Texture)(resourcesDir() / "machines/machine3.png")}},
 warningTexture(resourcesDir() / "machines/no-path-icon.png"),
 sprites {
     {(sf::Sprite)textures[0]},
     {(sf::Sprite)textures[1]},
     {(sf::Sprite)textures[2]},
     {(sf::Sprite)textures[3]},
-    {(sf::Sprite)textures[4]},
-},
+    {(sf::Sprite)textures[4]}},
 warningSprite(warningTexture) {
     // Setting sizes of all sprites
     for (int i=0; i < spriteCount; ++i) {
@@ -34,10 +32,10 @@ sf::Color CellDrawer::getColor(CellType type) {
     case CellType::Way:
         return sf::Color::Yellow;
 
-    case CellType::Machine_1:
+    case CellType::Lathe_1:
         return sf::Color::Red;
 
-    case CellType::Machine_2:
+    case CellType::Lathe_2:
         return sf::Color::Blue;
 
     case CellType::Furnace_1:

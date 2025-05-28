@@ -10,7 +10,6 @@ private:
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
     GUI::SwitchBox<6> cellTypeSwitch;
-    GUI::TextButton updateLinkageButton;
     Factory factory;
 
     // Current selected object to place

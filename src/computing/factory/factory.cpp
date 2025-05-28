@@ -20,10 +20,10 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
         // Reset, if set on existing cell
         switch (field.getCell(getLocal(absPos)).getType()) {
         // Update counters
-        case CellType::Machine_1:
-        case CellType::Machine_2:
-            machineCount--;
-            updateMachineText();
+        case CellType::Lathe_1:
+        case CellType::Lathe_2:
+            latheCount--;
+            updateLatheText();
             break;
 
         case CellType::Furnace_1:
@@ -31,19 +31,19 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
             updateFurnaceText();
             break;
 
-        case CellType::Cargo:
-            cargoCount--;
-            updateCargoText();
+        case CellType::Warehouse:
+            warehouseCount--;
+            updateWarehouseText();
             break;
         }
         // Setting selected cell to matched type
         field.getCell(getLocal(absPos)).setType(_type);
         // Increase counters
         switch (_type) {
-        case CellType::Machine_1:
-        case CellType::Machine_2:
-            machineCount++;
-            updateMachineText();
+        case CellType::Lathe_1:
+        case CellType::Lathe_2:
+            latheCount++;
+            updateLatheText();
             break;
 
         case CellType::Furnace_1:
@@ -51,9 +51,9 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
             updateFurnaceText();
             break;
 
-        case CellType::Cargo:
-            cargoCount++;
-            updateCargoText();
+        case CellType::Warehouse:
+            warehouseCount++;
+            updateWarehouseText();
             break;
         }
         // Update linkage of field
@@ -75,10 +75,10 @@ void Factory::remove(sf::Vector2i absPos) {
         return;
 
     // Update counters
-    case CellType::Machine_1:
-    case CellType::Machine_2:
-        machineCount--;
-        updateMachineText();
+    case CellType::Lathe_1:
+    case CellType::Lathe_2:
+        latheCount--;
+        updateLatheText();
         break;
 
     case CellType::Furnace_1:
@@ -86,9 +86,9 @@ void Factory::remove(sf::Vector2i absPos) {
         updateFurnaceText();
         break;
 
-    case CellType::Cargo:
-        cargoCount--;
-        updateCargoText();
+    case CellType::Warehouse:
+        warehouseCount--;
+        updateWarehouseText();
         break;
     }
     // In any normal machine/way - reset to none-type
@@ -137,8 +137,8 @@ bool Factory::checkConnections() {
         for (int x=0; x < field.getWidth(); ++x) {
             if (field.getCell({x, y}).getIndex() == 0) {
                 switch (field.getCell({x, y}).getType()) {
-                case CellType::Machine_1:
-                case CellType::Machine_2:
+                case CellType::Lathe_1:
+                case CellType::Lathe_2:
                 case CellType::Furnace_1:
                     field.getCell({x, y}).setIndex(indexCounter);
                     indexCounter++;

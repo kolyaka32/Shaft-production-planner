@@ -98,7 +98,15 @@ std::string ProductProcess::getBlankDiameter() {
     return std::format("{:.1f}", blankDiameter);
 }
 
-int ProductProcess::getMachineCount() {
+int ProductProcess::getLatheCount() {
+    return stepCount - startStep;
+}
+
+int ProductProcess::getFurnaceCount() {
+    return stepCount - startStep;
+}
+
+int ProductProcess::getWarehouseCount() {
     return stepCount - startStep;
 }
 

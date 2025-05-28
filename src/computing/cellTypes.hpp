@@ -12,10 +12,10 @@ enum class CellType {
     Way,
 
     // Types for storage
-    Cargo,
+    Warehouse,
 
     // Types of machines
-    Machine_1,
-    Machine_2,
+    Lathe_1,
+    Lathe_2,
     Furnace_1,
 };

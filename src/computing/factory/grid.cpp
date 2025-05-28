@@ -3,29 +3,29 @@
 
 // Static class values
 Field Grid::field{10, 5};
-int Grid::machineCount = 0;
+int Grid::latheCount = 0;
 int Grid::furnaceCount = 0;
-int Grid::cargoCount = 0;
+int Grid::warehouseCount = 0;
 
 
 Grid::Grid(Window& window, sf::Vector2f _pos)
 : pos(_pos),
-machineCountText(window.font),
+latheCountText(window.font),
 furnaceCountText(window.font),
-cargoCountText(window.font),
-machineCountHigh(window, 700, 60,  {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
+warehouseCountText(window.font),
+latheCountHigh(window, 700, 60,  {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
 furnaceCountHigh(window, 700, 100, {"Number of furnaces is excessive", "Число печей избыточно"}, "machines/warning-icon.png"),
-cargoCountHigh(window,   700, 140, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
-machineCountLow(window,  700, 60,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
+warehouseCountHigh(window,   700, 140, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
+latheCountLow(window,  700, 60,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
 furnaceCountLow(window,  700, 100, {"Number of furnaces is insufficient", "Число печей недостаточно"}, "machines/warning-icon.png"),
-cargoCountLow(window,    700, 140, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
+warehouseCountLow(window,    700, 140, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
     // Placing texts
-    machineCountText.setPosition({280, 60});
+    latheCountText.setPosition({280, 60});
     furnaceCountText.setPosition({280, 100});
-    cargoCountText.setPosition({280, 140});
-    updateMachineText();
+    warehouseCountText.setPosition({280, 140});
+    updateLatheText();
     updateFurnaceText();
-    updateCargoText();
+    updateWarehouseText();
 }
 
 sf::Vector2i Grid::getLocal(sf::Vector2i absPos) {
@@ -36,26 +36,26 @@ sf::Vector2f Grid::getAbs(sf::Vector2i localPos) {
     return {localPos.x*cellSize + pos.x, localPos.y*cellSize + pos.y};
 }
 
-void Grid::updateMachineText() {
+void Grid::updateLatheText() {
     // Update text itself
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Machines: {}, needed: {}", machineCount, ProductProcess::getMachineCount());
+        str = std::format("Lathes: {}, needed: {}", latheCount, ProductProcess::getLatheCount());
         break;
     
     case Language::Russian:
-        str = std::format("Станков: {}, необходимо: {}", machineCount, ProductProcess::getMachineCount());
+        str = std::format("Станков: {}, необходимо: {}", latheCount, ProductProcess::getLatheCount());
         break;
     }
-    machineCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
+    latheCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
-    machineCountHigh.deactivate();
-    machineCountLow.deactivate();
-    if (machineCount > ProductProcess::getMachineCount()) {
-        machineCountHigh.activate();
-    } else if (machineCount < ProductProcess::getMachineCount()) {
-        machineCountLow.activate();
+    latheCountHigh.deactivate();
+    latheCountLow.deactivate();
+    if (latheCount > ProductProcess::getLatheCount()) {
+        latheCountHigh.activate();
+    } else if (latheCount < ProductProcess::getLatheCount()) {
+        latheCountLow.activate();
     }
 }
 
@@ -64,67 +64,67 @@ void Grid::updateFurnaceText() {
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Furnaces: {}, needed: {}", furnaceCount, ProductProcess::getMachineCount());
+        str = std::format("Furnaces: {}, needed: {}", furnaceCount, ProductProcess::getFurnaceCount());
         break;
     
     case Language::Russian:
-        str = std::format("Печей: {}, необходимо: {}", furnaceCount, ProductProcess::getMachineCount());
+        str = std::format("Печей: {}, необходимо: {}", furnaceCount, ProductProcess::getFurnaceCount());
         break;
     }
     furnaceCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
     furnaceCountHigh.deactivate();
     furnaceCountLow.deactivate();
-    if (furnaceCount > ProductProcess::getMachineCount()) {
+    if (furnaceCount > ProductProcess::getFurnaceCount()) {
         furnaceCountHigh.activate();
-    } else if (furnaceCount < ProductProcess::getMachineCount()) {
+    } else if (furnaceCount < ProductProcess::getFurnaceCount()) {
         furnaceCountLow.activate();
     }
 }
 
-void Grid::updateCargoText() {
+void Grid::updateWarehouseText() {
     // Update text itself
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Warehouses: {}, needed: {}", cargoCount, ProductProcess::getMachineCount());
+        str = std::format("Warehouses: {}, needed: {}", warehouseCount, ProductProcess::getWarehouseCount());
         break;
     
     case Language::Russian:
-        str = std::format("Складов: {}, необходимо: {}", cargoCount, ProductProcess::getMachineCount());
+        str = std::format("Складов: {}, необходимо: {}", warehouseCount, ProductProcess::getWarehouseCount());
         break;
     }
-    cargoCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
+    warehouseCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
-    cargoCountHigh.deactivate();
-    cargoCountLow.deactivate();
-    if (cargoCount > ProductProcess::getMachineCount()) {
-        cargoCountHigh.activate();
-    } else if (cargoCount < ProductProcess::getMachineCount()) {
-        cargoCountLow.activate();
+    warehouseCountHigh.deactivate();
+    warehouseCountLow.deactivate();
+    if (warehouseCount > ProductProcess::getWarehouseCount()) {
+        warehouseCountHigh.activate();
+    } else if (warehouseCount < ProductProcess::getWarehouseCount()) {
+        warehouseCountLow.activate();
     }
 }
 
 void Grid::recalculateCellsCount() {
     // Resetting counts
-    machineCount=0;
+    latheCount=0;
     furnaceCount=0;
-    cargoCount=0;
+    warehouseCount=0;
 
     // Couting all objects
     for (int i=0; i < field.getHeight()*field.getWidth(); ++i) {
         switch (field[i].getType()) {
-        case CellType::Machine_1:
-        case CellType::Machine_2:
-            machineCount++;
+        case CellType::Lathe_1:
+        case CellType::Lathe_2:
+            latheCount++;
             break;
 
         case CellType::Furnace_1:
             furnaceCount++;
             break;
 
-        case CellType::Cargo:
-            cargoCount++;
+        case CellType::Warehouse:
+            warehouseCount++;
             break;
         
         default:
@@ -138,15 +138,15 @@ void Grid::blit(Window& window) {
     square.setPosition(pos);
 
     // Draw counters
-    window.draw(machineCountText);
+    window.draw(latheCountText);
     window.draw(furnaceCountText);
-    window.draw(cargoCountText);
-    machineCountHigh.draw(window);
+    window.draw(warehouseCountText);
+    latheCountHigh.draw(window);
     furnaceCountHigh.draw(window);
-    cargoCountHigh.draw(window);
-    machineCountLow.draw(window);
+    warehouseCountHigh.draw(window);
+    latheCountLow.draw(window);
     furnaceCountLow.draw(window);
-    cargoCountLow.draw(window);
+    warehouseCountLow.draw(window);
 
     // Draw cells
     for (int y=0; y < field.getHeight(); ++y) {

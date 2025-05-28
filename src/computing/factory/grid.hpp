@@ -10,10 +10,10 @@ private:
     // Absolute position of first element
     const sf::Vector2f pos;
     // Counter indicators
-    sf::Text machineCountText, furnaceCountText, cargoCountText;
+    sf::Text latheCountText, furnaceCountText, warehouseCountText;
     // Warnings
-    GUI::WarningBox machineCountHigh, furnaceCountHigh, cargoCountHigh;
-    GUI::WarningBox machineCountLow, furnaceCountLow, cargoCountLow;
+    GUI::WarningBox latheCountHigh, furnaceCountHigh, warehouseCountHigh;
+    GUI::WarningBox latheCountLow, furnaceCountLow, warehouseCountLow;
     //
     static void recalculateCellsCount();
 
@@ -21,11 +21,11 @@ protected:
     // Main field [height*width], filled with cells
     static Field field;
     // Counters of current objects at field
-    static int machineCount, furnaceCount, cargoCount;
+    static int latheCount, furnaceCount, warehouseCount;
     // Function for update texts
-    void updateMachineText();
+    void updateLatheText();
     void updateFurnaceText();
-    void updateCargoText();
+    void updateWarehouseText();
 
     // Getting local position (in cells) from absolute coordinate
     sf::Vector2i getLocal(sf::Vector2i absPos);
