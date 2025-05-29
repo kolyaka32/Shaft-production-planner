@@ -12,6 +12,7 @@ public:
     void remove(sf::Vector2i absPos);
     void reset(sf::Vector2i absPos);
     static bool checkConnections();
+    void tryOptimize();
 
 private:
     static void indexConnected(sf::Vector2i pos, unsigned index);

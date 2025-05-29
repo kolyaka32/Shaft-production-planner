@@ -11,6 +11,15 @@ height(_height) {
     }
 }
 
+Field::Field(const Field& _field)
+: width(_field.width),
+height(_field.height)  {
+    // Setting new grid
+    grid = new IndexedCell[width*height];
+    // Copying previous field into new
+    memcpy(grid, _field.grid, height*width*sizeof(grid[0]));
+}
+
 Field::~Field() {
     delete[] grid;
 }

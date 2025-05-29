@@ -1,4 +1,5 @@
 #include "factory.hpp"
+#include "optimiser.hpp"
 
 
 Factory::Factory(Window& window, sf::Vector2f _pos)
@@ -174,4 +175,9 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
             indexConnected({pos.x, pos.y+1}, _index);
         }
     }
+}
+
+void Factory::tryOptimize() {
+    Optimiser opt();
+    opt.solve(field);
 }

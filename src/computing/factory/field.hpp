@@ -14,6 +14,7 @@ private:
 
 public:
     Field(unsigned width, unsigned height);
+    Field(const Field& field);
     ~Field();
     void reset(unsigned width, unsigned height);
     void setWidth(unsigned width);

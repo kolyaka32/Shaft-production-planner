@@ -6,11 +6,14 @@
 // Subwindow for create and set parameters of factory grid
 class FactoryCycle : public SubmenuCycle {
 private:
-    // Grid options
+    // Main object, representing whole system
+    Factory factory;
+
+    // GUI to interact with factory grid
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
     GUI::SwitchBox<6> cellTypeSwitch;
-    Factory factory;
+    GUI::TextButton optimizeButton;
 
     // Current selected object to place
     bool selectObject = false;
