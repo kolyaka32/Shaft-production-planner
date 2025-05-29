@@ -1,0 +1,115 @@
+#include "material.hpp"
+
+Material::Material(unsigned _index) {
+    switch (_index) {
+    case 0:
+        value = Material::MachineSteel;
+        break;
+    
+    case 1:
+        value = Material::Alloys;
+        break;
+
+    case 2:
+        value = Material::HeatResistantSteel;
+        break;
+    }
+}
+
+Material::operator unsigned() {
+    switch (value) {
+    case Material::MachineSteel:
+        return 0;
+    
+    case Material::Alloys:
+        return 1;
+
+    case Material::HeatResistantSteel:
+        return 2;
+    }
+    return 0;
+}
+
+
+float Material::recristalisationTemp() {
+    switch (value) {
+    case MachineSteel:
+        return 680;
+
+    case Alloys:
+        return 450;
+    
+    case HeatResistantSteel:
+        return 850;
+    }
+    return 0;
+}
+
+float Material::density() {
+    switch (value) {
+    case MachineSteel:
+        return 7800;
+
+    case Alloys:
+        return 8800;
+    
+    case HeatResistantSteel:
+        return 7700;
+    }
+    return 0;
+}
+
+float Material::mainFi() {
+    switch (value) {
+    case MachineSteel:
+        return 60;
+
+    case Alloys:
+        return 45;
+    
+    case HeatResistantSteel:
+        return 45;
+    }
+    return 0;
+}
+
+float Material::addFi() {
+    switch (value) {
+    case MachineSteel:
+        return 15;
+
+    case Alloys:
+        return 10;
+    
+    case HeatResistantSteel:
+        return 10;
+    }
+    return 0;
+}
+
+float Material::Cv(float toolFeed) {
+    if (toolFeed > 0.4) {
+        switch (value) {
+        case MachineSteel:
+            return 548;
+
+        case Alloys:
+            return 436;
+        
+        case HeatResistantSteel:
+            return 345;
+        }
+    } else {
+        switch (value) {
+        case MachineSteel:
+            return 478;
+
+        case Alloys:
+            return 405;
+        
+        case HeatResistantSteel:
+            return 301;
+        }
+    }
+    return 0;
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "productionStep.hpp"
+#include "../part.hpp"
 
 //
 class ProductionSemiproduct {
@@ -13,5 +14,5 @@ class ProductionSemiproduct {
  public:
     ProductionSemiproduct(Window& window, float X, float Y);
     void draw(Window& window);
-    void setNewParameters(float diameter, float length, const Material material);
+    void setNewParameters(Part part);
 };

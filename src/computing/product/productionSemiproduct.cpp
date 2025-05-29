@@ -22,8 +22,8 @@ void ProductionSemiproduct::draw(Window& window) {
     window.draw(massText);
 }
 
-void ProductionSemiproduct::setNewParameters(float _diameter, float _length, const Material material) {
-    diameterText.setString(std::format("d={:.1f} mm", _diameter));
-    lengthText.setString(std::format("l={:.0f} mm", _length));
-    massText.setString(std::format("m={:.2f} kg", _diameter*_diameter*3.141592/4*material.density*_length/1000000000));
+void ProductionSemiproduct::setNewParameters(Part part) {
+    diameterText.setString(std::format("d={:.1f} mm", part.diameter));
+    lengthText.setString(std::format("l={:.0f} mm", part.length));
+    massText.setString(std::format("m={:.2f} kg", part.getMass()));
 }

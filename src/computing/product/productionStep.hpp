@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../app/cycleTemplate.hpp"
-#include "material.hpp"
 
 
 // Class showing one process step of part production

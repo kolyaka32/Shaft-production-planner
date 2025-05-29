@@ -2,16 +2,8 @@
 
 
 // Static global process options
-int ProductProcess::stepCount = -1;
-int ProductProcess::startStep = -1;
-Material ProductProcess::material = Material::machineSteel;
-unsigned ProductProcess::materialIndex = 0;
-float ProductProcess::targetRoughness = 4;
-float ProductProcess::targetDiameter = 60;
-float ProductProcess::targetLength = 200;
-float ProductProcess::blankRoughness = 240;
-float ProductProcess::blankDiameter = 80;
-float ProductProcess::blankLength = 220;
+Part ProductProcess::targetPart{60, 200, 4};
+Part ProductProcess::blanktPart{80, 220, 240};
 
 
 ProductProcess::ProductProcess(Window& window)
@@ -30,72 +22,68 @@ warningLowLength(window, 750, 350, {"Insufficient length", "Недостаточ
 warningLowDiameter(window, 750, 400, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
 warningHighLength(window, 750, 350, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
 warningHighDiameter(window, 750, 400, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png"),
-warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слишком малая шероховатость"}, "machines/warning-icon.png") {
-    setMaterial(materialIndex);
-}
+warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слишком малая шероховатость"}, "machines/warning-icon.png") {}
 
 void ProductProcess::setTargetRoughness(float _targetRoughness) {
-    targetRoughness = _targetRoughness;
-    updateProcessParameters();
+    targetPart.rougness = _targetRoughness;
+    recalculate(targetPart, blanktPart);
 }
 
 void ProductProcess::setTargetDiameter(float _targetDiameter) {
-    targetDiameter = _targetDiameter;
-    updateProcessParameters();
+    targetPart.diameter = _targetDiameter;
+    recalculate(targetPart, blanktPart);
 }
 
 void ProductProcess::setTargetLength(float _targetLength) {
-    targetLength = _targetLength;
-    updateProcessParameters();
+    targetPart.length = _targetLength;
+    recalculate(targetPart, blanktPart);
 }
 
 void ProductProcess::setBlankRoughness(float _roughness) {
-    blankRoughness = _roughness;
-    updateProcessParameters();
-}
-
-void ProductProcess::setBlankLength(float _length) {
-    blankLength = _length;
-    updateProcessParameters();
+    blanktPart.rougness = _roughness;
+    recalculate(targetPart, blanktPart);
 }
 
 void ProductProcess::setBlankDiameter(float _diameter) {
-    blankDiameter = _diameter;
-    updateProcessParameters();
+    blanktPart.diameter = _diameter;
+    recalculate(targetPart, blanktPart);
+}
+
+void ProductProcess::setBlankLength(float _length) {
+    blanktPart.length = _length;
+    recalculate(targetPart, blanktPart);
 }
 
 void ProductProcess::setMaterial(unsigned _index) {
-    materialIndex = _index;
-    updateMaterialProperties();
-    updateProcessParameters();
+    Part::material = Material(_index);
 }
 
 unsigned ProductProcess::getMaterial() {
-    return materialIndex;
+    return Part::material;
 }
 
 std::string ProductProcess::getTargetRoughness() {
-    return std::format("{:.1f}", targetRoughness);
+    return std::format("{:.1f}", targetPart.rougness);
 }
 
 std::string ProductProcess::getTargetLength() {
-    return std::format("{:.0f}", targetLength);
+    return std::format("{:.0f}", targetPart.length);
 }
 
 std::string ProductProcess::getTargetDiameter() {
-    return std::format("{:.1f}", targetDiameter);
+    return std::format("{:.1f}", targetPart.diameter);
 }
 
 std::string ProductProcess::getBlankRoughness() {
-    return std::format("{:.1f}", blankRoughness);
+    return std::format("{:.1f}", blanktPart.rougness);
 }
 
 std::string ProductProcess::getBlankLength() {
-    return std::format("{:.0f}", blankLength);
+    return std::format("{:.0f}", blanktPart.length);
 }
 
 std::string ProductProcess::getBlankDiameter() {
-    return std::format("{:.1f}", blankDiameter);
+    return std::format("{:.1f}", blanktPart.diameter);
 }
 
 
@@ -116,7 +104,7 @@ void ProductProcess::draw(Window& window) {
 }
 
 
-void ProductProcess::updateProcessParameters() {
+/*void ProductProcess::recalculate() {
     // Resetting warnings
     warningLowLength.deactivate();
     warningLowDiameter.deactivate();
@@ -137,7 +125,6 @@ void ProductProcess::updateProcessParameters() {
             startStep = stepCount-1;
         }
     }
-    
 
     // Update input diameters
     float inputDiameter = targetDiameter;
@@ -161,147 +148,21 @@ void ProductProcess::updateProcessParameters() {
     } else if (blankDiameter > inputDiameter*1.2) {
         warningHighDiameter.activate();
     }
-}
+}*/
 
-void ProductProcess::updateMaterialProperties() {
-    switch (materialIndex) {
-    case 0:
-        material = Material::machineSteel;
-        break;
-
-    case 1:
-        material = Material::alloys;
-        break;
-
-    case 2:
-        material = Material::heatResistantSteel;
-        break;
-    }
-}
-
-int ProductProcess::getStepCount(float rougness) {
-    if (rougness < 6.4) {
-        return 3;
-    } else if (rougness < 12.8) {
-        return 2;
-    } else if (rougness < 50) {
-        return 1;
-    }
-    return 0;
-}
-
-float ProductProcess::getInputDiameter(unsigned step, float outDiameter) {
-    switch (step) {
-    case 4:
-        return outDiameter+2*getCutFinishingDistance(outDiameter);
-
-    case 3:
-        return outDiameter+2*getCutTrimmingDistance(outDiameter);
-
-    case 2:
-        return outDiameter+2*getCutMainDistance(outDiameter);
-
-    default:
-        return outDiameter+2*getCutRoughDistance(outDiameter);
-    }
-}
-
-float ProductProcess::getInputLength(unsigned step, float outLength) {
-    return outLength;
-}
-
-float ProductProcess::getCutRoughDistance(float diameter) {
-    if (diameter < 18) {
-        return 2.0;
-    } else if (diameter < 30) {
-        return 2.5;
-    } else if (diameter < 50) {
-        return 3.0;
-    } else if (diameter < 80) {
-        return 3.5;
-    } else if (diameter < 120) {
-        return 4.5;
-    } else if (diameter < 180) {
-        return 5.0;
-    } else if (diameter < 250) {
-        return 5.5;
-    } else if (diameter < 320) {
-        return 6.5;
-    } else if (diameter < 400) {
-        return 7.5;
-    }
-    return 8.5;
-}
-
-float ProductProcess::getCutMainDistance(float diameter) {
-    if (diameter < 18) {
-        return 0.9;
-    } else if (diameter < 30) {
-        return 1.0;
-    } else if (diameter < 50) {
-        return 1.3;
-    } else if (diameter < 80) {
-        return 1.5;
-    } else if (diameter < 120) {
-        return 1.7;
-    } else if (diameter < 180) {
-        return 2.0;
-    } else if (diameter < 250) {
-        return 2.2;
-    } else if (diameter < 320) {
-        return 2.4;
-    } else if (diameter < 400) {
-        return 2.6;
-    }
-    return 2.8;
-}
-
-float ProductProcess::getCutTrimmingDistance(float diameter) {
-    if (diameter < 18) {
-        return 0.5;
-    } else if (diameter < 30) {
-        return 0.6;
-    } else if (diameter < 50) {
-        return 0.7;
-    } else if (diameter < 80) {
-        return 0.8;
-    } else if (diameter < 120) {
-        return 0.9;
-    } else if (diameter < 180) {
-        return 1.0;
-    } else if (diameter < 250) {
-        return 1.1;
-    } else if (diameter < 320) {
-        return 1.2;
-    } else if (diameter < 400) {
-        return 1.4;
-    }
-    return 1.6;
-}
-
-float ProductProcess::getCutFinishingDistance(float diameter) {
-    if (diameter < 30) {
-        return 0.2;
-    } else if (diameter < 120) {
-        return 0.3;
-    } else if (diameter < 400) {
-        return 0.4;
-    }
-    return 0.6;
-}
 
 void ProductProcess::save(std::ofstream& fout) {
     // Writing system data
     fout << '\n';
     fout << "Part\n";
     // Writing part data
-    fout << targetDiameter << ' ' << targetLength << ' ' << targetRoughness << '\n';
+    fout << targetPart.diameter << ' ' << targetPart.length << ' ' << targetPart.rougness << '\n';
 
     // Writing blank data
-    fout << blankDiameter << ' ' << blankLength << ' ' << blankRoughness << '\n';
+    fout << blanktPart.diameter << ' ' << blanktPart.length << ' ' << blanktPart.rougness << '\n';
 
     // Writing other part data
-    fout << materialIndex << '\n';
+    fout << Part::material << '\n';
 }
 
 void ProductProcess::load(std::ifstream& fin) {
@@ -313,14 +174,16 @@ void ProductProcess::load(std::ifstream& fin) {
     std::getline(fin, line);
 
     // Getting part data
-    fin >> targetDiameter >> targetLength >> targetRoughness;
+    fin >> targetPart.diameter >> targetPart.length >> targetPart.rougness;
 
     // Getting blank data
-    fin >> blankDiameter >> blankLength >> blankRoughness;
+    fin >> blanktPart.length >> blanktPart.length >> blanktPart.rougness;
 
     // Getting other part data
-    fin >> materialIndex;
+    unsigned index;
+    fin >> index;
+    Part::material = Material{index};
 
     // Recalculating all values and processes
-    updateMaterialProperties();
+    recalculate(targetPart, blanktPart);
 }
