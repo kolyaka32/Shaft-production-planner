@@ -8,7 +8,8 @@ SubmenuCycle::SubmenuCycle(Window& window)
 : CycleTemplate(window),
 settings(window),
 selectProductButton(window, 0, 0, 160, 50, {"Product", "Изделие"}),
-selectFactoryButton(window, 160, 0, 160, 50, {"Factory", "Цех"}),
+selectProcessButton(window, 160, 0, 160, 50, {"Process", "Процесс"}),
+selectFactoryButton(window, 320, 0, 160, 50, {"Factory", "Цех"}),
 saveButton(window, 800, 10, 150, 40, {"Save", "Сохранить"}),
 loadButton(window, 980, 10, 150, 40, {"Load", "Загрузить"}),
 saveInfo(window, 700, 10, {"Saved", "Сохранено"}) {}

@@ -8,7 +8,7 @@
 class SubmenuCycle : public CycleTemplate {
  protected:
     // Buttons for switch between subwindows
-    GUI::TextButton selectProductButton, selectFactoryButton;
+    GUI::TextButton selectProductButton, selectProcessButton, selectFactoryButton;
     // Global settings
     Settings settings;
     // Saving options

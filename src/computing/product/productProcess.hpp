@@ -56,9 +56,6 @@ class ProductProcess {
     std::string getBlankRoughness();
     std::string getBlankLength();
     std::string getBlankDiameter();
-    static int getLatheCount();
-    static int getFurnaceCount();
-    static int getWarehouseCount();
     unsigned getMaterial();
     void updateProcessParameters();
     void draw(Window& window);

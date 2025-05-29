@@ -178,6 +178,5 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
 }
 
 void Factory::tryOptimize() {
-    Optimiser opt();
-    opt.solve(field);
+    Optimiser::solve(field);
 }

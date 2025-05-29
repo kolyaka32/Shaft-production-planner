@@ -17,6 +17,8 @@ private:
     GUI::ImageButton blankPicture;
     GUI::TypeBox blankWidthInput, blankHeightInput, blankRoughnessInput;
     GUI::Text materialText;
+
+    // Global part properties
     GUI::SwitchBox<3> materialSwitch;
 
 public:

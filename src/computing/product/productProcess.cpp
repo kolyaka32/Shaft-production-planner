@@ -98,18 +98,6 @@ std::string ProductProcess::getBlankDiameter() {
     return std::format("{:.1f}", blankDiameter);
 }
 
-int ProductProcess::getLatheCount() {
-    return stepCount - startStep;
-}
-
-int ProductProcess::getFurnaceCount() {
-    return stepCount - startStep;
-}
-
-int ProductProcess::getWarehouseCount() {
-    return stepCount - startStep;
-}
-
 
 void ProductProcess::draw(Window& window) {
     // Draw main steps
@@ -239,8 +227,10 @@ float ProductProcess::getCutRoughDistance(float diameter) {
         return 5.5;
     } else if (diameter < 320) {
         return 6.5;
+    } else if (diameter < 400) {
+        return 7.5;
     }
-    return 7.5;
+    return 8.5;
 }
 
 float ProductProcess::getCutMainDistance(float diameter) {
@@ -260,8 +250,10 @@ float ProductProcess::getCutMainDistance(float diameter) {
         return 2.2;
     } else if (diameter < 320) {
         return 2.4;
+    } else if (diameter < 400) {
+        return 2.6;
     }
-    return 2.6;
+    return 2.8;
 }
 
 float ProductProcess::getCutTrimmingDistance(float diameter) {
@@ -281,8 +273,10 @@ float ProductProcess::getCutTrimmingDistance(float diameter) {
         return 1.1;
     } else if (diameter < 320) {
         return 1.2;
+    } else if (diameter < 400) {
+        return 1.4;
     }
-    return 1.4;
+    return 1.6;
 }
 
 float ProductProcess::getCutFinishingDistance(float diameter) {
@@ -290,10 +284,10 @@ float ProductProcess::getCutFinishingDistance(float diameter) {
         return 0.2;
     } else if (diameter < 120) {
         return 0.3;
-    } else if (diameter < 250) {
+    } else if (diameter < 400) {
         return 0.4;
     }
-    return 0.5;
+    return 0.6;
 }
 
 void ProductProcess::save(std::ofstream& fout) {

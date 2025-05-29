@@ -22,6 +22,11 @@ process.getMaterial())
 
 void ProductCycle::LClick(sf::Vector2i pos) {
     // Checking global objects
+    if (selectProcessButton.isClicked(pos)) {
+        App::startNext(Cycle::ProcessPlanner);
+        stop();
+        return;
+    }
     if (selectFactoryButton.isClicked(pos)) {
         App::startNext(Cycle::FactoryPlaner);
         stop();
@@ -124,6 +129,7 @@ void ProductCycle::draw() {
     // Draw global objects
     window.clear(sf::Color(20, 20, 20));
     selectProductButton.draw(window);
+    selectProcessButton.draw(window);
     selectFactoryButton.draw(window);
     saveButton.draw(window);
     loadButton.draw(window);

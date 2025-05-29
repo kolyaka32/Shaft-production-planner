@@ -5,6 +5,7 @@
 enum class Cycle {
     None,
     ProductPlanner,
+    ProcessPlanner,
     FactoryPlaner,
     Default = ProductPlanner,
 };

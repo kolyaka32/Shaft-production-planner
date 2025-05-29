@@ -21,5 +21,5 @@ private:
 
 public:
     Optimiser();
-    void solve(Field& field);
+    static void solve(Field& field);
 };

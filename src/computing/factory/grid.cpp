@@ -41,20 +41,20 @@ void Grid::updateLatheText() {
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Lathes: {}, needed: {}", latheCount, ProductProcess::getLatheCount());
+        str = std::format("Lathes: {}, needed: {}", latheCount, ProcessPlanner::getLatheCount());
         break;
     
     case Language::Russian:
-        str = std::format("Станков: {}, необходимо: {}", latheCount, ProductProcess::getLatheCount());
+        str = std::format("Станков: {}, необходимо: {}", latheCount, ProcessPlanner::getLatheCount());
         break;
     }
     latheCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
     latheCountHigh.deactivate();
     latheCountLow.deactivate();
-    if (latheCount > ProductProcess::getLatheCount()) {
+    if (latheCount > ProcessPlanner::getLatheCount()) {
         latheCountHigh.activate();
-    } else if (latheCount < ProductProcess::getLatheCount()) {
+    } else if (latheCount < ProcessPlanner::getLatheCount()) {
         latheCountLow.activate();
     }
 }
@@ -64,20 +64,20 @@ void Grid::updateFurnaceText() {
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Furnaces: {}, needed: {}", furnaceCount, ProductProcess::getFurnaceCount());
+        str = std::format("Furnaces: {}, needed: {}", furnaceCount, ProcessPlanner::getFurnaceCount());
         break;
     
     case Language::Russian:
-        str = std::format("Печей: {}, необходимо: {}", furnaceCount, ProductProcess::getFurnaceCount());
+        str = std::format("Печей: {}, необходимо: {}", furnaceCount, ProcessPlanner::getFurnaceCount());
         break;
     }
     furnaceCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
     furnaceCountHigh.deactivate();
     furnaceCountLow.deactivate();
-    if (furnaceCount > ProductProcess::getFurnaceCount()) {
+    if (furnaceCount > ProcessPlanner::getFurnaceCount()) {
         furnaceCountHigh.activate();
-    } else if (furnaceCount < ProductProcess::getFurnaceCount()) {
+    } else if (furnaceCount < ProcessPlanner::getFurnaceCount()) {
         furnaceCountLow.activate();
     }
 }
@@ -87,20 +87,20 @@ void Grid::updateWarehouseText() {
     std::string str;
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        str = std::format("Warehouses: {}, needed: {}", warehouseCount, ProductProcess::getWarehouseCount());
+        str = std::format("Warehouses: {}, needed: {}", warehouseCount, ProcessPlanner::getWarehouseCount());
         break;
     
     case Language::Russian:
-        str = std::format("Складов: {}, необходимо: {}", warehouseCount, ProductProcess::getWarehouseCount());
+        str = std::format("Складов: {}, необходимо: {}", warehouseCount, ProcessPlanner::getWarehouseCount());
         break;
     }
     warehouseCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
     // Update warnings
     warehouseCountHigh.deactivate();
     warehouseCountLow.deactivate();
-    if (warehouseCount > ProductProcess::getWarehouseCount()) {
+    if (warehouseCount > ProcessPlanner::getWarehouseCount()) {
         warehouseCountHigh.activate();
-    } else if (warehouseCount < ProductProcess::getWarehouseCount()) {
+    } else if (warehouseCount < ProcessPlanner::getWarehouseCount()) {
         warehouseCountLow.activate();
     }
 }

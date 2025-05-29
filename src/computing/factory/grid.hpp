@@ -1,7 +1,8 @@
 #pragma once
 
 #include "field.hpp"
-#include "../product/productProcess.hpp"
+#include "../../app/cycleTemplate.hpp"
+#include "../process/processPlanner.hpp"
 
 
 // Class for draw and calculate objects at the grid

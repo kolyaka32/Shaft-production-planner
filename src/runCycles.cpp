@@ -1,5 +1,6 @@
 #include "app/app.hpp"
 #include "computing/product/productCycle.hpp"
+#include "computing/process/processCycle.hpp"
 #include "computing/factory/factoryCycle.hpp"
 
 // Main process of selecting cycle
@@ -9,6 +10,13 @@ void App::run() {
         case Cycle::ProductPlanner:
             {
                 ProductCycle cycle(window);
+                cycle.run();
+            }
+            break;
+
+        case Cycle::ProcessPlanner:
+            {
+                ProcessCycle cycle(window);
                 cycle.run();
             }
             break;
