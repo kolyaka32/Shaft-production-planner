@@ -13,6 +13,12 @@ void Part::set(float _diameter, float _length, float _rougness) {
     rougness = _rougness;
 }
 
+void Part::set(const Part part) {
+    diameter = part.diameter;
+    length = part.length;
+    rougness = part.rougness;
+}
+
 void Part::setMaterial(Material _material) {
     material = _material;
 }

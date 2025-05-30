@@ -4,7 +4,7 @@
 
 ThermalStage::ThermalStage() {}
 
-void ThermalStage::setNew(Part outPart) {
+void ThermalStage::set(Part outPart) {
     capacity = calculateCapacity(outPart);
     time = calculateTreatmentTime(outPart);
 }

@@ -7,13 +7,13 @@ Part ProductProcess::blanktPart{80, 220, 240};
 
 
 ProductProcess::ProductProcess(Window& window)
-: semiproducts {
+: drawSemiproducts {
     {window,  20, 540},
     {window, 250, 540},
     {window, 480, 540},
     {window, 710, 540},
     {window, 940, 540}},
-steps {
+drawSteps {
     {window, 170, 540, {"Rough", "Черновая"}},
     {window, 400, 540, {"Main", "Получистовая"}},
     {window, 630, 540, {"Trimming", "Чистовая"}},
@@ -22,7 +22,10 @@ warningLowLength(window, 750, 350, {"Insufficient length", "Недостаточ
 warningLowDiameter(window, 750, 400, {"Insufficient diameter", "Недостаточный диаметр"}, "machines/danger-icon.png"),
 warningHighLength(window, 750, 350, {"Redundant length", "Избыточная длинна"}, "machines/warning-icon.png"),
 warningHighDiameter(window, 750, 400, {"Redundant diameter", "Избыточный диаметр"}, "machines/warning-icon.png"),
-warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слишком малая шероховатость"}, "machines/warning-icon.png") {}
+warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слишком малая шероховатость"}, "machines/warning-icon.png") {
+    // Update on creation
+    update();
+}
 
 void ProductProcess::setTargetRoughness(float _targetRoughness) {
     targetPart.rougness = _targetRoughness;
@@ -51,7 +54,7 @@ void ProductProcess::setBlankDiameter(float _diameter) {
 
 void ProductProcess::setBlankLength(float _length) {
     blanktPart.length = _length;
-    recalculate(targetPart, blanktPart);
+    
 }
 
 void ProductProcess::setMaterial(unsigned _index) {
@@ -86,14 +89,46 @@ std::string ProductProcess::getBlankDiameter() {
     return std::format("{:.1f}", blanktPart.diameter);
 }
 
+void ProductProcess::update() {
+    // Resetting warnings
+    warningLowLength.deactivate();
+    warningLowDiameter.deactivate();
+    warningHighLength.deactivate();
+    warningHighDiameter.deactivate();
+    warningHighBlankRoughness.deactivate();
+
+    // Recalculating process
+    recalculate(targetPart, blanktPart);
+
+    // Reactivating warnings
+    if (blanktPart.rougness < targetPart.rougness) {
+        warningHighBlankRoughness.activate();
+    }
+    // Checking, if blank parameters allowable and optimal
+    const Part& calcBlank = semiproducts[startStep];
+    if (calcBlank.length > blanktPart.length) {
+        warningLowLength.activate();
+    } else if (blanktPart.length > calcBlank.length*1.2) {
+        warningHighLength.activate();
+    }
+    if (calcBlank.diameter > blanktPart.diameter) {
+        warningLowDiameter.activate();
+    } else if (blanktPart.diameter > calcBlank.diameter*1.2) {
+        warningHighDiameter.activate();
+    }
+    // Updating semiproducts
+    for (int i=endStep; i >= startStep; --i) {
+        drawSemiproducts[i].setNewParameters(semiproducts[i]);
+    }
+}
 
 void ProductProcess::draw(Window& window) {
     // Draw main steps
-    for (int i=startStep; i <= stepCount; ++i) {
-        semiproducts[i].draw(window);
+    for (int i=startStep; i <= endStep; ++i) {
+        drawSemiproducts[i].draw(window);
     }
-    for (int i=startStep; i < stepCount; ++i) {
-        steps[i].draw(window);
+    for (int i=startStep; i < endStep; ++i) {
+        drawSteps[i].draw(window);
     }
     // Draw warnings
     warningLowLength.draw(window);
@@ -102,53 +137,6 @@ void ProductProcess::draw(Window& window) {
     warningHighDiameter.draw(window);
     warningHighBlankRoughness.draw(window);
 }
-
-
-/*void ProductProcess::recalculate() {
-    // Resetting warnings
-    warningLowLength.deactivate();
-    warningLowDiameter.deactivate();
-    warningHighLength.deactivate();
-    warningHighDiameter.deactivate();
-    warningHighBlankRoughness.deactivate();
-
-    // Update step count
-    stepCount = getStepCount(targetRoughness)+1;
-    
-    if (blankRoughness < targetRoughness) {
-        startStep = stepCount-1;
-        warningHighBlankRoughness.activate();
-    } else {
-        startStep = getStepCount(blankRoughness);
-        // Check, if at same step
-        if (startStep+1 == stepCount) {
-            startStep = stepCount-1;
-        }
-    }
-
-    // Update input diameters
-    float inputDiameter = targetDiameter;
-    float inputLength = targetLength;
-    for (int i=stepCount; i > startStep; --i) {
-        semiproducts[i].setNewParameters(inputDiameter, inputLength, material);
-        inputDiameter = getInputDiameter(i, inputDiameter);
-        inputLength = getInputLength(i, inputLength);
-    }
-    // Update extra blank object
-    semiproducts[0].setNewParameters(inputDiameter, inputLength, material);
-
-    // Checking, if blank parameters allowable and optimal
-    if (inputLength > blankLength) {
-        warningLowLength.activate();
-    } else if (blankLength > inputLength*1.2) {
-        warningHighLength.activate();
-    }
-    if (inputDiameter > blankDiameter) {
-        warningLowDiameter.activate();
-    } else if (blankDiameter > inputDiameter*1.2) {
-        warningHighDiameter.activate();
-    }
-}*/
 
 
 void ProductProcess::save(std::ofstream& fout) {

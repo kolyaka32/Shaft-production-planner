@@ -7,7 +7,7 @@ private:
     // Standard tool durability time
     const float normTimeCut = 30.0;
     const float powerInput = 100;
-    int stepNumber;
+    unsigned stepNumber;
     Part inputPart;
     float time;
     float powerConsumption;
@@ -28,7 +28,7 @@ protected:
 
 public:
     MechanicalStage();
-    void setNew(Part outPart, float stepIndex);
+    void set(Part outPart, unsigned stepIndex);
     Part getInputPart();
     float getTime();
     float getPowerConsumption();

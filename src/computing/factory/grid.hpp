@@ -2,7 +2,7 @@
 
 #include "field.hpp"
 #include "../../app/cycleTemplate.hpp"
-#include "../process/processPlanner.hpp"
+#include "../process.hpp"
 
 
 // Class for draw and calculate objects at the grid

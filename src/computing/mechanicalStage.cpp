@@ -4,9 +4,9 @@
 
 MechanicalStage::MechanicalStage() {}
 
-void MechanicalStage::setNew(Part outPart, float _stepNumber) {
+void MechanicalStage::set(Part outPart, unsigned _stepNumber) {
     stepNumber = _stepNumber;
-    inputPart = calculateInputDiameter(stepNumber, outPart.diameter), calculateInputLength(stepNumber, outPart.length);
+    inputPart = {calculateInputDiameter(stepNumber, outPart.diameter), calculateInputLength(stepNumber, outPart.length), 0};
     time = calculateTime();
     powerConsumption = calculatePowerConsumption();
 }
@@ -68,7 +68,7 @@ float MechanicalStage::calculateCutDistance(unsigned step, float diameter) {
         }
         return 2.8;
 
-    case 3:
+    case 2:
         if (diameter < 18) {
             return 0.5;
         } else if (diameter < 30) {
@@ -90,7 +90,7 @@ float MechanicalStage::calculateCutDistance(unsigned step, float diameter) {
         }
         return 1.6;
 
-    case 4:
+    case 3:
         if (diameter < 30) {
             return 0.2;
         } else if (diameter < 120) {

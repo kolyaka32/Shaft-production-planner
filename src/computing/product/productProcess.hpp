@@ -17,11 +17,14 @@ class ProductProcess : Process {
     static Part blanktPart;
 
     // Drawable objects
-    ProductionStep steps[4];
-    ProductionSemiproduct semiproducts[5];
+    ProductionStep drawSteps[4];
+    ProductionSemiproduct drawSemiproducts[5];
     GUI::WarningBox warningLowLength, warningLowDiameter;  // Red warnings - unavaliable to produce
     GUI::WarningBox warningHighLength, warningHighDiameter;  // Yellow warnings - ineffecient to produce
     GUI::WarningBox warningHighBlankRoughness;  // Yellow warnings - Too low start roughness - ineffient
+
+    // Function for update visual part after changes
+    void update();
 
  public:
     ProductProcess(Window& window);

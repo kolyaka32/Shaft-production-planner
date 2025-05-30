@@ -18,7 +18,7 @@ protected:
 
 public:
     ThermalStage();
-    void setNew(Part outPart);
+    void set(Part outPart);
     int getCapacity();
     float getTime();
     int getNeedFurnaces(float settedPartCapacity);

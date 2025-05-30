@@ -11,14 +11,9 @@ private:
     static int latheCount, furnaceCount, warehouseCount;
 
 protected:
+    // Product step part
     // Step counts
-    static int startStep, stepCount;
-    // Function for update process
-    static void recalculate(Part target, Part blank);
-
-public:
-    Process();
-
+    static int startStep, endStep;
     // Process mechanical steps
     //static std::vector<MechanicalStage> mechanicalStages;
     static MechanicalStage mechanicalStages[4];
@@ -26,4 +21,18 @@ public:
     static ThermalStage thermalStages[4];
     // Semiproducts
     static Part semiproducts[5];
+
+    // Process part
+    static float partTarget;
+
+    // Function for update process
+    static void recalculate(Part target, Part blank);
+
+public:
+    Process();
+
+    // Options for get objects count
+    static unsigned getLatheCount();
+    static unsigned getFurnaceCount();
+    static unsigned getWarehouseCount();
 };
