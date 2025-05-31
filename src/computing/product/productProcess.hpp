@@ -9,13 +9,6 @@
 //
 class ProductProcess : Process {
  private:
-    // Getted options
-    // Target part
-    static Part targetPart;
-
-    // Blank part
-    static Part blanktPart;
-
     // Drawable objects
     ProductionStep drawSteps[4];
     ProductionSemiproduct drawSemiproducts[5];

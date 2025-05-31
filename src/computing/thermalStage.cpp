@@ -26,5 +26,5 @@ float ThermalStage::getTime() {
 }
 
 int ThermalStage::getNeedFurnaces(float settedPartCapacity) {
-    return std::ceilf(settedPartCapacity/capacity*time);
+    return std::ceilf(settedPartCapacity*time/capacity);
 }

@@ -5,11 +5,11 @@
 class MechanicalStage {
 private:
     // Standard tool durability time
-    const float normTimeCut = 30.0;
-    const float powerInput = 100;
-    unsigned stepNumber;
+    const float normTimeCut = 30.0;  // In minutes
+    const float powerInput = 1.5;    // In kilowatts
+    unsigned stepNumber;  // Index of step
     Part inputPart;
-    float time;
+    float time;  // In hours
     float powerConsumption;
 
 protected:
@@ -18,7 +18,7 @@ protected:
     float calculateInputLength(unsigned step, float outLength);
 
     // Time calculation process
-    float calculateToolFeed();
+    float calculateToolFeed();  // 
     float calculateCutSpeed();
     float calculateRotateFrequency();
     float calculateMinuteFeed();

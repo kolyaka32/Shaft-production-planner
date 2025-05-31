@@ -9,6 +9,9 @@ class ProcessCycle : public SubmenuCycle {
 private:
     // Main process parameters and solver
     ProcessPlanner planner;
+    // Option to deal with
+    GUI::Text targetInputText;
+    GUI::TypeBox targetInput;
 
 public:
     ProcessCycle(Window& window);

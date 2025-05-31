@@ -12,7 +12,7 @@ partPicture(0, 260, "machines/shaftBlueprint.png"),
 partWidthInput(window, 250, 410, 100, process.getTargetLength()),
 partHeightInput(window, 655, 315, 80, process.getTargetDiameter()),
 partRoughnessInput(window, 655, 265, 80, process.getTargetRoughness()),
-materialText(window, 880, 60, {"Material:", "Материал:"}),
+materialText(window, 880, 60, LanguagedText{"Material:", "Материал:"}),
 materialSwitch(window, 740, 100, (LanguagedText[]) {
     {"Steel", "Сталь"},
     {"Alloys", "Цветные сплавы"},

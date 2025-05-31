@@ -4,9 +4,9 @@
 FactoryCycle::FactoryCycle(Window& window)
 : SubmenuCycle(window),
 factory(window, {200, 200}),
-widthText(window, 80, 100, {"Width", "Ширина"}),
+widthText(window, 80, 100, LanguagedText{"Width", "Ширина"}),
 widthBox(window, 40, 140, 80, Factory::getWidth()),
-heightText(window, 200, 100, {"Height", "Высота"}),
+heightText(window, 200, 100, LanguagedText{"Height", "Высота"}),
 heightBox(window, 160, 140, 80, Factory::getHeight()),
 cellTypeSwitch(window, 20, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
     {"Warehouse", "Склад"}, {"Lathe 1", "Станок 1"}, {"Lathe 2", "Станок 2"}, {"Furnace 1", "Печь 1"}}),

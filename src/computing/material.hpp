@@ -15,7 +15,7 @@ public:
     constexpr Material(Value _value) : value(_value) {}
     constexpr operator Value() const { return value; }
     operator unsigned();
-    
+
 
     // Properties of material
     float recristalisationTemp();

@@ -6,12 +6,21 @@
 
 
 namespace GUI {
+    enum class Aligment : unsigned {
+        Left,
+        Midle,
+        Right,
+    };
+
     class Text {
      private:
         sf::Text text;
 
      public:
-        Text(Window& window, float X, float Y, LanguagedText texts);
+        Text(Window& window, float X, float Y, LanguagedText texts, Aligment aligment = Aligment::Midle);
+        Text(Window& window, float X, float Y, const std::string text, Aligment aligment = Aligment::Midle);
+        void setText(LanguagedText texts);
+        void setText(const std::string text);
         void draw(Window& window);
     };
 

@@ -1,11 +1,6 @@
 #include "productProcess.hpp"
 
 
-// Static global process options
-Part ProductProcess::targetPart{60, 200, 4};
-Part ProductProcess::blanktPart{80, 220, 240};
-
-
 ProductProcess::ProductProcess(Window& window)
 : drawSemiproducts {
     {window,  20, 540},
@@ -29,36 +24,37 @@ warningHighBlankRoughness(window, 750, 450, {"Too low blank rougness", "Слиш
 
 void ProductProcess::setTargetRoughness(float _targetRoughness) {
     targetPart.rougness = _targetRoughness;
-    recalculate(targetPart, blanktPart);
+    update();
 }
 
 void ProductProcess::setTargetDiameter(float _targetDiameter) {
     targetPart.diameter = _targetDiameter;
-    recalculate(targetPart, blanktPart);
+    update();
 }
 
 void ProductProcess::setTargetLength(float _targetLength) {
     targetPart.length = _targetLength;
-    recalculate(targetPart, blanktPart);
+    update();
 }
 
 void ProductProcess::setBlankRoughness(float _roughness) {
-    blanktPart.rougness = _roughness;
-    recalculate(targetPart, blanktPart);
+    blankPart.rougness = _roughness;
+    update();
 }
 
 void ProductProcess::setBlankDiameter(float _diameter) {
-    blanktPart.diameter = _diameter;
-    recalculate(targetPart, blanktPart);
+    blankPart.diameter = _diameter;
+    update();
 }
 
 void ProductProcess::setBlankLength(float _length) {
-    blanktPart.length = _length;
-    
+    blankPart.length = _length;
+    update();
 }
 
 void ProductProcess::setMaterial(unsigned _index) {
     Part::material = Material(_index);
+    update();
 }
 
 unsigned ProductProcess::getMaterial() {
@@ -78,15 +74,15 @@ std::string ProductProcess::getTargetDiameter() {
 }
 
 std::string ProductProcess::getBlankRoughness() {
-    return std::format("{:.1f}", blanktPart.rougness);
+    return std::format("{:.1f}", blankPart.rougness);
 }
 
 std::string ProductProcess::getBlankLength() {
-    return std::format("{:.0f}", blanktPart.length);
+    return std::format("{:.0f}", blankPart.length);
 }
 
 std::string ProductProcess::getBlankDiameter() {
-    return std::format("{:.1f}", blanktPart.diameter);
+    return std::format("{:.1f}", blankPart.diameter);
 }
 
 void ProductProcess::update() {
@@ -98,22 +94,22 @@ void ProductProcess::update() {
     warningHighBlankRoughness.deactivate();
 
     // Recalculating process
-    recalculate(targetPart, blanktPart);
+    recalculate();
 
     // Reactivating warnings
-    if (blanktPart.rougness < targetPart.rougness) {
+    if (blankPart.rougness < targetPart.rougness) {
         warningHighBlankRoughness.activate();
     }
     // Checking, if blank parameters allowable and optimal
     const Part& calcBlank = semiproducts[startStep];
-    if (calcBlank.length > blanktPart.length) {
+    if (calcBlank.length > blankPart.length) {
         warningLowLength.activate();
-    } else if (blanktPart.length > calcBlank.length*1.2) {
+    } else if (blankPart.length > calcBlank.length*1.2) {
         warningHighLength.activate();
     }
-    if (calcBlank.diameter > blanktPart.diameter) {
+    if (calcBlank.diameter > blankPart.diameter) {
         warningLowDiameter.activate();
-    } else if (blanktPart.diameter > calcBlank.diameter*1.2) {
+    } else if (blankPart.diameter > calcBlank.diameter*1.2) {
         warningHighDiameter.activate();
     }
     // Updating semiproducts
@@ -147,7 +143,7 @@ void ProductProcess::save(std::ofstream& fout) {
     fout << targetPart.diameter << ' ' << targetPart.length << ' ' << targetPart.rougness << '\n';
 
     // Writing blank data
-    fout << blanktPart.diameter << ' ' << blanktPart.length << ' ' << blanktPart.rougness << '\n';
+    fout << blankPart.diameter << ' ' << blankPart.length << ' ' << blankPart.rougness << '\n';
 
     // Writing other part data
     fout << Part::material << '\n';
@@ -165,7 +161,7 @@ void ProductProcess::load(std::ifstream& fin) {
     fin >> targetPart.diameter >> targetPart.length >> targetPart.rougness;
 
     // Getting blank data
-    fin >> blanktPart.length >> blanktPart.length >> blanktPart.rougness;
+    fin >> blankPart.length >> blankPart.length >> blankPart.rougness;
 
     // Getting other part data
     unsigned index;
@@ -173,5 +169,5 @@ void ProductProcess::load(std::ifstream& fin) {
     Part::material = Material{index};
 
     // Recalculating all values and processes
-    recalculate(targetPart, blanktPart);
+    recalculate();
 }

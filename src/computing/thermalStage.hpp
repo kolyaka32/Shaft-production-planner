@@ -5,10 +5,10 @@
 
 class ThermalStage {
 private:
-    int capacity;
-    float time;
+    int capacity;  // In parts per one operation
+    float time;    // In hours
     // Furnace constants
-    const float furnaceDiameter = 100;
+    const float furnaceDiameter = 1000;
     const float recrystalysationDepth = 25;
     const float coolingSpeed = 20;
 

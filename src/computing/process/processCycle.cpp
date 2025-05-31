@@ -3,7 +3,9 @@
 
 ProcessCycle::ProcessCycle(Window& window)
 : SubmenuCycle(window),
-planner()
+planner(window),
+targetInputText(window, 280, 550, LanguagedText{"Target part production [prt/h]", "Целевой уровень производства [Дет/ч]"}),
+targetInput(window, 550, 555, 80, planner.getTargetProduction())
 {}
 
 void ProcessCycle::LClick(sf::Vector2i pos) {
@@ -35,13 +37,13 @@ void ProcessCycle::LClick(sf::Vector2i pos) {
     }
 
     // Check, if stop input - update values
-    /*if (partWidthInput.click(pos)) {
-        process.setTargetLength(partWidthInput.getNumber());
-    }*/
+    if (targetInput.click(pos)) {
+        planner.setTargetProduction(targetInput.getNumber());
+    }
 }
 
 void ProcessCycle::LUnClick(sf::Vector2i pos) {
-    //partWidthInput.unClick();
+    targetInput.unClick();
 }
 
 void ProcessCycle::RClick(sf::Vector2i pos) {
@@ -50,17 +52,17 @@ void ProcessCycle::RClick(sf::Vector2i pos) {
 
 void ProcessCycle::keyDown(sf::Event::KeyPressed state) {
     // Check, if stop input - update values
-    /*if (partWidthInput.keyPress(state)) {
-        process.setTargetLength(partWidthInput.getNumber());
-    }*/
+    if (targetInput.keyPress(state)) {
+        planner.setTargetProduction(targetInput.getNumber());
+    }
 }
 
 void ProcessCycle::textInput(char32_t keyCode) {
-    //partWidthInput.inputText(keyCode);
+    targetInput.inputText(keyCode);
 }
 
 void ProcessCycle::update() {
-    // partWidthInput.update(sf::Mouse::getPosition(window));
+    targetInput.update(sf::Mouse::getPosition(window));
 }
 
 void ProcessCycle::draw() {
@@ -74,7 +76,9 @@ void ProcessCycle::draw() {
     saveInfo.draw(window);
 
     // Draw main part
-
+    planner.draw(window);
+    targetInputText.draw(window);
+    targetInput.draw(window);
 
     settings.draw(window);
 
