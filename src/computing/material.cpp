@@ -1,5 +1,6 @@
 #include "material.hpp"
 
+
 Material::Material(unsigned _index) {
     switch (_index) {
     case 0:
@@ -62,13 +63,13 @@ float Material::density() {
 float Material::mainFi() {
     switch (value) {
     case MachineSteel:
-        return 60;
+        return 60*M_PI/180;
 
     case Alloys:
-        return 45;
+        return 45*M_PI/180;
     
     case HeatResistantSteel:
-        return 45;
+        return 45*M_PI/180;
     }
     return 0;
 }
@@ -76,13 +77,13 @@ float Material::mainFi() {
 float Material::addFi() {
     switch (value) {
     case MachineSteel:
-        return 15;
+        return 15*M_PI/180;
 
     case Alloys:
-        return 10;
+        return 10*M_PI/180;
     
     case HeatResistantSteel:
-        return 10;
+        return 10*M_PI/180;
     }
     return 0;
 }

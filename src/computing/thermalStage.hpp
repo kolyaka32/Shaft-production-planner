@@ -5,12 +5,16 @@
 
 class ThermalStage {
 private:
-    int capacity;  // In parts per one operation
-    float time;    // In hours
     // Furnace constants
-    const float furnaceDiameter = 1000;
+    const float furnaceDiameter = 1500;
     const float recrystalysationDepth = 25;
     const float coolingSpeed = 20;
+
+    // Calcualted quantities
+    int capacity;  // In parts per one operation
+    float time;    // In hours
+    // Number of furnaces, needed to complete setted capacity
+    int requiredQuantity;
 
 protected:
     int calculateCapacity(Part part);
@@ -18,8 +22,9 @@ protected:
 
 public:
     ThermalStage();
-    void set(Part outPart);
+    void set(Part outPart, float settedPartCapacity);
     int getCapacity();
-    float getTime();
-    int getNeedFurnaces(float settedPartCapacity);
+    float getTimePerUnit();
+    float getTimePerOperation();
+    int getNeedFurnaces();
 };

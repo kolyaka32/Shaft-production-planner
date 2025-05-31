@@ -10,6 +10,7 @@ class ProductionSemiproduct {
     sf::Text diameterText;
     sf::Text massText;
     sf::Text lengthText;
+    sf::Text rougnessText;
 
  public:
     ProductionSemiproduct(Window& window, float X, float Y);

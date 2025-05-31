@@ -9,9 +9,13 @@ class ProcessCycle : public SubmenuCycle {
 private:
     // Main process parameters and solver
     ProcessPlanner planner;
-    // Option to deal with
-    GUI::Text targetInputText;
-    GUI::TypeBox targetInput;
+    // Input part
+    GUI::Text targetProductionInputText, targetVolumeInputText;
+    GUI::TypeBox targetProductionInput, targetVolumeInput;
+    GUI::Text batchProductionTimeText;
+
+protected:
+    std::string getBatchText();
 
 public:
     ProcessCycle(Window& window);

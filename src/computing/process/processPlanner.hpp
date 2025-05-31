@@ -8,15 +8,16 @@
 class ProcessPlanner : public Process {
 private:
     // Grphical constants and macroses
-    const float stepOffset = 110, stepStartOffset = 160;
+    const float stepOffset = 110, stepStartOffset = 170;
     constexpr float getOffset(int index);
 
     // Graphical part
-    GUI::Text stepTexts[8];
+    sf::RectangleShape backGround;
     GUI::Text timeDescription, machinesDescription, furnacesDescription;
+    GUI::Text stepTexts[8];
+    GUI::Text summaryText;
     sf::Text timeTexts[8];
     sf::Text countTexts[8];
-    GUI::Text summaryText;
     GUI::Text productionTimeText, machineCountText, furnaceCountText;
 
 protected:
@@ -25,6 +26,8 @@ protected:
 public:
     ProcessPlanner(Window& window);
     void setTargetProduction(float target);
+    void setTargetVolume(int target);
     std::string getTargetProduction();
+    std::string getTargetVolume();
     void draw(Window& window);
 };

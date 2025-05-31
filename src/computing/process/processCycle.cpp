@@ -4,8 +4,11 @@
 ProcessCycle::ProcessCycle(Window& window)
 : SubmenuCycle(window),
 planner(window),
-targetInputText(window, 280, 550, LanguagedText{"Target part production [prt/h]", "Целевой уровень производства [Дет/ч]"}),
-targetInput(window, 550, 555, 80, planner.getTargetProduction())
+targetProductionInputText(window, 10, 350, LanguagedText{"Target part production [prt/h]", "Целевой уровень производства [Дет/ч]"}, GUI::Aligment::Left),
+targetProductionInput(window, 550, 355, 80, planner.getTargetProduction()),
+targetVolumeInputText(window, 10, 390, LanguagedText{"Batch size", "Объём партии"}, GUI::Aligment::Left),
+targetVolumeInput(window, 550, 395, 80, planner.getTargetVolume()),
+batchProductionTimeText(window, 10, 430, getBatchText(), GUI::Aligment::Left)
 {}
 
 void ProcessCycle::LClick(sf::Vector2i pos) {
@@ -37,13 +40,19 @@ void ProcessCycle::LClick(sf::Vector2i pos) {
     }
 
     // Check, if stop input - update values
-    if (targetInput.click(pos)) {
-        planner.setTargetProduction(targetInput.getNumber());
+    if (targetProductionInput.click(pos)) {
+        planner.setTargetProduction(targetProductionInput.getNumber());
+        batchProductionTimeText.setText(getBatchText());
+    }
+    if (targetVolumeInput.click(pos)) {
+        planner.setTargetVolume(targetVolumeInput.getNumber());
+        batchProductionTimeText.setText(getBatchText());
     }
 }
 
 void ProcessCycle::LUnClick(sf::Vector2i pos) {
-    targetInput.unClick();
+    targetProductionInput.unClick();
+    targetVolumeInput.unClick();
 }
 
 void ProcessCycle::RClick(sf::Vector2i pos) {
@@ -52,17 +61,24 @@ void ProcessCycle::RClick(sf::Vector2i pos) {
 
 void ProcessCycle::keyDown(sf::Event::KeyPressed state) {
     // Check, if stop input - update values
-    if (targetInput.keyPress(state)) {
-        planner.setTargetProduction(targetInput.getNumber());
+    if (targetProductionInput.keyPress(state)) {
+        planner.setTargetProduction(targetProductionInput.getNumber());
+        batchProductionTimeText.setText(getBatchText());
+    }
+    if (targetVolumeInput.keyPress(state)) {
+        planner.setTargetVolume(targetVolumeInput.getNumber());
+        batchProductionTimeText.setText(getBatchText());
     }
 }
 
 void ProcessCycle::textInput(char32_t keyCode) {
-    targetInput.inputText(keyCode);
+    targetProductionInput.inputText(keyCode);
+    targetVolumeInput.inputText(keyCode);
 }
 
 void ProcessCycle::update() {
-    targetInput.update(sf::Mouse::getPosition(window));
+    targetProductionInput.update(sf::Mouse::getPosition(window));
+    targetVolumeInput.update(sf::Mouse::getPosition(window));
 }
 
 void ProcessCycle::draw() {
@@ -77,11 +93,25 @@ void ProcessCycle::draw() {
 
     // Draw main part
     planner.draw(window);
-    targetInputText.draw(window);
-    targetInput.draw(window);
+    targetProductionInputText.draw(window);
+    targetProductionInput.draw(window);
+    targetVolumeInputText.draw(window);
+    targetVolumeInput.draw(window);
+    batchProductionTimeText.draw(window);
 
     settings.draw(window);
 
     // Display things on screen
     window.display();
+}
+
+std::string ProcessCycle::getBatchText() {
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        return std::format("Time per whole batch [h]: {:.0f}", planner.getVolumeProductionTime());
+
+    case Language::Russian:
+        return std::format("Время выполнения партии [ч]: {:.0f}", planner.getVolumeProductionTime());
+    }
+    return "";
 }

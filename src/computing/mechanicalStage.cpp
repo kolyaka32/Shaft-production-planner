@@ -4,22 +4,46 @@
 
 MechanicalStage::MechanicalStage() {}
 
-void MechanicalStage::set(Part outPart, unsigned _stepNumber) {
-    stepNumber = _stepNumber;
-    inputPart = {calculateInputDiameter(stepNumber, outPart.diameter), calculateInputLength(stepNumber, outPart.length), 0};
+void MechanicalStage::set(Part outPart, unsigned _stepNumber, float _settedPartCapacity) {
+    inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), getRougness(_stepNumber)};
     time = calculateTime();
+    requiredQuantity = std::ceilf(_settedPartCapacity*time);
+    powerConsumption = calculatePowerConsumption();
+}
+
+void MechanicalStage::setFirst(Part outPart, unsigned _stepNumber, float _settedPartCapacity, float _inputRougness) {
+    inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), _inputRougness};
+    time = calculateTime();
+    requiredQuantity = std::ceilf(_settedPartCapacity*time);
     powerConsumption = calculatePowerConsumption();
 }
 
 int MechanicalStage::getStepNumber(float rougness) {
-    if (rougness < 6.4) {
+    if (rougness <= 6.4) {
         return 3;
-    } else if (rougness < 12.8) {
+    } else if (rougness <= 12.8) {
         return 2;
-    } else if (rougness < 50) {
+    } else if (rougness <= 50) {
         return 1;
     }
     return 0;
+}
+
+float MechanicalStage::getRougness(int stepIndex) {
+    switch (stepIndex) {
+    case 0:
+        return 200;
+
+    case 1:
+        return 50;
+    
+    case 2:
+        return 12.8;
+
+    case 3:
+        return 6.4;
+    }
+    return 200;
 }
 
 float MechanicalStage::calculateCutDistance(unsigned step, float diameter) {
@@ -112,23 +136,28 @@ float MechanicalStage::calculateInputLength(unsigned step, float outLength) {
 }
 
 float MechanicalStage::calculateToolFeed() {
-    return (inputPart.diameter/2)*sinf(Part::material.mainFi()+Part::material.addFi())/sinf(Part::material.mainFi())/sinf(Part::material.addFi());
+    auto t = (inputPart.rougness/1000)*sinf(Part::material.mainFi()+Part::material.addFi())/sinf(Part::material.mainFi())/sinf(Part::material.addFi());
+    return t;
 }
 
 float MechanicalStage::calculateCutSpeed() {
-    return Part::material.Cv(calculateToolFeed()) / powf(normTimeCut, 0.4);
+    auto t = Part::material.Cv(calculateToolFeed()) / powf(normTimeCut, 0.4);
+    return t;
 }
 
 float MechanicalStage::calculateRotateFrequency() {
-    return std::roundf(1000*calculateCutSpeed()/inputPart.diameter);
+    auto t = std::roundf(1000*calculateCutSpeed()/inputPart.diameter);
+    return t;
 }
 
 float MechanicalStage::calculateMinuteFeed() {
-    return calculateToolFeed()*calculateRotateFrequency();
+    auto t = calculateToolFeed()*calculateRotateFrequency();
+    return t;
 }
 
 float MechanicalStage::calculateTime() {
-    return (inputPart.length+2)/(calculateMinuteFeed());
+    auto t = (inputPart.length+2)/(calculateMinuteFeed());
+    return t;
 }
 
 float MechanicalStage::calculatePowerConsumption() {
@@ -140,14 +169,18 @@ Part MechanicalStage::getInputPart() {
     return inputPart;
 }
 
-float MechanicalStage::getTime() {
+float MechanicalStage::getTimePerOperation() {
     return time;
+}
+
+float MechanicalStage::getTimePerUnit() {
+    return time/requiredQuantity;
 }
 
 float MechanicalStage::getPowerConsumption() {
     return powerConsumption;
 }
 
-int MechanicalStage::getNeedLathes(float settedPartCapacity) {
-    return std::ceilf(settedPartCapacity*time);
+int MechanicalStage::getNeedLathes() {
+    return requiredQuantity;
 }

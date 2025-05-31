@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 
 // Class represemting material of creating part
 class Material {

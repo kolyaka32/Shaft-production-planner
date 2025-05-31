@@ -7,9 +7,9 @@ private:
     // Standard tool durability time
     const float normTimeCut = 30.0;  // In minutes
     const float powerInput = 1.5;    // In kilowatts
-    unsigned stepNumber;  // Index of step
     Part inputPart;
     float time;  // In hours
+    int requiredQuantity;
     float powerConsumption;
 
 protected:
@@ -18,7 +18,7 @@ protected:
     float calculateInputLength(unsigned step, float outLength);
 
     // Time calculation process
-    float calculateToolFeed();  // 
+    float calculateToolFeed();
     float calculateCutSpeed();
     float calculateRotateFrequency();
     float calculateMinuteFeed();
@@ -28,11 +28,14 @@ protected:
 
 public:
     MechanicalStage();
-    void set(Part outPart, unsigned stepIndex);
+    void set(Part outPart, unsigned stepIndex, float settedPartCapacity);
+    void setFirst(Part outPart, unsigned stepIndex, float settedPartCapacity, float inputRougness);
     Part getInputPart();
-    float getTime();
+    float getTimePerOperation();
+    float getTimePerUnit();
     float getPowerConsumption();
-    int getNeedLathes(float settedPartCapacity);
+    int getNeedLathes();
 
     static int getStepNumber(float rougness);
+    static float getRougness(int stepIndex);
 };

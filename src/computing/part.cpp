@@ -24,5 +24,5 @@ void Part::setMaterial(Material _material) {
 }
 
 float Part::getMass() {
-    return diameter*diameter*3.141592/4*length/1000000000*material.density();
+    return diameter*diameter*M_PI/4*length/1000000000*material.density();
 }

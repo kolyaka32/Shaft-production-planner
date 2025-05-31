@@ -10,17 +10,20 @@ private:
     // Optimal counts of objects
     static int latheCount, furnaceCount, warehouseCount;
     // Time on production of one part
-    static float time;
+    static float timePerPart;
+    // Time to produce whole volume
+    static float timePerVolume;
 
 protected:
-    // PInput part
+    // Input part
     // Parts for calculations
     static Part targetPart, blankPart;
-    // Process part
-    static float partTarget;
+    static float partProductionTarget;
+    static int partVolumeTarget;
 
     // Function for update process
     static void recalculate();
+    static void calculateVolumeTime();
 
     // Calculated parameters
     // Step counts
@@ -39,5 +42,6 @@ public:
     static unsigned getLatheCount();
     static unsigned getFurnaceCount();
     static unsigned getWarehouseCount();
-    static float getProductionTime();
+    static float getPartProductionTime();
+    static float getVolumeProductionTime();
 };
