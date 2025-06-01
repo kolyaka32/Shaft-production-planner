@@ -4,10 +4,10 @@
 
 ThermalStage::ThermalStage() {}
 
-void ThermalStage::set(Part outPart, float _settedPartCapacity) {
+void ThermalStage::set(Part outPart, float _settedPartCapacity, int _batchVolume) {
     setCapacity(calculateCapacity(outPart));
     setOperationTime(calculateTreatmentTime(outPart));
-    setRequiredQuantity(_settedPartCapacity);
+    setRequiredQuantity(_settedPartCapacity, _batchVolume);
 }
 
 int ThermalStage::calculateCapacity(Part part) {

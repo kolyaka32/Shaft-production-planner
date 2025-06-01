@@ -11,19 +11,19 @@ private:
     static int latheCount, furnaceCount, warehouseCount;
     // Time on production of one part
     static float timePerPart;
-    // Time to produce whole volume
-    static float timePerVolume;
+    // Time to produce whole batch
+    static float timePerBatch;
 
 protected:
     // Input part
     // Parts for calculations
     static Part targetPart, blankPart;
     static float partProductionTarget;
-    static int partVolumeTarget;
+    static int targetBatchVolume;
 
     // Function for update process
     static void recalculate();
-    static void calculateVolumeTime();
+    static void calculateBatchTime();
 
     // Calculated parameters
     // Step counts

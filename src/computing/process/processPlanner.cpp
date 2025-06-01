@@ -59,7 +59,7 @@ void ProcessPlanner::setTargetProduction(float _target) {
 }
 
 void ProcessPlanner::setTargetVolume(int _target) {
-    partVolumeTarget = _target;
+    targetBatchVolume = _target;
     // Update process parameters
     recalculate();
     // Updating texts
@@ -71,7 +71,7 @@ std::string ProcessPlanner::getTargetProduction() {
 }
 
 std::string ProcessPlanner::getTargetVolume() {
-    return std::to_string(partVolumeTarget);
+    return std::to_string(targetBatchVolume);
 }
 
 void ProcessPlanner::update() {

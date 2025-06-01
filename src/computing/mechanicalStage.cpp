@@ -1,4 +1,6 @@
 #include <cmath>
+#include <fstream>
+#include "../testing.hpp"
 #include "mechanicalStage.hpp"
 
 
@@ -6,20 +8,27 @@ MechanicalStage::MechanicalStage() {
     setCapacity(1);
 }
 
-void MechanicalStage::set(Part outPart, unsigned _stepNumber, float _settedPartCapacity) {
-    inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), getRougness(_stepNumber)};
-    activeTime = calculateTime();
-    setOperationTime(activeTime);
-    setRequiredQuantity(_settedPartCapacity);
-    setPowerConsumption(calculatePowerConsumption());
+void MechanicalStage::set(Part outPart, unsigned _stepNumber, float _settedPartCapacity, int _batchVolume) {
+    setFirst(outPart, _stepNumber, getRougness(_stepNumber), _settedPartCapacity, _batchVolume);
 }
 
-void MechanicalStage::setFirst(Part outPart, unsigned _stepNumber, float _settedPartCapacity, float _inputRougness) {
+void MechanicalStage::setFirst(Part outPart, unsigned _stepNumber, float _inputRougness, float _settedPartCapacity, int _batchVolume) {
     inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), _inputRougness};
     activeTime = calculateTime();
     setOperationTime(activeTime);
-    setRequiredQuantity(_settedPartCapacity);
+    setRequiredQuantity(_settedPartCapacity, _batchVolume);
     setPowerConsumption(calculatePowerConsumption());
+
+    // Check correction of calculated numbers
+    #if CHECK_CORRECTION
+    std::ofstream fout("Calculations.txt");
+    fout << "d=" << inputPart.diameter << " l=" << inputPart.length << " Rz=" << inputPart.rougness << '\n';
+    fout << "Подача: " << calculateToolFeed() << '\n';
+    fout << "Скорость резания: " << calculateCutSpeed() << '\n';
+    fout << "Частота вращения: " << calculateRotateFrequency() << '\n';
+    fout << "Минутная подача: " << calculateMinuteFeed() << '\n';
+    fout << "Время: " << calculateTime() << '\n';
+    #endif
 }
 
 int MechanicalStage::getStepNumber(float rougness) {
@@ -148,7 +157,7 @@ float MechanicalStage::calculateCutSpeed() {
 }
 
 float MechanicalStage::calculateRotateFrequency() {
-    return std::roundf(1000*calculateCutSpeed()/inputPart.diameter);
+    return std::roundf(1000*calculateCutSpeed()/inputPart.diameter/M_PI);
 }
 
 float MechanicalStage::calculateMinuteFeed() {

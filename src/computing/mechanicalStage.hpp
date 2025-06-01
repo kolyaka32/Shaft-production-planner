@@ -28,8 +28,8 @@ protected:
 
 public:
     MechanicalStage();
-    void set(Part outPart, unsigned stepIndex, float settedPartCapacity);
-    void setFirst(Part outPart, unsigned stepIndex, float settedPartCapacity, float inputRougness);
+    void set(Part outPart, unsigned stepIndex, float settedPartCapacity, int batchVolume);
+    void setFirst(Part outPart, unsigned stepIndex, float inputRougness, float settedPartCapacity, int batchVolume);
     Part getInputPart();
 
     static int getStepNumber(float rougness);

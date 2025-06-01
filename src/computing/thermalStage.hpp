@@ -16,5 +16,5 @@ protected:
 
 public:
     ThermalStage();
-    void set(Part outPart, float settedPartCapacity);
+    void set(Part outPart, float settedPartCapacity, int batchVolume);
 };

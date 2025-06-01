@@ -5,7 +5,7 @@
 Part Process::targetPart{60, 200, 4};
 Part Process::blankPart{80, 220, 240};
 float Process::partProductionTarget = 10;
-int Process::partVolumeTarget = 100;
+int Process::targetBatchVolume = 100;
 // Process itself
 MechanicalStage Process::mechanicalStages[4];
 ThermalStage Process::thermalStages[4];
@@ -14,7 +14,7 @@ Part Process::semiproducts[5];
 int Process::startStep = 0, Process::endStep = 0;
 int Process::latheCount = 0, Process::furnaceCount = 0, Process::warehouseCount = 0;
 float Process::timePerPart = 0;
-float Process::timePerVolume = 0;
+float Process::timePerBatch = 0;
 
 
 Process::Process() {}
@@ -44,12 +44,12 @@ void Process::recalculate() {
     for (int i=endStep-1; i >= startStep; --i) {
         // Check, if input rougness not from previous step
         if (i == startStep && semiproducts[i+1].rougness < blankPart.rougness) {
-            mechanicalStages[i].setFirst(semiproducts[i+1], i, partProductionTarget, blankPart.rougness);
+            mechanicalStages[i].setFirst(semiproducts[i+1], i, blankPart.rougness, partProductionTarget, targetBatchVolume);
         } else {
-            mechanicalStages[i].set(semiproducts[i+1], i, partProductionTarget);
+            mechanicalStages[i].set(semiproducts[i+1], i, partProductionTarget, targetBatchVolume);
         }
         semiproducts[i].set(mechanicalStages[i].getInputPart());
-        thermalStages[i].set(semiproducts[i], partProductionTarget);
+        thermalStages[i].set(semiproducts[i], partProductionTarget, targetBatchVolume);
 
         // Updating counters
         latheCount += mechanicalStages[i].getReqieredQuantity();
@@ -58,12 +58,12 @@ void Process::recalculate() {
         timePerPart += thermalStages[i].getTimePerOperation();
         warehouseCount++;
     }
-    calculateVolumeTime();
+    calculateBatchTime();
 }
 
-void Process::calculateVolumeTime() {
+void Process::calculateBatchTime() {
     // Resetting
-    timePerVolume = 0;
+    timePerBatch = 0;
 
     // Counting whole volume time to produce
     float endTime[4];
@@ -73,16 +73,16 @@ void Process::calculateVolumeTime() {
 
     for (int i=startStep; i < endStep; ++i) {
         int stepCapacity = thermalStages[i].getCapacity();
-        if (stepCapacity > partVolumeTarget) {
-            stepCapacity = partVolumeTarget;
+        if (stepCapacity > targetBatchVolume) {
+            stepCapacity = targetBatchVolume;
         }
         // Adding start time to all steps, before them can start work
         for (int j=i+1; j < endStep; ++j) {
             endTime[j] += mechanicalStages[i].getTimePerBatch(stepCapacity);
             endTime[j] += thermalStages[i].getTimePerOperation();
         }
-        float machineTime = mechanicalStages[i].getTimePerBatch(partVolumeTarget);
-        float furnaceTime = thermalStages[i].getTimePerBatch(partVolumeTarget);
+        float machineTime = mechanicalStages[i].getTimePerBatch(targetBatchVolume);
+        float furnaceTime = thermalStages[i].getTimePerBatch(targetBatchVolume);
 
         if (furnaceTime > machineTime) {
             endTime[i] += furnaceTime;
@@ -100,8 +100,8 @@ void Process::calculateVolumeTime() {
     }
     // Finding maximal time
     for (int i=startStep; i < endStep; ++i) {
-        if (endTime[i] > timePerVolume) {
-            timePerVolume = endTime[i];
+        if (endTime[i] > timePerBatch) {
+            timePerBatch = endTime[i];
         }
     }
 }
@@ -123,5 +123,5 @@ float Process::getPartProductionTime() {
 }
 
 float Process::getVolumeProductionTime() {
-    return timePerVolume;
+    return timePerBatch;
 }

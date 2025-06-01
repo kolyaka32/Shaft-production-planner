@@ -15,7 +15,7 @@ private:
 protected:
     void setCapacity(int capacity);
     void setOperationTime(float time);
-    void setRequiredQuantity(float settedPartCapacity);
+    void setRequiredQuantity(float settedPartCapacity, int batchVolume);
     void setPowerConsumption(float powerConsumtion);
 
 public:

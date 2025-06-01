@@ -11,8 +11,12 @@ void Stage::setOperationTime(float _time) {
     operationTime = _time;
 }
 
-void Stage::setRequiredQuantity(float _settedPartCapacity) {
+void Stage::setRequiredQuantity(float _settedPartCapacity, int _batchVolume) {
     requiredQuantity = std::ceilf(_settedPartCapacity*operationTime/capacity);
+    // Check, if produce less parts than required
+    if (requiredQuantity > _batchVolume) {
+        requiredQuantity = _batchVolume;
+    }
 }
 
 void Stage::setPowerConsumption(float _powerConsumtion) {
