@@ -13,8 +13,8 @@ Part Process::semiproducts[5];
 // Calculated part (resetted for savety)
 int Process::startStep = 0, Process::endStep = 0;
 int Process::latheCount = 0, Process::furnaceCount = 0, Process::warehouseCount = 0;
-float Process::timePerPart = 0;
-float Process::timePerBatch = 0;
+float Process::timePerPart = 0, Process::timePerBatch = 0;
+float Process::totalPartCost = 0, Process::totalBatchCost = 0;
 
 
 Process::Process() {}
@@ -25,6 +25,8 @@ void Process::recalculate() {
     furnaceCount = 0;
     warehouseCount = 0;
     timePerPart = 0;
+    totalPartCost = 0;
+    totalBatchCost = 0;
 
     // Update step count
     endStep = MechanicalStage::getStepNumber(targetPart.rougness)+1;
@@ -51,12 +53,20 @@ void Process::recalculate() {
         semiproducts[i].set(mechanicalStages[i].getInputPart());
         thermalStages[i].set(semiproducts[i], partProductionTarget, targetBatchVolume);
 
-        // Updating counters
+        // Updating machines counters
         latheCount += mechanicalStages[i].getReqieredQuantity();
-        timePerPart += mechanicalStages[i].getTimePerOperation();
         furnaceCount += thermalStages[i].getReqieredQuantity();
-        timePerPart += thermalStages[i].getTimePerOperation();
         warehouseCount++;
+
+        // Updating time counters
+        timePerPart += mechanicalStages[i].getTimePerOperation();
+        timePerPart += thermalStages[i].getTimePerOperation();
+
+        // Update cost counters
+        totalPartCost += mechanicalStages[i].getPartCost();
+        totalPartCost += thermalStages[i].getPartCost();
+        totalBatchCost += mechanicalStages[i].getBatchCost();
+        totalBatchCost += thermalStages[i].getBatchCost();
     }
     calculateBatchTime();
 }
@@ -124,4 +134,16 @@ float Process::getPartProductionTime() {
 
 float Process::getVolumeProductionTime() {
     return timePerBatch;
+}
+
+float Process::getPartCost() {
+    return totalPartCost;
+}
+
+float Process::getBatchCost() {
+    return totalBatchCost;
+}
+
+float Process::getAvaragePartCost() {
+    return totalBatchCost/targetBatchVolume;
 }

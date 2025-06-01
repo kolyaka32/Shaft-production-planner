@@ -9,6 +9,7 @@ private:
     const float furnaceDiameter = 1500;
     const float recrystalysationDepth = 25;
     const float coolingSpeed = 20;
+    const float powerInput = 35;  // In kilowatts
 
 protected:
     int calculateCapacity(Part part);

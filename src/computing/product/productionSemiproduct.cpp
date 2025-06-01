@@ -28,6 +28,6 @@ void ProductionSemiproduct::draw(Window& window) {
 void ProductionSemiproduct::setNewParameters(Part part) {
     diameterText.setString(std::format("d={:.1f} mm", part.diameter));
     lengthText.setString(std::format("l={:.0f} mm", part.length));
-    massText.setString(std::format("m={:.2f} kg", part.getMass()));
+    massText.setString(std::format("m={:.2f} kg", part.mass));
     rougnessText.setString(std::format("Rz={:.1f} mkm", part.rougness));
 }

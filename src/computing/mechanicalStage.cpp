@@ -15,9 +15,10 @@ void MechanicalStage::set(Part outPart, unsigned _stepNumber, float _settedPartC
 void MechanicalStage::setFirst(Part outPart, unsigned _stepNumber, float _inputRougness, float _settedPartCapacity, int _batchVolume) {
     inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), _inputRougness};
     activeTime = calculateTime();
-    setOperationTime(activeTime);
+    setOperationTime(activeTime + (calcualteMountTime(inputPart)+calcualteMountTime(outPart))/60 + calculateInstrumentTime(activeTime), _batchVolume);
     setRequiredQuantity(_settedPartCapacity, _batchVolume);
-    setPowerConsumption(calculatePowerConsumption());
+    setPowerConsumption(powerInput);
+    setCost(_batchVolume, activeTime, calculateInstrumentCost(activeTime));
 
     // Check correction of calculated numbers
     #if CHECK_CORRECTION
@@ -168,8 +169,59 @@ float MechanicalStage::calculateTime() {
     return (inputPart.length+2)/(calculateMinuteFeed());
 }
 
-float MechanicalStage::calculatePowerConsumption() {
-    return powerInput*activeTime;
+float MechanicalStage::calcualteMountTime(Part part) {
+    // Manual installation
+    if (part.mass < 0.25) {
+        return 0.16;
+    } else if (part.mass < 0.5) {
+        return 0.17;
+    } else if (part.mass < 1) {
+        if (part.diameter > 250) {
+            return 0.18;
+        } else {
+            return 0.25;
+        }
+    } else if (part.mass < 3) {
+        if (part.diameter > 250) {
+            return 0.19;
+        } else {
+            return 0.29;
+        }
+    } else if (part.mass < 5) {
+        if (part.diameter > 250) {
+            return 0.22;
+        } else {
+            return 0.34;
+        }
+    } else if (part.mass < 8) {
+        if (part.diameter > 250) {
+            return 0.26;
+        } else {
+            return 0.38;
+        }
+    } else if (part.mass < 12) {
+        if (part.diameter > 250) {
+            return 0.32;
+        } else {
+            return 0.46;
+        }
+    } else if (part.mass < 20) {
+        if (part.diameter > 250) {
+            return 0.39;
+        } else {
+            return 0.6;
+        }
+    }
+    // Mechanical installation
+    return 0.6+1.5;
+}
+
+float MechanicalStage::calculateInstrumentTime(float activeTime) {
+    return ceilf(activeTime/normTimeCut) * 1.5/60;
+}
+
+float MechanicalStage::calculateInstrumentCost(float activeTime) {
+    return ceilf(activeTime/normTimeCut) * instrumentCost;
 }
 
 // Getting public functions

@@ -8,7 +8,9 @@ targetProductionInputText(window, 10, 350, LanguagedText{"Target part production
 targetProductionInput(window, 550, 355, 80, planner.getTargetProduction()),
 targetVolumeInputText(window, 10, 390, LanguagedText{"Batch size", "Объём партии"}, GUI::Aligment::Left),
 targetVolumeInput(window, 550, 395, 80, planner.getTargetVolume()),
-batchProductionTimeText(window, 10, 430, getBatchText(), GUI::Aligment::Left)
+batchTimeText(window, 10, 430, getBatchTimeText(), GUI::Aligment::Left),
+batchCostText(window, 10, 470, getBatchCostText(), GUI::Aligment::Left),
+avaragePartCost(window, 10, 510, getAvaragePartText(), GUI::Aligment::Left)
 {}
 
 void ProcessCycle::LClick(sf::Vector2i pos) {
@@ -42,11 +44,15 @@ void ProcessCycle::LClick(sf::Vector2i pos) {
     // Check, if stop input - update values
     if (targetProductionInput.click(pos)) {
         planner.setTargetProduction(targetProductionInput.getNumber());
-        batchProductionTimeText.setText(getBatchText());
+        batchTimeText.setText(getBatchTimeText());
+        batchCostText.setText(getBatchCostText());
+        avaragePartCost.setText(getAvaragePartText());
     }
     if (targetVolumeInput.click(pos)) {
         planner.setTargetVolume(targetVolumeInput.getNumber());
-        batchProductionTimeText.setText(getBatchText());
+        batchTimeText.setText(getBatchTimeText());
+        batchCostText.setText(getBatchCostText());
+        avaragePartCost.setText(getAvaragePartText());
     }
 }
 
@@ -63,11 +69,15 @@ void ProcessCycle::keyDown(sf::Event::KeyPressed state) {
     // Check, if stop input - update values
     if (targetProductionInput.keyPress(state)) {
         planner.setTargetProduction(targetProductionInput.getNumber());
-        batchProductionTimeText.setText(getBatchText());
+        batchTimeText.setText(getBatchTimeText());
+        batchCostText.setText(getBatchCostText());
+        avaragePartCost.setText(getAvaragePartText());
     }
     if (targetVolumeInput.keyPress(state)) {
         planner.setTargetVolume(targetVolumeInput.getNumber());
-        batchProductionTimeText.setText(getBatchText());
+        batchTimeText.setText(getBatchTimeText());
+        batchCostText.setText(getBatchCostText());
+        avaragePartCost.setText(getAvaragePartText());
     }
 }
 
@@ -97,7 +107,9 @@ void ProcessCycle::draw() {
     targetProductionInput.draw(window);
     targetVolumeInputText.draw(window);
     targetVolumeInput.draw(window);
-    batchProductionTimeText.draw(window);
+    batchTimeText.draw(window);
+    batchCostText.draw(window);
+    avaragePartCost.draw(window);
 
     settings.draw(window);
 
@@ -105,13 +117,35 @@ void ProcessCycle::draw() {
     window.display();
 }
 
-std::string ProcessCycle::getBatchText() {
+std::string ProcessCycle::getBatchTimeText() {
     switch (LanguagedText::getLanguage()) {
     case Language::English:
         return std::format("Time per whole batch [h]: {:.1f}", planner.getVolumeProductionTime());
 
     case Language::Russian:
         return std::format("Время выполнения партии [ч]: {:.1f}", planner.getVolumeProductionTime());
+    }
+    return "";
+}
+
+std::string ProcessCycle::getBatchCostText() {
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        return std::format("Cost of batch [rub]: {:.0f}", planner.getBatchCost());
+
+    case Language::Russian:
+        return std::format("Стоимость партии [руб]: {:.0f}", planner.getBatchCost());
+    }
+    return "";
+}
+
+std::string ProcessCycle::getAvaragePartText() {
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        return std::format("Cost per one part [rub/prt]: {:.1f}", planner.getAvaragePartCost());
+
+    case Language::Russian:
+        return std::format("Себестоимость детали [руб/дет]: {:.1f}", planner.getAvaragePartCost());
     }
     return "";
 }

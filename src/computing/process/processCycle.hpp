@@ -12,10 +12,12 @@ private:
     // Input part
     GUI::Text targetProductionInputText, targetVolumeInputText;
     GUI::TypeBox targetProductionInput, targetVolumeInput;
-    GUI::Text batchProductionTimeText;
+    GUI::Text batchTimeText, batchCostText, avaragePartCost;
 
 protected:
-    std::string getBatchText();
+    std::string getBatchTimeText();
+    std::string getBatchCostText();
+    std::string getAvaragePartText();
 
 public:
     ProcessCycle(Window& window);

@@ -13,6 +13,8 @@ private:
     static float timePerPart;
     // Time to produce whole batch
     static float timePerBatch;
+    // Total cost of single part and whole batch
+    static float totalPartCost, totalBatchCost;
 
 protected:
     // Input part
@@ -44,4 +46,7 @@ public:
     static unsigned getWarehouseCount();
     static float getPartProductionTime();
     static float getVolumeProductionTime();
+    static float getPartCost();
+    static float getBatchCost();
+    static float getAvaragePartCost();
 };

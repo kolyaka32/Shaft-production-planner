@@ -5,8 +5,9 @@
 class MechanicalStage : public Stage {
 private:
     // Standard tool durability time
-    const float normTimeCut = 30.0;  // In minutes
-    const float powerInput = 1.5;    // In kilowatts
+    const float normTimeCut = 30.0;    // In minutes
+    const float powerInput = 1.5;      // In kilowatts
+    const float instrumentCost = 500;  // In rubbles
 
     // Variables
     Part inputPart;
@@ -23,8 +24,9 @@ protected:
     float calculateRotateFrequency();
     float calculateMinuteFeed();
     float calculateTime();
-
-    float calculatePowerConsumption();
+    float calcualteMountTime(Part part);
+    float calculateInstrumentTime(float activeTime);
+    float calculateInstrumentCost(float activeTime);
 
 public:
     MechanicalStage();
