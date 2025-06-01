@@ -108,10 +108,10 @@ void ProcessCycle::draw() {
 std::string ProcessCycle::getBatchText() {
     switch (LanguagedText::getLanguage()) {
     case Language::English:
-        return std::format("Time per whole batch [h]: {:.0f}", planner.getVolumeProductionTime());
+        return std::format("Time per whole batch [h]: {:.1f}", planner.getVolumeProductionTime());
 
     case Language::Russian:
-        return std::format("Время выполнения партии [ч]: {:.0f}", planner.getVolumeProductionTime());
+        return std::format("Время выполнения партии [ч]: {:.1f}", planner.getVolumeProductionTime());
     }
     return "";
 }

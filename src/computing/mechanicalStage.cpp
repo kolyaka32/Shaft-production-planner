@@ -2,20 +2,24 @@
 #include "mechanicalStage.hpp"
 
 
-MechanicalStage::MechanicalStage() {}
+MechanicalStage::MechanicalStage() {
+    setCapacity(1);
+}
 
 void MechanicalStage::set(Part outPart, unsigned _stepNumber, float _settedPartCapacity) {
     inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), getRougness(_stepNumber)};
-    time = calculateTime();
-    requiredQuantity = std::ceilf(_settedPartCapacity*time);
-    powerConsumption = calculatePowerConsumption();
+    activeTime = calculateTime();
+    setOperationTime(activeTime);
+    setRequiredQuantity(_settedPartCapacity);
+    setPowerConsumption(calculatePowerConsumption());
 }
 
 void MechanicalStage::setFirst(Part outPart, unsigned _stepNumber, float _settedPartCapacity, float _inputRougness) {
     inputPart = {calculateInputDiameter(_stepNumber, outPart.diameter), calculateInputLength(_stepNumber, outPart.length), _inputRougness};
-    time = calculateTime();
-    requiredQuantity = std::ceilf(_settedPartCapacity*time);
-    powerConsumption = calculatePowerConsumption();
+    activeTime = calculateTime();
+    setOperationTime(activeTime);
+    setRequiredQuantity(_settedPartCapacity);
+    setPowerConsumption(calculatePowerConsumption());
 }
 
 int MechanicalStage::getStepNumber(float rougness) {
@@ -136,51 +140,30 @@ float MechanicalStage::calculateInputLength(unsigned step, float outLength) {
 }
 
 float MechanicalStage::calculateToolFeed() {
-    auto t = (inputPart.rougness/1000)*sinf(Part::material.mainFi()+Part::material.addFi())/sinf(Part::material.mainFi())/sinf(Part::material.addFi());
-    return t;
+    return (inputPart.rougness/1000)*sinf(Part::material.mainFi()+Part::material.addFi())/sinf(Part::material.mainFi())/sinf(Part::material.addFi());
 }
 
 float MechanicalStage::calculateCutSpeed() {
-    auto t = Part::material.Cv(calculateToolFeed()) / powf(normTimeCut, 0.4);
-    return t;
+    return Part::material.Cv(calculateToolFeed()) / powf(normTimeCut, 0.4);
 }
 
 float MechanicalStage::calculateRotateFrequency() {
-    auto t = std::roundf(1000*calculateCutSpeed()/inputPart.diameter);
-    return t;
+    return std::roundf(1000*calculateCutSpeed()/inputPart.diameter);
 }
 
 float MechanicalStage::calculateMinuteFeed() {
-    auto t = calculateToolFeed()*calculateRotateFrequency();
-    return t;
+    return calculateToolFeed()*calculateRotateFrequency();
 }
 
 float MechanicalStage::calculateTime() {
-    auto t = (inputPart.length+2)/(calculateMinuteFeed());
-    return t;
+    return (inputPart.length+2)/(calculateMinuteFeed());
 }
 
 float MechanicalStage::calculatePowerConsumption() {
-    return powerInput*time;
+    return powerInput*activeTime;
 }
 
 // Getting public functions
 Part MechanicalStage::getInputPart() {
     return inputPart;
-}
-
-float MechanicalStage::getTimePerOperation() {
-    return time;
-}
-
-float MechanicalStage::getTimePerUnit() {
-    return time/requiredQuantity;
-}
-
-float MechanicalStage::getPowerConsumption() {
-    return powerConsumption;
-}
-
-int MechanicalStage::getNeedLathes() {
-    return requiredQuantity;
 }

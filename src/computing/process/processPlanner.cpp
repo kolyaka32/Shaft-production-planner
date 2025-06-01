@@ -2,7 +2,7 @@
 
 
 ProcessPlanner::ProcessPlanner(Window& window)
-: backGround({1200, 150}),
+: backGround({1200, 165}),
 stepTexts {
     {window, getOffset(0), 90, LanguagedText{"Rough", "Черновая"}},
     {window, getOffset(1), 120, LanguagedText{"Thermal", "Термическая"}},
@@ -13,10 +13,10 @@ stepTexts {
     {window, getOffset(6), 90, LanguagedText{"Finishing", "Отделочная"}},
     {window, getOffset(7), 120, LanguagedText{"Thermal", "Термическая"}},
 },
-timeDescription(window, 5, 150, LanguagedText{"Time [h]:", "Время [ч]:"}, GUI::Aligment::Left),
+singleTimeDescription(window, 5, 150, LanguagedText{"Per part:", "На деталь:"}, GUI::Aligment::Left),
 machinesDescription(window, 5, 180, LanguagedText{"Lathes:", "Станков:"}, GUI::Aligment::Left),
 furnacesDescription(window, 5, 210, LanguagedText{"Furnaces:", "Печей:"}, GUI::Aligment::Left),
-timeTexts {
+singleTimeTexts {
     {window.font}, {window.font}, {window.font}, {window.font},
     {window.font}, {window.font}, {window.font}, {window.font},
 },
@@ -35,19 +35,15 @@ furnaceCountText(window, getOffset(8)+60, 210, std::to_string(getFurnaceCount())
 
     // Updating texts
     for (int i=startStep; i < endStep; ++i) {
-        timeTexts[i*2].setString(std::format("{:.1f}", mechanicalStages[i].getTimePerOperation()));
-        timeTexts[i*2].setOrigin(timeTexts[i*2].getGlobalBounds().size/2.0f);
-        timeTexts[i*2].setPosition({getOffset(i*2), 165.0f});
-        countTexts[i*2].setString(std::to_string(mechanicalStages[i].getNeedLathes()));
-        countTexts[i*2].setOrigin(countTexts[i*2].getGlobalBounds().size/2.0f);
+        // Mechanical step
+        singleTimeTexts[i*2].setPosition({getOffset(i*2), 165.0f});
         countTexts[i*2].setPosition({getOffset(i*2), 195.0f});
-        timeTexts[i*2+1].setString(std::format("{:.1f}", thermalStages[i].getTimePerOperation()));
-        timeTexts[i*2+1].setOrigin(timeTexts[i*2+1].getGlobalBounds().size/2.0f);
-        timeTexts[i*2+1].setPosition({getOffset(i*2+1), 165.0f});
-        countTexts[i*2+1].setString(std::to_string(thermalStages[i].getNeedFurnaces()));
-        countTexts[i*2+1].setOrigin(countTexts[i*2+1].getGlobalBounds().size/2.0f);
+        // Thermal step
+        singleTimeTexts[i*2+1].setPosition({getOffset(i*2+1), 165.0f});
         countTexts[i*2+1].setPosition({getOffset(i*2+1), 225.0f});
     }
+    // Update all texts
+    update();
 }
 
 constexpr float ProcessPlanner::getOffset(int index) {
@@ -56,11 +52,17 @@ constexpr float ProcessPlanner::getOffset(int index) {
 
 void ProcessPlanner::setTargetProduction(float _target) {
     partProductionTarget = _target;
+    // Update process parameters
+    recalculate();
+    // Updating texts
     update();
 }
 
 void ProcessPlanner::setTargetVolume(int _target) {
     partVolumeTarget = _target;
+    // Update process parameters
+    recalculate();
+    // Updating texts
     update();
 }
 
@@ -73,17 +75,17 @@ std::string ProcessPlanner::getTargetVolume() {
 }
 
 void ProcessPlanner::update() {
-    // Update process parameters
-    recalculate();
     // Updating texts
     for (int i=startStep; i < endStep; ++i) {
-        timeTexts[i*2].setString(std::format("{:.1f}", mechanicalStages[i].getTimePerOperation()));
-        timeTexts[i*2].setOrigin(timeTexts[i*2].getGlobalBounds().size/2.0f);
-        countTexts[i*2].setString(std::to_string(mechanicalStages[i].getNeedLathes()));
+        // Mechanical part
+        singleTimeTexts[i*2].setString(std::format("{:.1f}", mechanicalStages[i].getTimePerOperation()));
+        singleTimeTexts[i*2].setOrigin(singleTimeTexts[i*2].getGlobalBounds().size/2.0f);
+        countTexts[i*2].setString(std::to_string(mechanicalStages[i].getReqieredQuantity()));
         countTexts[i*2].setOrigin(countTexts[i*2].getGlobalBounds().size/2.0f);
-        timeTexts[i*2+1].setString(std::format("{:.1f}", thermalStages[i].getTimePerOperation()));
-        timeTexts[i*2+1].setOrigin(timeTexts[i*2+1].getGlobalBounds().size/2.0f);
-        countTexts[i*2+1].setString(std::to_string(thermalStages[i].getNeedFurnaces()));
+        // Thermal part
+        singleTimeTexts[i*2+1].setString(std::format("{:.1f}", thermalStages[i].getTimePerOperation()));
+        singleTimeTexts[i*2+1].setOrigin(singleTimeTexts[i*2+1].getGlobalBounds().size/2.0f);
+        countTexts[i*2+1].setString(std::to_string(thermalStages[i].getReqieredQuantity()));
         countTexts[i*2+1].setOrigin(countTexts[i*2+1].getGlobalBounds().size/2.0f);
     }
     productionTimeText.setText(std::format("{:.1f}", getPartProductionTime()));
@@ -96,12 +98,12 @@ void ProcessPlanner::draw(Window& window) {
     window.draw(backGround);
 
     // Table
-    timeDescription.draw(window);
+    singleTimeDescription.draw(window);
     machinesDescription.draw(window);
     furnacesDescription.draw(window);
     for (int i=startStep*2; i < endStep*2; ++i) {
         stepTexts[i].draw(window);
-        window.draw(timeTexts[i]);
+        window.draw(singleTimeTexts[i]);
         window.draw(countTexts[i]);
     }
     

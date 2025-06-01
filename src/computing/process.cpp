@@ -52,9 +52,9 @@ void Process::recalculate() {
         thermalStages[i].set(semiproducts[i], partProductionTarget);
 
         // Updating counters
-        latheCount += mechanicalStages[i].getNeedLathes();
+        latheCount += mechanicalStages[i].getReqieredQuantity();
         timePerPart += mechanicalStages[i].getTimePerOperation();
-        furnaceCount += thermalStages[i].getNeedFurnaces();
+        furnaceCount += thermalStages[i].getReqieredQuantity();
         timePerPart += thermalStages[i].getTimePerOperation();
         warehouseCount++;
     }
@@ -78,15 +78,15 @@ void Process::calculateVolumeTime() {
         }
         // Adding start time to all steps, before them can start work
         for (int j=i+1; j < endStep; ++j) {
-            endTime[j] += ceilf((float)stepCapacity/mechanicalStages[i].getNeedLathes())*mechanicalStages[i].getTimePerOperation();
+            endTime[j] += mechanicalStages[i].getTimePerBatch(stepCapacity);
             endTime[j] += thermalStages[i].getTimePerOperation();
         }
-        float furnaceTime = ceilf((float)ceilf((float)partVolumeTarget/thermalStages[i].getCapacity())/thermalStages[i].getNeedFurnaces())*thermalStages[i].getTimePerOperation();
-        float machineTime = ceilf((float)partVolumeTarget/mechanicalStages[i].getNeedLathes())*mechanicalStages[i].getTimePerOperation();
+        float machineTime = mechanicalStages[i].getTimePerBatch(partVolumeTarget);
+        float furnaceTime = thermalStages[i].getTimePerBatch(partVolumeTarget);
 
         if (furnaceTime > machineTime) {
             endTime[i] += furnaceTime;
-            endTime[i] += ceilf((float)stepCapacity/mechanicalStages[i].getNeedLathes())*mechanicalStages[i].getTimePerOperation();
+            endTime[i] += mechanicalStages[i].getTimePerBatch(stepCapacity);
         } else {
             endTime[i] += machineTime;
             endTime[i] += thermalStages[i].getTimePerOperation();
@@ -94,7 +94,7 @@ void Process::calculateVolumeTime() {
 
         // Adding end time to all step before, so them can finish work
         for (int j=i-1; j >= startStep; --j) {
-            endTime[j] += ceilf((float)stepCapacity/mechanicalStages[i].getNeedLathes())*mechanicalStages[i].getTimePerOperation();
+            endTime[j] += mechanicalStages[i].getTimePerBatch(stepCapacity);
             endTime[j] += thermalStages[i].getTimePerOperation();
         }
     }

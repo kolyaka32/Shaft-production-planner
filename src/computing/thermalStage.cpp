@@ -4,10 +4,10 @@
 
 ThermalStage::ThermalStage() {}
 
-void ThermalStage::set(Part outPart, float settedPartCapacity) {
-    capacity = calculateCapacity(outPart);
-    time = calculateTreatmentTime(outPart);
-    requiredQuantity = std::ceilf(settedPartCapacity*time/capacity);
+void ThermalStage::set(Part outPart, float _settedPartCapacity) {
+    setCapacity(calculateCapacity(outPart));
+    setOperationTime(calculateTreatmentTime(outPart));
+    setRequiredQuantity(_settedPartCapacity);
 }
 
 int ThermalStage::calculateCapacity(Part part) {
@@ -17,20 +17,4 @@ int ThermalStage::calculateCapacity(Part part) {
 
 float ThermalStage::calculateTreatmentTime(Part part) {
     return 1 + part.diameter/2/recrystalysationDepth + part.material.recristalisationTemp()/coolingSpeed;
-}
-
-int ThermalStage::getCapacity() {
-    return capacity;
-}
-
-float ThermalStage::getTimePerUnit() {
-    return time/capacity/requiredQuantity;
-}
-
-float ThermalStage::getTimePerOperation() {
-    return time;
-}
-
-int ThermalStage::getNeedFurnaces() {
-    return requiredQuantity;
 }

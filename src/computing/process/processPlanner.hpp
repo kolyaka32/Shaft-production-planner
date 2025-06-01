@@ -13,10 +13,11 @@ private:
 
     // Graphical part
     sf::RectangleShape backGround;
-    GUI::Text timeDescription, machinesDescription, furnacesDescription;
+    GUI::Text singleTimeDescription;
+    GUI::Text machinesDescription, furnacesDescription;
     GUI::Text stepTexts[8];
     GUI::Text summaryText;
-    sf::Text timeTexts[8];
+    sf::Text singleTimeTexts[8];
     sf::Text countTexts[8];
     GUI::Text productionTimeText, machineCountText, furnaceCountText;
 
