@@ -10,7 +10,7 @@ heightText(window, 200, 100, LanguagedText{"Height", "Высота"}),
 heightBox(window, 160, 140, 80, Factory::getHeight()),
 cellTypeSwitch(window, 20, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
     {"Warehouse", "Склад"}, {"Lathe 1", "Станок 1"}, {"Lathe 2", "Станок 2"}, {"Furnace 1", "Печь 1"}}),
-optimizeButton(window, 20, 450, 150, 40, {"Try optimize", "Попробовать оптимизировать"}),
+optimizeButton(window, 20, 450, 150, 40, {"Try optimize", "Оптимизировать"}),
 cursorCell() {}
 
 void FactoryCycle::keyDown(sf::Event::KeyPressed state) {

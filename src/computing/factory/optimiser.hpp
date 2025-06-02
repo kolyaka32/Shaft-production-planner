@@ -21,5 +21,6 @@ private:
 
 public:
     Optimiser();
-    static void solve(Field& field);
+    static void placeWay(Field& field, unsigned count);
+    static void placeObjects(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses);
 };
