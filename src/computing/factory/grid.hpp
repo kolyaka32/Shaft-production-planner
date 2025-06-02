@@ -11,11 +11,11 @@ private:
     // Absolute position of first element
     const sf::Vector2f pos;
     // Counter indicators
-    sf::Text latheCountText, furnaceCountText, warehouseCountText;
+    GUI::DynamicText latheCountText, furnaceCountText, warehouseCountText;
     // Warnings
     GUI::WarningBox latheCountHigh, furnaceCountHigh, warehouseCountHigh;
     GUI::WarningBox latheCountLow, furnaceCountLow, warehouseCountLow;
-    //
+    // Function for recalculate counts of machines after loading
     static void recalculateCellsCount();
 
 protected:

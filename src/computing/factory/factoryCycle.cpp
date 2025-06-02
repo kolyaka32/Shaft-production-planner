@@ -150,6 +150,8 @@ void FactoryCycle::draw() {
         cursorCell.draw(window, sf::Mouse::getPosition(window));
     }
 
+    optimizeButton.draw(window);
+
     // Display things on screen
     window.display();
 }

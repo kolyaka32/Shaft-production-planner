@@ -10,19 +10,16 @@ int Grid::warehouseCount = 0;
 
 Grid::Grid(Window& window, sf::Vector2f _pos)
 : pos(_pos),
-latheCountText(window.font),
-furnaceCountText(window.font),
-warehouseCountText(window.font),
-latheCountHigh(window, 700, 60,  {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
-furnaceCountHigh(window, 700, 100, {"Number of furnaces is excessive", "Число печей избыточно"}, "machines/warning-icon.png"),
-warehouseCountHigh(window,   700, 140, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
-latheCountLow(window,  700, 60,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
-furnaceCountLow(window,  700, 100, {"Number of furnaces is insufficient", "Число печей недостаточно"}, "machines/warning-icon.png"),
-warehouseCountLow(window,    700, 140, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
+latheCountText(window, 280, 60, {"Lathes: {}, needed: {}", "Станков: {}, необходимо: {}"}, GUI::Aligment::Left),
+furnaceCountText(window, 280, 100, {"Furnaces: {}, needed: {}", "Печей: {}, необходимо: {}"}, GUI::Aligment::Left),
+warehouseCountText(window, 280, 140, {"Warehouses: {}, needed: {}", "Складов: {}, необходимо: {}"}, GUI::Aligment::Left),
+latheCountHigh(window, 720, 60, {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
+furnaceCountHigh(window,720, 100, {"Number of furnaces is excessive", "Число печей избыточно"}, "machines/warning-icon.png"),
+warehouseCountHigh(window, 720, 140, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
+latheCountLow(window, 720, 60,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
+furnaceCountLow(window, 720, 100, {"Number of furnaces is insufficient", "Число печей недостаточно"}, "machines/warning-icon.png"),
+warehouseCountLow(window, 720, 140, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
     // Placing texts
-    latheCountText.setPosition({280, 60});
-    furnaceCountText.setPosition({280, 100});
-    warehouseCountText.setPosition({280, 140});
     updateLatheText();
     updateFurnaceText();
     updateWarehouseText();
@@ -38,17 +35,7 @@ sf::Vector2f Grid::getAbs(sf::Vector2i localPos) {
 
 void Grid::updateLatheText() {
     // Update text itself
-    std::string str;
-    switch (LanguagedText::getLanguage()) {
-    case Language::English:
-        str = std::format("Lathes: {}, needed: {}", latheCount, Process::getLatheCount());
-        break;
-
-    case Language::Russian:
-        str = std::format("Станков: {}, необходимо: {}", latheCount, Process::getLatheCount());
-        break;
-    }
-    latheCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
+    latheCountText.setValues(latheCount, Process::getLatheCount());
     // Update warnings
     latheCountHigh.deactivate();
     latheCountLow.deactivate();
@@ -61,17 +48,7 @@ void Grid::updateLatheText() {
 
 void Grid::updateFurnaceText() {
     // Update text itself
-    std::string str;
-    switch (LanguagedText::getLanguage()) {
-    case Language::English:
-        str = std::format("Furnaces: {}, needed: {}", furnaceCount, Process::getFurnaceCount());
-        break;
-    
-    case Language::Russian:
-        str = std::format("Печей: {}, необходимо: {}", furnaceCount, Process::getFurnaceCount());
-        break;
-    }
-    furnaceCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
+    furnaceCountText.setValues(furnaceCount, Process::getFurnaceCount());
     // Update warnings
     furnaceCountHigh.deactivate();
     furnaceCountLow.deactivate();
@@ -84,17 +61,7 @@ void Grid::updateFurnaceText() {
 
 void Grid::updateWarehouseText() {
     // Update text itself
-    std::string str;
-    switch (LanguagedText::getLanguage()) {
-    case Language::English:
-        str = std::format("Warehouses: {}, needed: {}", warehouseCount, Process::getWarehouseCount());
-        break;
-    
-    case Language::Russian:
-        str = std::format("Складов: {}, необходимо: {}", warehouseCount, Process::getWarehouseCount());
-        break;
-    }
-    warehouseCountText.setString(sf::String::fromUtf8(str.begin(), str.end()));
+    warehouseCountText.setValues(warehouseCount, Process::getWarehouseCount());
     // Update warnings
     warehouseCountHigh.deactivate();
     warehouseCountLow.deactivate();
@@ -138,9 +105,9 @@ void Grid::blit(Window& window) {
     square.setPosition(pos);
 
     // Draw counters
-    window.draw(latheCountText);
-    window.draw(furnaceCountText);
-    window.draw(warehouseCountText);
+    latheCountText.draw(window);
+    furnaceCountText.draw(window);
+    warehouseCountText.draw(window);
     latheCountHigh.draw(window);
     furnaceCountHigh.draw(window);
     warehouseCountHigh.draw(window);
