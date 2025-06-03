@@ -165,7 +165,6 @@ bool Optimiser::connectCell(Field& copy, unsigned index, unsigned& counter) {
             }
         }
     }
-    debug(copy);
 
     int step = 1;
     int findCellX = 0, findCellY = 0;
@@ -219,7 +218,6 @@ bool Optimiser::findWay(Field& copy, int& step, int& findCellX, int& findCellY, 
                 }
             }
         }
-        debug(copy);
         // Checking on finding need way
         for (int i=0; i < copy.getHeight(); ++i) {
             for (int j=0; j < copy.getWidth(); ++j) {
@@ -259,20 +257,22 @@ bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, unsigned
                 counter++;
             }
             field[{X, Y}].setType(CellType::Way);
+            // Checking, if could add more cells surround cell
+            tryPlaceMachine(field, X-1, Y, counter);
+            tryPlaceMachine(field, X, Y-1, counter);
+            tryPlaceMachine(field, X+1, Y, counter);
+            tryPlaceMachine(field, X, Y+1, counter);
             return true;
         }
     }
     return false;
 }
 
-void Optimiser::debug(Field& field) {
-    // Debugging info
-    static std::ofstream fout("cell connection.txt");
-    fout << '\n';
-    for (int i=0; i < field.getHeight(); ++i) {
-        for (int j=0; j < field.getWidth(); ++j) {
-            fout << '(' << field[{j, i}].getIndex() << ' ' << (int)field[{j, i}].weight << ") ";
+void Optimiser::tryPlaceMachine(Field& field, int X, int Y, unsigned& counter) {
+    if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
+        if (field[{X, Y}].getType() == CellType::None) {
+            field[{X, Y}].setType(CellType::Unspecified);
+            counter--;
         }
-        fout << '\n';
     }
 }

@@ -10,7 +10,7 @@ private:
     static bool findWay(Field& copy, int& step, int& findCellX, int& findCellY, unsigned& findIndex, unsigned startIndex);
     static void setCell(Field& field, int X, int Y, unsigned weight);
     static bool trySetWay(Field& field, int X, int Y, unsigned weight, unsigned& counter);
-    static void debug(Field& field);
+    static void tryPlaceMachine(Field& field, int X, int Y, unsigned& counter);
 
 public:
     Optimiser();
