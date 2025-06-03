@@ -6,14 +6,13 @@
 // Optimiser class
 Optimiser::Optimiser() {}
 
-void Optimiser::optimise(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses) {
-    placeWay(field, lathe + furnace + warehouses);
+void Optimiser::optimise(Field& field) {
+    placeWay(field, Process::getLatheCount() + Process::getFurnaceCount() + Process::getWarehouseCount());
+    placeObjects(field);
 }
 
-void Optimiser::placeWay(Field& field, unsigned _count) {
+void Optimiser::placeWay(Field& field, unsigned count) {
     // Trying to optimise field placement
-    unsigned count = _count;
-
     // Create copy of current field
     Field copy(field.getWidth(), field.getHeight());
 
@@ -222,7 +221,7 @@ bool Optimiser::findWay(Field& copy, int& step, int& findCellX, int& findCellY, 
         for (int i=0; i < copy.getHeight(); ++i) {
             for (int j=0; j < copy.getWidth(); ++j) {
                 // Check cell on allowable way
-                if (copy[{j, i}].weight != (unsigned)(-1) && copy[{j, i}].getType() == CellType::Way && copy[{j, i}].getIndex() < index) {
+                if (copy[{j, i}].weight != (unsigned)(-1) && copy[{j, i}].getType() == CellType::Way && copy[{j, i}].getIndex() != index) {
                     findIndex = copy[{j, i}].getIndex();
                     findCellX = j;
                     findCellY = i;
@@ -273,6 +272,34 @@ void Optimiser::tryPlaceMachine(Field& field, int X, int Y, unsigned& counter) {
         if (field[{X, Y}].getType() == CellType::None) {
             field[{X, Y}].setType(CellType::Unspecified);
             counter--;
+        }
+    }
+}
+
+void Optimiser::placeObjects(Field& field) {
+    const std::vector<unsigned> counts = Process::getMachinesCount();
+
+    for (int i=0; i < counts.size()/3; ++i) {
+        // Replacing unspecified cells with lathes
+        placeMachine(field, CellType::Lathe_1, counts[i*3]);
+        // Replacing unspecified cells with furnaces
+        placeMachine(field, CellType::Furnace_1, counts[i*3+1]);
+        // Replacing unspecified cells with furnaces
+        placeMachine(field, CellType::Warehouse, counts[i*3+2]);
+    }
+}
+
+void Optimiser::placeMachine(Field& field, CellType _type, unsigned _count) {
+    for (int i=0; i < field.getHeight(); ++i) {
+        for (int j=0; j < field.getWidth(); ++j) {
+            if (field[{j, i}].getType() == CellType::Unspecified) {
+                field[{j, i}].setType(_type);
+                // Check, if place enough
+                _count--;
+                if (_count == 0) {
+                    return;
+                }
+            }
         }
     }
 }

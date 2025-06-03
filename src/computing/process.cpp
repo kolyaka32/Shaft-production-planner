@@ -12,7 +12,6 @@ ThermalStage Process::thermalStages[4];
 Part Process::semiproducts[5];
 // Calculated part (resetted for savety)
 int Process::startStep = 0, Process::endStep = 0;
-int Process::latheCount = 0, Process::furnaceCount = 0, Process::warehouseCount = 0;
 float Process::timePerPart = 0, Process::timePerBatch = 0;
 float Process::totalPartCost = 0, Process::totalBatchCost = 0;
 
@@ -21,9 +20,6 @@ Process::Process() {}
 
 void Process::recalculate() {
     // Reset
-    latheCount = 0;
-    furnaceCount = 0;
-    warehouseCount = 0;
     timePerPart = 0;
     totalPartCost = 0;
     totalBatchCost = 0;
@@ -52,11 +48,6 @@ void Process::recalculate() {
         }
         semiproducts[i].set(mechanicalStages[i].getInputPart());
         thermalStages[i].set(semiproducts[i], partProductionTarget, targetBatchVolume);
-
-        // Updating machines counters
-        latheCount += mechanicalStages[i].getReqieredQuantity();
-        furnaceCount += thermalStages[i].getReqieredQuantity();
-        warehouseCount++;
 
         // Updating time counters
         timePerPart += mechanicalStages[i].getTimePerOperation();
@@ -117,15 +108,33 @@ void Process::calculateBatchTime() {
 }
 
 unsigned Process::getLatheCount() {
-    return latheCount;
+    unsigned count = 0;
+    for (int i=startStep; i < endStep; ++i) {
+        count += mechanicalStages[i].getReqieredQuantity();
+    }
+    return count;
 }
 
 unsigned Process::getFurnaceCount() {
-    return furnaceCount;
+    unsigned count = 0;
+    for (int i=startStep; i < endStep; ++i) {
+        count += thermalStages[i].getReqieredQuantity();
+    }
+    return count;
 }
 
 unsigned Process::getWarehouseCount() {
-    return warehouseCount;
+    return endStep-startStep;
+}
+
+const std::vector<unsigned> Process::getMachinesCount() {
+    std::vector<unsigned> counts;
+    for (int i=startStep; i < endStep; ++i) {
+        counts.push_back(mechanicalStages[i].getReqieredQuantity());
+        counts.push_back(thermalStages[i].getReqieredQuantity());
+        counts.push_back(1);
+    }
+    return counts;
 }
 
 float Process::getPartProductionTime() {

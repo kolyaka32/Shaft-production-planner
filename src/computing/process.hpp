@@ -7,8 +7,6 @@
 
 class Process {
 private:
-    // Optimal counts of objects
-    static int latheCount, furnaceCount, warehouseCount;
     // Time on production of one part
     static float timePerPart;
     // Time to produce whole batch
@@ -44,6 +42,7 @@ public:
     static unsigned getLatheCount();
     static unsigned getFurnaceCount();
     static unsigned getWarehouseCount();
+    static const std::vector<unsigned> getMachinesCount();
     static float getPartProductionTime();
     static float getVolumeProductionTime();
     static float getPartCost();
