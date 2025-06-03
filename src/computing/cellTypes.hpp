@@ -18,4 +18,5 @@ enum class CellType {
     Lathe_1,
     Lathe_2,
     Furnace_1,
+    Unspecified,
 };

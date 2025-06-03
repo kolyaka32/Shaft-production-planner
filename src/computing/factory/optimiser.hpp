@@ -17,8 +17,8 @@ public:
 
 class Optimiser {
 private:
-    void setType(Cell& cell);
-    static void placeWay(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses);
+    static void placeWay(Field& field, unsigned count);
+    static bool connectCell(Field& copy, sf::Vector2i cell, unsigned& counter);
 
 public:
     Optimiser();
