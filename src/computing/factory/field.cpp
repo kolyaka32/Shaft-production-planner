@@ -1,5 +1,6 @@
 #include "field.hpp"
 
+
 Field::Field(unsigned _width, unsigned _height)
 : width(_width),
 height(_height) {
@@ -22,6 +23,21 @@ height(_field.height)  {
 
 Field::~Field() {
     delete[] grid;
+}
+
+Field& Field::operator=(const Field& _field) {
+    // Clear previous
+    delete[] grid;
+
+    // Crete new
+    width = _field.width;
+    height = _field.height;
+    // Setting new grid
+    grid = new IndexedCell[width*height];
+    // Copying previous field into new
+    memcpy(grid, _field.grid, height*width*sizeof(grid[0]));
+
+    return *this;
 }
 
 void Field::reset(unsigned _width, unsigned _height) {

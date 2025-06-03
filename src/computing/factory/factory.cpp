@@ -178,6 +178,9 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
 }
 
 void Factory::tryOptimize() {
-    Optimiser::placeWay(field, latheCount+furnaceCount+warehouseCount);
-    Optimiser::placeObjects(field, latheCount, furnaceCount, warehouseCount);
+    Optimiser::placeWay(field, Process::getLatheCount(), Process::getFurnaceCount(), Process::getWarehouseCount());
+    recalculateCellsCount();
+    updateLatheText();
+    updateFurnaceText();
+    updateWarehouseText();
 }

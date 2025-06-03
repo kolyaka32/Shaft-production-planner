@@ -2,48 +2,61 @@
 #include "optimiser.hpp"
 
 
-// Area class
-Area::Area() {}
-
-Area::Area(int _X, int _Y, int _width, int _height) {
-    width = _width;
-    height = _height;
-    X = _X;
-    Y = _Y;
-}
-
 
 // Optimiser class
 Optimiser::Optimiser() {}
 
-void Optimiser::placeWay(Field& field, unsigned count) {
+void Optimiser::placeWay(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses) {
     // Trying to optimise field placement
-    
-    // Create copy of current field
-    Field copy(field);
+    unsigned count = lathe + furnace + warehouses;
 
-    // Analasing areas to place gridded system
-    // Checking by size = from most to least
-    int counts[8]{0};
+    // Create copy of current field
+    Field copy(field.getWidth(), field.getHeight());
+
+    // Copying voi cells
+    for (int y = 0; y < field.getHeight(); ++y) {
+        for (int x=0; x < field.getWidth(); ++x) {
+            if (field[{x, y}].getType() == CellType::Void) {
+                copy[{x, y}].setType(CellType::Void);
+            }
+        }
+    }
 
     //
-    for (int startY=0; startY < 4; ++startY) {
-        // Checking all horizontal rects with height=3
-        
-        // Check line under way
-        for (int y = startY+1; y < field.getHeight(); y += 3) {
-            // Check, if column avalible
-            if (field[])
+    for (int y = 0; y < copy.getHeight(); y += 3) {
+        for (int x=0; x < copy.getWidth(); ++x) {
+            bool setting = true;
+            if (y+1 < copy.getHeight() &&
+                copy[{x, y+1}].getType() == CellType::Void) {
+                setting = false;
+            }
+            if (setting) {
+                copy[{x, y+1}].setType(CellType::Way);
+                // Setting objects
+                if (copy[{x, y}].getType() != CellType::Void) {
+                    count--;
+                }
+                if (y+2 < copy.getHeight() &&
+                    copy[{x, y+2}].getType() != CellType::Void) {
+                    //field[{x, y+2}].setType();
+                    count--;
+                }
+                if (count <= 0) {
+                    field = copy;
+                    return;
+                }
+            }
         }
-
-        // Check line above way (if can)
-        if (startY == 0) {
-            continue;
-        }
-
+        //
     }
+
+    // Linking all not connected piecies
+
+
+    //
+    field = copy;
 }
 
-void Optimiser::placeObjects(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses) {
-    
+void Optimiser::optimise(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses) {
+    placeWay(field, lathe, furnace, warehouses);
 }

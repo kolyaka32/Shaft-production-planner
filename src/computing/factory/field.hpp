@@ -16,6 +16,7 @@ public:
     Field(unsigned width, unsigned height);
     Field(const Field& field);
     ~Field();
+    Field& operator=(const Field&);
     void reset(unsigned width, unsigned height);
     void setWidth(unsigned width);
     void setHeight(unsigned height);

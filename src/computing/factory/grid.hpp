@@ -15,14 +15,14 @@ private:
     // Warnings
     GUI::WarningBox latheCountHigh, furnaceCountHigh, warehouseCountHigh;
     GUI::WarningBox latheCountLow, furnaceCountLow, warehouseCountLow;
-    // Function for recalculate counts of machines after loading
-    static void recalculateCellsCount();
 
 protected:
     // Main field [height*width], filled with cells
     static Field field;
     // Counters of current objects at field
     static int latheCount, furnaceCount, warehouseCount;
+    // Function for recalculate counts of machines after loading
+    static void recalculateCellsCount();
     // Function for update texts
     void updateLatheText();
     void updateFurnaceText();
@@ -32,7 +32,6 @@ protected:
     sf::Vector2i getLocal(sf::Vector2i absPos);
     // Getting absolute position (in pixels) from local coordinate
     sf::Vector2f getAbs(sf::Vector2i localPos);
-    
 
 public:
     Grid(Window& window, sf::Vector2f position);

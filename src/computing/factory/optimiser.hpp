@@ -17,10 +17,10 @@ public:
 
 class Optimiser {
 private:
-    /* data */
+    void setType(Cell& cell);
+    static void placeWay(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses);
 
 public:
     Optimiser();
-    static void placeWay(Field& field, unsigned count);
-    static void placeObjects(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses);
+    static void optimise(Field& field, unsigned lathe, unsigned furnace, unsigned warehouses);
 };
