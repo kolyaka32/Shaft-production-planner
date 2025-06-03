@@ -13,4 +13,5 @@ public:
     void draw(Window& window, sf::Vector2f absPos);
     unsigned getIndex();
     void setIndex(unsigned index);
+    unsigned weight;
 };

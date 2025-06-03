@@ -165,13 +165,13 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
         if (pos.x > 0) {
             indexConnected({pos.x-1, pos.y}, _index);
         }
-        if (pos.x < field.getWidth()) {
+        if (pos.x < field.getWidth()-1) {
             indexConnected({pos.x+1, pos.y}, _index);
         }
         if (pos.y > 0) {
             indexConnected({pos.x, pos.y-1}, _index);
         }
-        if (pos.y < field.getHeight()) {
+        if (pos.y < field.getHeight()-1) {
             indexConnected({pos.x, pos.y+1}, _index);
         }
     }
@@ -179,6 +179,7 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
 
 void Factory::tryOptimize() {
     Optimiser::optimise(field, Process::getLatheCount(), Process::getFurnaceCount(), Process::getWarehouseCount());
+    checkConnections();
     recalculateCellsCount();
     updateLatheText();
     updateFurnaceText();

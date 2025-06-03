@@ -13,15 +13,6 @@ cellTypeSwitch(window, 20, 200, (LanguagedText[]){{"None", "Ничего"}, {"Pa
 optimizeButton(window, 20, 450, 150, 40, {"Try optimize", "Оптимизировать"}),
 cursorCell() {}
 
-void FactoryCycle::keyDown(sf::Event::KeyPressed state) {
-    if (widthBox.keyPress(state)) {
-        factory.setWidth(widthBox.getNumber());
-    }
-    if (heightBox.keyPress(state)) {
-        factory.setHeight(heightBox.getNumber());
-    }
-}
-
 void FactoryCycle::LClick(sf::Vector2i pos) {
     // Checking global objects
     if (selectProductButton.isClicked(pos)) {
@@ -109,6 +100,27 @@ void FactoryCycle::RClick(sf::Vector2i pos) {
     } else if (factory.isSelected(pos)) {
         // Setting object in grid
         factory.remove(pos);
+    }
+}
+
+void FactoryCycle::keyDown(sf::Event::KeyPressed state) {
+    if (widthBox.keyPress(state)) {
+        int number = widthBox.getNumber();
+        // Check on getting over border
+        if (number > 18) {
+            number = 18;
+            widthBox.setString("18");
+        }
+        factory.setWidth(number);
+    }
+    if (heightBox.keyPress(state)) {
+        int number = heightBox.getNumber();
+        // Check on getting over border
+        if (number > 10) {
+            number = 10;
+            heightBox.setString("10");
+        }
+        factory.setHeight(number);
     }
 }
 

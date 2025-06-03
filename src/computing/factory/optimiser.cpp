@@ -1,6 +1,6 @@
 #include <vector>
+#include <fstream>
 #include "optimiser.hpp"
-
 
 
 // Optimiser class
@@ -40,34 +40,51 @@ void Optimiser::placeWay(Field& field, unsigned _count) {
     //
     bool hasFree = true;
     while (count > 0 && hasFree) {
-        int searchLine = 0;
+        int searchLine = -1;
 
-        // Check, if first line full
-        if (positions[0] == field.getWidth()) {
-            searchLine++;
+        // Check, if first line avaliable
+        if (positions[0] < field.getWidth()) {
+            searchLine = 0;
         }
 
         for (int i=1; i < height; ++i) {
             // Check, if line full
-            if (positions[i] == field.getWidth()) {
+            if (positions[i] >= field.getWidth()) {
                 // Check, if last line
-                if (i == height) {
-                    field = copy;
-                    return;
-                }
                 continue;
             }
-            if (positions[i-1] > 4*i &&
-                positions[i] < positions[i-1]) {
-                searchLine = i;
+            if (positions[i] < positions[i-1]) {
+                // Optimisation, to not select lines, if not enough cells to start new line
+                if (positions[i-1] > 3*i) {
+                    searchLine = i;
+                }
             }
             // Need to additional check on obstacles
+        }
+        // Check, if has line to fill
+        if (searchLine == -1) {
+            // Connecting all not connected lines
+            for (int i=0; i < notConnectedCells.size(); ++i) {
+                if (connectCell(copy, copy[{notConnectedCells[i].x, notConnectedCells[i].y}].getIndex(), count)) {
+                    // Check, if hasn't connecting ways (error)
+                    return;
+                }
+            }
+            field = copy;
+            return;
         }
 
         // Check position on free space
         if (copy[{positions[searchLine], searchLine*3+1}].getType() == CellType::Void) {
-            positions[searchLine]++;
             needConnect[searchLine] = true;
+            // Checking, how many cells after it inacessible
+            for (int i=positions[searchLine]; i < field.getWidth(); ++i) {
+                if (copy[{i, searchLine*3+1}].getType() == CellType::Void) {
+                    positions[searchLine]++;
+                } else {
+                    break;
+                }
+            }
         } else {
             // Adding new column to this space
             // Get index, where adding
@@ -119,7 +136,7 @@ void Optimiser::placeWay(Field& field, unsigned _count) {
         if (count <= 0) {
             // Linking all not connected piecies
             if (notConnectedCells.size()) {
-                if (connectCell(copy, notConnectedCells[0], count)) {
+                if (connectCell(copy, copy[{notConnectedCells[0].x, notConnectedCells[0].y}].getIndex(), count)) {
                     // Check, if hasn't connecting ways (error)
                     return;
                 }
@@ -135,10 +152,127 @@ void Optimiser::placeWay(Field& field, unsigned _count) {
     field = copy;
 }
 
-bool Optimiser::connectCell(Field& copy, sf::Vector2i cell, unsigned& counter) {
-    std::vector<sf::Vector2i> posibleCells;
+bool Optimiser::connectCell(Field& copy, unsigned index, unsigned& counter) {
+    // Resetting weights
+    for (int i=0; i < copy.getHeight(); ++i) {
+        for (int j=0; j < copy.getWidth(); ++j) {
+            if (copy[{j, i}].getIndex() == index) {
+                // Cells, needed to connect in main system
+                copy[{j, i}].weight = 1;
+            } else {
+                // Resetting weights (to infinity)
+                copy[{j, i}].weight = -1;
+            }
+        }
+    }
+    debug(copy);
 
+    int step = 1;
+    int findCellX = 0, findCellY = 0;
+    unsigned findIndex = -1;
+
+    if (findWay(copy, step, findCellX, findCellY, findIndex, index)) {
+        return true;
+    }
+
+    // Connecting finded cell to main system
+    for (int i = step; i > 0; --i) {
+        if (trySetWay(copy, findCellX, findCellY+1, i, counter)) {
+            findCellY++;
+        } else if (trySetWay(copy, findCellX, findCellY-1, i, counter)) {
+            findCellY--;
+        } else if (trySetWay(copy, findCellX-1, findCellY, i, counter)) {
+            findCellX--;
+        } else if (trySetWay(copy, findCellX+1, findCellY, i, counter)) {
+            findCellX++;
+        } else {
+            // Error
+            return true;
+        }
+    }
+
+    // Merging current index with finded
+    for (int i=0; i < copy.getHeight(); ++i) {
+        for (int j=0; j < copy.getWidth(); ++j) {
+            if (copy[{j, i}].getIndex() == index) {
+                copy[{j, i}].setIndex(findIndex);
+            }
+        }
+    }
 
     // Upating cells indexes
     return false;
+}
+
+bool Optimiser::findWay(Field& copy, int& step, int& findCellX, int& findCellY, unsigned& findIndex, unsigned index) {
+    while (true) {
+        // Setting near cells to need weight
+        for (int i=0; i < copy.getHeight(); ++i) {
+            for (int j=0; j < copy.getWidth(); ++j) {
+                // Finding current step weights
+                if (copy[{j, i}].weight == step) {
+                    // Setting all surrounding cells to next weight
+                    setCell(copy, j-1, i, step+1);
+                    setCell(copy, j, i-1, step+1);
+                    setCell(copy, j+1, i, step+1);
+                    setCell(copy, j, i+1, step+1);
+                }
+            }
+        }
+        debug(copy);
+        // Checking on finding need way
+        for (int i=0; i < copy.getHeight(); ++i) {
+            for (int j=0; j < copy.getWidth(); ++j) {
+                // Check cell on allowable way
+                if (copy[{j, i}].weight != (unsigned)(-1) && copy[{j, i}].getType() == CellType::Way && copy[{j, i}].getIndex() < index) {
+                    findIndex = copy[{j, i}].getIndex();
+                    findCellX = j;
+                    findCellY = i;
+                    return false;
+                }
+            }
+        }
+        step++;
+        // Check on overflow
+        if (step > 40) {
+            return true;
+        }
+    }
+    return true;
+}
+
+void Optimiser::setCell(Field& field, int X, int Y, unsigned _weight) {
+    if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
+        if (field[{X, Y}].getType() != CellType::Void) {
+            if (field[{X, Y}].weight > _weight) {
+                field[{X, Y}].weight = _weight;
+            }
+        }
+    }
+}
+
+bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, unsigned& counter) {
+    if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
+        if (field[{X, Y}].weight == _weight) {
+            // Setting cell as way
+            if (field[{X, Y}].getType() == CellType::Unspecified) {
+                counter++;
+            }
+            field[{X, Y}].setType(CellType::Way);
+            return true;
+        }
+    }
+    return false;
+}
+
+void Optimiser::debug(Field& field) {
+    // Debugging info
+    static std::ofstream fout("cell connection.txt");
+    fout << '\n';
+    for (int i=0; i < field.getHeight(); ++i) {
+        for (int j=0; j < field.getWidth(); ++j) {
+            fout << '(' << field[{j, i}].getIndex() << ' ' << (int)field[{j, i}].weight << ") ";
+        }
+        fout << '\n';
+    }
 }
