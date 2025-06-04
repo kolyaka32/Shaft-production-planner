@@ -135,19 +135,19 @@ void Optimiser::placeWay(Field& field, unsigned _count) {
                 }
             }
             // Setting way cell
-            copy[{positions[searchLine], searchLine*3+1}].setType(CellType::Way);
+            copy[{positions[searchLine], searchLine*3+1}].setType(CellType::UnspecifiedWay);
             copy[{positions[searchLine], searchLine*3+1}].setIndex(cellIndex);
 
             // Check on avaliable places
             if (copy[{positions[searchLine], searchLine*3}].getType() != CellType::Void) {
                 // Set upper cell
-                copy[{positions[searchLine], searchLine*3}].setType(CellType::Unspecified);
+                copy[{positions[searchLine], searchLine*3}].setType(CellType::UnspecifiedMachine);
                 count--;
             }
             if (searchLine*3+2 < field.getHeight() &&
                 copy[{positions[searchLine], searchLine*3+2}].getType() != CellType::Void) {
                 // Set bottom cell
-                copy[{positions[searchLine], searchLine*3+2}].setType(CellType::Unspecified);
+                copy[{positions[searchLine], searchLine*3+2}].setType(CellType::UnspecifiedMachine);
                 count--;
             }
             // Increasing counter for next line
@@ -237,7 +237,7 @@ bool Optimiser::findWay(Field& copy, int& step, int& findCellX, int& findCellY, 
         for (int i=0; i < copy.getHeight(); ++i) {
             for (int j=0; j < copy.getWidth(); ++j) {
                 // Check cell on allowable way
-                if (copy[{j, i}].weight != (unsigned)(-1) && copy[{j, i}].getType() == CellType::Way && copy[{j, i}].getIndex() != index) {
+                if (copy[{j, i}].weight != (unsigned)(-1) && copy[{j, i}].getType() == CellType::UnspecifiedWay && copy[{j, i}].getIndex() != index) {
                     findIndex = copy[{j, i}].getIndex();
                     findCellX = j;
                     findCellY = i;
@@ -268,10 +268,10 @@ bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, int& cou
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         if (field[{X, Y}].weight == _weight) {
             // Setting cell as way
-            if (field[{X, Y}].getType() == CellType::Unspecified) {
+            if (field[{X, Y}].getType() == CellType::UnspecifiedMachine) {
                 counter++;
             }
-            field[{X, Y}].setType(CellType::Way);
+            field[{X, Y}].setType(CellType::UnspecifiedWay);
             // Checking, if could add more cells surround cell
             tryPlaceMachine(field, X-1, Y, counter);
             tryPlaceMachine(field, X, Y-1, counter);
@@ -286,7 +286,7 @@ bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, int& cou
 void Optimiser::tryPlaceMachine(Field& field, int X, int Y, int& counter) {
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         if (field[{X, Y}].getType() == CellType::None) {
-            field[{X, Y}].setType(CellType::Unspecified);
+            field[{X, Y}].setType(CellType::UnspecifiedMachine);
             counter--;
         }
     }
@@ -345,7 +345,7 @@ void Optimiser::placeObjects(Field& field) {
 void Optimiser::findFirst(Field& field, std::vector<sf::Vector2i>& cells) {
     for (int i=1; i < field.getHeight(); ++i) {
         for (int j=0; j < field.getWidth(); ++j) {
-            if (field[{j, i}].getType() == CellType::Way) {
+            if (field[{j, i}].getType() == CellType::UnspecifiedWay) {
                 field[{j, i}].weight = 1;
                 cells.push_back({j, i});
                 return;
@@ -358,11 +358,11 @@ bool Optimiser::placeMachine(Field& field, int X, int Y, std::vector<sf::Vector2
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         // Check, that has't already seen
         if (field[{X, Y}].weight == 0) {
-            if (field[{X, Y}].getType() == CellType::Way) {
+            if (field[{X, Y}].getType() == CellType::UnspecifiedWay) {
                 field[{X, Y}].weight = 1;
                 cells.push_back({X, Y});
             }
-            if (field[{X, Y}].getType() == CellType::Unspecified) {
+            if (field[{X, Y}].getType() == CellType::UnspecifiedMachine) {
                 // Replacing cell with need type
                 switch (counter % 3) {
                 case 0:
@@ -401,7 +401,7 @@ void Optimiser::clearRestCells(Field& field) {
     // Detect all unspecified celss
     for (int i=0; i < field.getHeight(); ++i) {
         for (int j=0; j < field.getWidth(); ++j) {
-            if (field[{j, i}].getType() == CellType::Unspecified) {
+            if (field[{j, i}].getType() == CellType::UnspecifiedMachine) {
                 field[{j, i}].setType(CellType::None);
                 rest = true;
             }
@@ -413,7 +413,7 @@ void Optimiser::clearRestCells(Field& field) {
         // Check on unusing ways
         for (int i=0; i < field.getHeight(); ++i) {
             for (int j=0; j < field.getWidth(); ++j) {
-                if (field[{j, i}].getType() == CellType::Way) {
+                if (field[{j, i}].getType() == CellType::UnspecifiedWay) {
                     int machines = 0;
                     int ways = 0;
                     checkNotUsing(field, j-1, i, ways, machines);
@@ -434,12 +434,11 @@ void Optimiser::clearRestCells(Field& field) {
 void Optimiser::checkNotUsing(Field& field, int X, int Y, int& ways, int& machines) {
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         switch (field[{X, Y}].getType()) {
-        case CellType::Way:
+        case CellType::UnspecifiedWay:
             ways++;
             return;
 
         case CellType::Lathe_1:
-        case CellType::Lathe_2:
         case CellType::Furnace_1:
         case CellType::Warehouse:
             machines++;

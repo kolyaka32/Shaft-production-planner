@@ -10,7 +10,7 @@ const float cellSize = 50.f;
 // Class for draw textured cells
 class CellDrawer {
 private:
-    const static unsigned spriteCount = 5;
+    const static unsigned spriteCount = 8;
     const sf::Texture textures[spriteCount];
     const sf::Texture warningTexture;
     sf::Sprite sprites[spriteCount];

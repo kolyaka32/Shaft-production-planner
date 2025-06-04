@@ -22,7 +22,6 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
         switch (field.getCell(getLocal(absPos)).getType()) {
         // Update counters
         case CellType::Lathe_1:
-        case CellType::Lathe_2:
             latheCount--;
             updateLatheText();
             break;
@@ -42,7 +41,6 @@ void Factory::set(CellType _type, sf::Vector2i absPos) {
         // Increase counters
         switch (_type) {
         case CellType::Lathe_1:
-        case CellType::Lathe_2:
             latheCount++;
             updateLatheText();
             break;
@@ -77,7 +75,6 @@ void Factory::remove(sf::Vector2i absPos) {
 
     // Update counters
     case CellType::Lathe_1:
-    case CellType::Lathe_2:
         latheCount--;
         updateLatheText();
         break;
@@ -121,7 +118,7 @@ bool Factory::checkConnections() {
     // Checking grid on way networks
     for (int y=0; y < field.getHeight(); ++y) {
         for (int x=0; x < field.getWidth(); ++x) {
-            if (field.getCell({x, y}).getType() == CellType::Way
+            if (field.getCell({x, y}).getType() == CellType::UnspecifiedWay
                 && field.getCell({x, y}).getIndex() == 0) {
                 // Setting cell and all, connected to it to be same index
                 indexConnected({x, y}, indexCounter);
@@ -139,7 +136,6 @@ bool Factory::checkConnections() {
             if (field.getCell({x, y}).getIndex() == 0) {
                 switch (field.getCell({x, y}).getType()) {
                 case CellType::Lathe_1:
-                case CellType::Lathe_2:
                 case CellType::Furnace_1:
                     field.getCell({x, y}).setIndex(indexCounter);
                     indexCounter++;
@@ -161,7 +157,7 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
     }
     field.getCell(pos).setIndex(_index);
     // Setting all neighbourth to be same type (recursevly)
-    if (field.getCell(pos).getType() == CellType::Way) {
+    if (field.getCell(pos).getType() == CellType::UnspecifiedWay) {
         if (pos.x > 0) {
             indexConnected({pos.x-1, pos.y}, _index);
         }

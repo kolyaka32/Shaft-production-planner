@@ -8,15 +8,17 @@ enum class CellType {
     // Type representing empty space
     None,
 
-    // Types for calculations
-    Way,
+    // Types of transporting
+    UnspecifiedWay,
+    ManualWay,
+    HoistWay,
+    ConveyorWay,
+
+    // Types of machines
+    UnspecifiedMachine,
+    Lathe_1,
+    Furnace_1,
 
     // Types for storage
     Warehouse,
-
-    // Types of machines
-    Lathe_1,
-    Lathe_2,
-    Furnace_1,
-    Unspecified,
 };

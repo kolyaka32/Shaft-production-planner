@@ -12,7 +12,7 @@ private:
     // GUI to interact with factory grid
     GUI::Text widthText, heightText;
     GUI::TypeBox widthBox, heightBox;
-    GUI::SwitchBox<6> cellTypeSwitch;
+    GUI::SwitchBox<5> cellTypeSwitch;
     GUI::TextButton optimizeButton;
     GUI::TextButton updatePathButton;
 

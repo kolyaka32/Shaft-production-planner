@@ -37,19 +37,15 @@ void Cell::loadFrom(char letter) {
         break;
 
     case 'w':
-        type = CellType::Way;
+        type = CellType::UnspecifiedWay;
         break;
 
     case 'c':
         type = CellType::Warehouse;
         break;
 
-    case '1':
+    case 'l':
         type = CellType::Lathe_1;
-        break;
-
-    case '2':
-        type = CellType::Lathe_2;
         break;
 
     case 'f':
@@ -67,17 +63,14 @@ char Cell::saveAs() {
     case CellType::None:
         return 'n';
 
-    case CellType::Way:
+    case CellType::UnspecifiedWay:
         return 'w';
 
     case CellType::Warehouse:
         return 'c';
 
     case CellType::Lathe_1:
-        return '1';
-
-    case CellType::Lathe_2:
-        return '2';
+        return 'l';
 
     case CellType::Furnace_1:
         return 'f';

@@ -9,7 +9,7 @@ widthBox(window, 40, 140, 80, Factory::getWidth()),
 heightText(window, 200, 100, LanguagedText{"Height", "Высота"}),
 heightBox(window, 160, 140, 80, Factory::getHeight()),
 cellTypeSwitch(window, 5, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
-    {"Warehouse", "Склад"}, {"Lathe 1", "Станок 1"}, {"Lathe 2", "Станок 2"}, {"Furnace 1", "Печь 1"}}),
+    {"Lathe 1", "Станок 1"}, {"Furnace 1", "Печь 1"}, {"Warehouse", "Склад"}}),
 optimizeButton(window, 5, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
 updatePathButton(window, 5, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
 cursorCell() {}
@@ -44,11 +44,27 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
 
     // Checking, if select new type of cell
     if (cellTypeSwitch.click(pos)) {
-        if (cellTypeSwitch.getValue() == 0) {
+        selectObject = true;
+        switch (cellTypeSwitch.getValue()) {
+        case 0:
             selectObject = false;
-        } else {
-            selectObject = true;
-            cursorCell.setType((CellType)(cellTypeSwitch.getValue()+1));
+            return;
+        
+        case 1:
+            cursorCell.setType(CellType::UnspecifiedWay);
+            break;
+
+        case 2:
+            cursorCell.setType(CellType::Lathe_1);
+            break;
+
+        case 3:
+            cursorCell.setType(CellType::Furnace_1);
+            break;
+
+        case 4:
+            cursorCell.setType(CellType::Warehouse);
+            break;
         }
         return;
     }

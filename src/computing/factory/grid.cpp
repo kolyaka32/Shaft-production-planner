@@ -82,7 +82,6 @@ void Grid::recalculateCellsCount() {
     for (int i=0; i < field.getHeight()*field.getWidth(); ++i) {
         switch (field[i].getType()) {
         case CellType::Lathe_1:
-        case CellType::Lathe_2:
             latheCount++;
             break;
 
