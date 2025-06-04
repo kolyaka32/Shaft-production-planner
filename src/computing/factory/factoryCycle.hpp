@@ -14,6 +14,7 @@ private:
     GUI::TypeBox widthBox, heightBox;
     GUI::SwitchBox<6> cellTypeSwitch;
     GUI::TextButton optimizeButton;
+    GUI::TextButton updatePathButton;
 
     // Current selected object to place
     bool selectObject = false;

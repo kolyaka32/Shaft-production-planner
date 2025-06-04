@@ -147,6 +147,9 @@ void ProductProcess::save(std::ofstream& fout) {
 
     // Writing other part data
     fout << Part::material << '\n';
+
+    // Writing process data
+    fout << partProductionTarget << ' ' << targetBatchVolume << '\n';
 }
 
 void ProductProcess::load(std::ifstream& fin) {
@@ -167,6 +170,9 @@ void ProductProcess::load(std::ifstream& fin) {
     unsigned index;
     fin >> index;
     Part::material = Material{index};
+
+    // Reading process data
+    fin >> partProductionTarget >> targetBatchVolume;
 
     // Recalculating all values and processes
     recalculate();

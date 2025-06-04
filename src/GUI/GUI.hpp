@@ -39,6 +39,7 @@ namespace GUI {
 		void setValues(Args&& ...args) {
 			std::string str = std::vformat(textTemplate.getString(), std::make_format_args(args...));
 			text.setString(sf::String::fromUtf8(str.begin(), str.end()));
+			updateOrigin();
 		}
 	};
 
@@ -48,7 +49,8 @@ namespace GUI {
 		sf::Text text;
 
 	 public:
-		TextButton(Window& window, float X, float Y, float W, float H, LanguagedText texts);
+		TextButton(Window& window, float X, float Y, float W, float H, LanguagedText texts, Aligment aligment = Aligment::Midle);
+		TextButton(Window& window, float X, float Y, LanguagedText texts, Aligment aligment = Aligment::Midle);
 		bool isClicked(sf::Vector2i point);
 		void draw(Window& window);
 	};

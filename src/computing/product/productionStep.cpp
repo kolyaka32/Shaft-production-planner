@@ -5,7 +5,7 @@ ProductionStep::ProductionStep(Window& window, float X, float Y, LanguagedText _
 : stepText(window, X+40, Y-40, _text),
 arrowTexture(resourcesDir() / "GUI/arrow.png"),
 arrowSprite(arrowTexture) {
-    arrowSprite.setPosition({X+10, Y});
+    arrowSprite.setPosition({X+15, Y});
 }
 
 void ProductionStep::draw(Window& window) {

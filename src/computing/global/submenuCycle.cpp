@@ -7,11 +7,11 @@
 SubmenuCycle::SubmenuCycle(Window& window)
 : CycleTemplate(window),
 settings(window),
-selectProductButton(window, 0, 0, 160, 50, {"Product", "Изделие"}),
-selectProcessButton(window, 160, 0, 160, 50, {"Process", "Процесс"}),
-selectFactoryButton(window, 320, 0, 160, 50, {"Factory", "Цех"}),
-saveButton(window, 800, 10, 150, 40, {"Save", "Сохранить"}),
-loadButton(window, 980, 10, 150, 40, {"Load", "Загрузить"}),
+selectProductButton(window, 82, 2, 160, 50, {"Product", "Изделие"}),
+selectProcessButton(window, 242, 2, 160, 50, {"Process", "Процесс"}),
+selectFactoryButton(window, 402, 2, 160, 50, {"Factory", "Цех"}),
+saveButton(window, 880, 10, 160, 40, {"Save", "Сохранить"}),
+loadButton(window, 1060, 10, 160, 40, {"Load", "Загрузить"}),
 saveInfo(window, 700, 10, {"Saved", "Сохранено"}) {}
 
 void SubmenuCycle::save() {

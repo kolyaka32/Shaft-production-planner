@@ -1,33 +1,28 @@
 #include "productionSemiproduct.hpp"
 
 ProductionSemiproduct::ProductionSemiproduct(Window& window, float X, float Y)
-: background({150, 150}),
-diameterText(window.font),
-lengthText(window.font),
-massText(window.font),
-rougnessText(window.font) {
+: background({160, 160}),
+diameterText(window, X+2, Y+5, {"d={:.1f} mm", "d={:.1f} мм"}, GUI::Aligment::Left),
+lengthText(window, X+2, Y+40, {"l={:.0f} mm", "l={:.0f} мм"}, GUI::Aligment::Left),
+massText(window, X+2, Y+75, {"m={:.2f} kg", "m={:.2f} кг"}, GUI::Aligment::Left),
+rougnessText(window, X+2, Y+110, {"Rz={:.1f}", "Rz={:.1f}"}, GUI::Aligment::Left) {
     background.setPosition({X, Y});
     background.setFillColor(sf::Color{120, 120, 120});
     background.setOutlineThickness(2);
     background.setOutlineColor(sf::Color::Black);
-
-    diameterText.setPosition({X, Y});
-    lengthText.setPosition({X, Y+35});
-    massText.setPosition({X, Y+70});
-    rougnessText.setPosition({X, Y+105});
 }
 
 void ProductionSemiproduct::draw(Window& window) {
     window.draw(background);
-    window.draw(diameterText);
-    window.draw(lengthText);
-    window.draw(massText);
-    window.draw(rougnessText);
+    diameterText.draw(window);
+    lengthText.draw(window);
+    massText.draw(window);
+    rougnessText.draw(window);
 }
 
 void ProductionSemiproduct::setNewParameters(Part part) {
-    diameterText.setString(std::format("d={:.1f} mm", part.diameter));
-    lengthText.setString(std::format("l={:.0f} mm", part.length));
-    massText.setString(std::format("m={:.2f} kg", part.mass));
-    rougnessText.setString(std::format("Rz={:.1f} mkm", part.rougness));
+    diameterText.setValues(part.diameter);
+    lengthText.setValues(part.length);
+    massText.setValues(part.mass);
+    rougnessText.setValues(part.rougness);
 }

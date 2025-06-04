@@ -29,11 +29,11 @@ countTexts {
     {window.font}, {window.font}, {window.font}, {window.font},
     {window.font}, {window.font}, {window.font}, {window.font},
 },
-summaryText(window, getOffset(8)+60, machineHeaderHeight, LanguagedText{"Sumary:", "Суммарно:"}),
-partTimeText(window, getOffset(8)+60, singleTimeHeight, std::format("{:.1f}", getPartProductionTime())),
-partCostText(window, getOffset(8)+60, singleCostHeight, std::format("{:.1f}", getPartCost())),
-machineCountText(window, getOffset(8)+60, latheHeight, std::to_string(getLatheCount())),
-furnaceCountText(window, getOffset(8)+60, furnaceHeight, std::to_string(getFurnaceCount()))
+summaryText(window, getOffset(8)+50, machineHeaderHeight, LanguagedText{"Sumary:", "Суммарно:"}),
+partTimeText(window, getOffset(8)+50, singleTimeHeight, std::format("{:.1f}", getPartProductionTime())),
+partCostText(window, getOffset(8)+50, singleCostHeight, std::format("{:.1f}", getPartCost())),
+machineCountText(window, getOffset(8)+50, latheHeight, std::to_string(getLatheCount())),
+furnaceCountText(window, getOffset(8)+50, furnaceHeight, std::to_string(getFurnaceCount()))
 {
     // Setting background
     backGround.setPosition({0, machineHeaderHeight+5});
@@ -55,7 +55,7 @@ furnaceCountText(window, getOffset(8)+60, furnaceHeight, std::to_string(getFurna
 }
 
 constexpr float ProcessPlanner::getOffset(int index) {
-    return stepOffset*index+stepStartOffset;
+    return stepOffset * index + stepStartOffset;
 }
 
 void ProcessPlanner::setTargetProduction(float _target) {

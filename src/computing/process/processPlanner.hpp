@@ -8,7 +8,7 @@
 class ProcessPlanner : public Process {
 private:
     // Grphical constants and macroses
-    const float stepOffset = 110, stepStartOffset = 170;
+    const float stepOffset = 110, stepStartOffset = 190;
     constexpr float getOffset(int index);
     const float machineHeaderHeight = 90, furnaceHeaderHieght = 120;
     const float singleTimeHeight = 150, singleCostHeight = 180;

@@ -7,10 +7,10 @@
 class ProductionSemiproduct {
  private:
     sf::RectangleShape background;
-    sf::Text diameterText;
-    sf::Text massText;
-    sf::Text lengthText;
-    sf::Text rougnessText;
+    GUI::DynamicText diameterText;
+    GUI::DynamicText massText;
+    GUI::DynamicText lengthText;
+    GUI::DynamicText rougnessText;
 
  public:
     ProductionSemiproduct(Window& window, float X, float Y);

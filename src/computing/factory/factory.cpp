@@ -185,3 +185,7 @@ void Factory::tryOptimize() {
     updateFurnaceText();
     updateWarehouseText();
 }
+
+void Factory::updateWays() {
+    
+}

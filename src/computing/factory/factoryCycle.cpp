@@ -3,14 +3,15 @@
 
 FactoryCycle::FactoryCycle(Window& window)
 : SubmenuCycle(window),
-factory(window, {200, 200}),
+factory(window, {250, 200}),
 widthText(window, 80, 100, LanguagedText{"Width", "Ширина"}),
 widthBox(window, 40, 140, 80, Factory::getWidth()),
 heightText(window, 200, 100, LanguagedText{"Height", "Высота"}),
 heightBox(window, 160, 140, 80, Factory::getHeight()),
-cellTypeSwitch(window, 20, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
+cellTypeSwitch(window, 5, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
     {"Warehouse", "Склад"}, {"Lathe 1", "Станок 1"}, {"Lathe 2", "Станок 2"}, {"Furnace 1", "Печь 1"}}),
-optimizeButton(window, 20, 450, 150, 40, {"Try optimize", "Оптимизировать"}),
+optimizeButton(window, 5, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
+updatePathButton(window, 5, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
 cursorCell() {}
 
 void FactoryCycle::LClick(sf::Vector2i pos) {
@@ -67,13 +68,15 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
     if (optimizeButton.isClicked(pos)) {
         factory.tryOptimize();
     }
+    if (updatePathButton.isClicked(pos)) {
+        factory.updateWays();
+    }
     // Check, if stop input - update grid scales
     if (widthBox.click(pos)) {
         int number = widthBox.getNumber();
         // Check on getting over border
         if (number > 18) {
             number = 18;
-            widthBox.setString("18");
         }
         factory.setWidth(number);
     }
@@ -82,7 +85,6 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         // Check on getting over border
         if (number > 10) {
             number = 10;
-            heightBox.setString("10");
         }
         factory.setHeight(number);
     }
@@ -163,6 +165,7 @@ void FactoryCycle::draw() {
     }
 
     optimizeButton.draw(window);
+    updatePathButton.draw(window);
 
     // Display things on screen
     window.display();
