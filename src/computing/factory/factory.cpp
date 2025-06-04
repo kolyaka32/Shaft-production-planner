@@ -178,7 +178,8 @@ void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
 }
 
 void Factory::tryOptimize() {
-    Optimiser::optimise(field);
+    Optimiser optimiser;
+    optimiser.optimise(field);
     checkConnections();
     recalculateCellsCount();
     updateLatheText();

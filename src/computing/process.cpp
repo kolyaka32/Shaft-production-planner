@@ -127,7 +127,7 @@ unsigned Process::getWarehouseCount() {
     return endStep-startStep;
 }
 
-const std::vector<unsigned> Process::getMachinesCount() {
+std::vector<unsigned> Process::getMachinesCount() {
     std::vector<unsigned> counts;
     for (int i=startStep; i < endStep; ++i) {
         counts.push_back(mechanicalStages[i].getReqieredQuantity());

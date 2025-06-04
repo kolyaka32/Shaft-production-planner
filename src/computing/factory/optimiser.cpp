@@ -1,5 +1,4 @@
 #include <vector>
-#include <fstream>
 #include "optimiser.hpp"
 
 
@@ -9,10 +8,12 @@ Optimiser::Optimiser() {}
 void Optimiser::optimise(Field& field) {
     placeWay(field, Process::getLatheCount() + Process::getFurnaceCount() + Process::getWarehouseCount());
     placeObjects(field);
+    clearRestCells(field);
 }
 
-void Optimiser::placeWay(Field& field, unsigned count) {
+void Optimiser::placeWay(Field& field, unsigned _count) {
     // Trying to optimise field placement
+    int count = _count;
     // Create copy of current field
     Field copy(field.getWidth(), field.getHeight());
 
@@ -37,8 +38,29 @@ void Optimiser::placeWay(Field& field, unsigned count) {
     std::vector<sf::Vector2i> notConnectedCells;
 
     //
-    bool hasFree = true;
-    while (count > 0 && hasFree) {
+    while (true) {
+        // Check, if complete quota
+        if (count <= 0) {
+            // Linking all not connected piecies
+            if (notConnectedCells.size()) {
+                if (connectCell(copy, copy[{notConnectedCells[0].x, notConnectedCells[0].y}].getIndex(), count)) {
+                    // Check, if hasn't connecting ways (error)
+                    return;
+                }
+                notConnectedCells.erase(notConnectedCells.begin());
+                
+                // Check, if need repeat
+                if (count <=0 ) {
+                    continue;
+                }
+            } else {
+                // Finishing program
+                field = copy;
+                return;
+            }
+        }
+
+        // Finding line, where need should add path
         int searchLine = -1;
 
         // Check, if first line avaliable
@@ -60,7 +82,7 @@ void Optimiser::placeWay(Field& field, unsigned count) {
             }
             // Need to additional check on obstacles
         }
-        // Check, if has line to fill
+        // Check, if hasn't line to fill
         if (searchLine == -1) {
             // Connecting all not connected lines
             for (int i=0; i < notConnectedCells.size(); ++i) {
@@ -131,27 +153,12 @@ void Optimiser::placeWay(Field& field, unsigned count) {
             // Increasing counter for next line
             positions[searchLine]++;
         }
-        // Check, if complete quota
-        if (count <= 0) {
-            // Linking all not connected piecies
-            if (notConnectedCells.size()) {
-                if (connectCell(copy, copy[{notConnectedCells[0].x, notConnectedCells[0].y}].getIndex(), count)) {
-                    // Check, if hasn't connecting ways (error)
-                    return;
-                }
-                notConnectedCells.erase(notConnectedCells.begin());
-            } else {
-                // Finishing program
-                field = copy;
-                return;
-            }
-        }
     }
     // Finishing program
     field = copy;
 }
 
-bool Optimiser::connectCell(Field& copy, unsigned index, unsigned& counter) {
+bool Optimiser::connectCell(Field& copy, unsigned index, int& counter) {
     // Resetting weights
     for (int i=0; i < copy.getHeight(); ++i) {
         for (int j=0; j < copy.getWidth(); ++j) {
@@ -164,6 +171,11 @@ bool Optimiser::connectCell(Field& copy, unsigned index, unsigned& counter) {
             }
         }
     }
+    // Update debug
+    #if DEBUG
+    fout << '\n' << index << ' ' << counter;
+    debug(copy);
+    #endif
 
     int step = 1;
     int findCellX = 0, findCellY = 0;
@@ -217,6 +229,10 @@ bool Optimiser::findWay(Field& copy, int& step, int& findCellX, int& findCellY, 
                 }
             }
         }
+        // Check on errors
+        #if DEBUG
+        debug(copy);
+        #endif
         // Checking on finding need way
         for (int i=0; i < copy.getHeight(); ++i) {
             for (int j=0; j < copy.getWidth(); ++j) {
@@ -248,7 +264,7 @@ void Optimiser::setCell(Field& field, int X, int Y, unsigned _weight) {
     }
 }
 
-bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, unsigned& counter) {
+bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, int& counter) {
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         if (field[{X, Y}].weight == _weight) {
             // Setting cell as way
@@ -267,7 +283,7 @@ bool Optimiser::trySetWay(Field& field, int X, int Y, unsigned _weight, unsigned
     return false;
 }
 
-void Optimiser::tryPlaceMachine(Field& field, int X, int Y, unsigned& counter) {
+void Optimiser::tryPlaceMachine(Field& field, int X, int Y, int& counter) {
     if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
         if (field[{X, Y}].getType() == CellType::None) {
             field[{X, Y}].setType(CellType::Unspecified);
@@ -277,29 +293,169 @@ void Optimiser::tryPlaceMachine(Field& field, int X, int Y, unsigned& counter) {
 }
 
 void Optimiser::placeObjects(Field& field) {
-    const std::vector<unsigned> counts = Process::getMachinesCount();
+    // Massive with all counts of machines, that need to place
+    std::vector<unsigned> counts = Process::getMachinesCount();
+    int counter = 0;
 
-    for (int i=0; i < counts.size()/3; ++i) {
-        // Replacing unspecified cells with lathes
-        placeMachine(field, CellType::Lathe_1, counts[i*3]);
-        // Replacing unspecified cells with furnaces
-        placeMachine(field, CellType::Furnace_1, counts[i*3+1]);
-        // Replacing unspecified cells with furnaces
-        placeMachine(field, CellType::Warehouse, counts[i*3+2]);
+    // Resetting weights
+    for (int i=0; i < field.getHeight(); ++i) {
+        for (int j=0; j < field.getWidth(); ++j) {
+            field[{j, i}].weight = 0;
+        }
+    }
+
+    // Check on errors
+    #if DEBUG
+    // Writing counts for understanding
+    fout << "\nPlacing\n";
+    for (int i=0; i < counts.size(); ++i) {
+        fout << counts[i] << ' ';
+    }
+
+    debug(field);
+    #endif
+
+    // Array of cells, to search
+    std::vector<sf::Vector2i> cells;
+
+    // Finding first way
+    findFirst(field, cells);
+
+    // Additional check, if has cells
+    while (cells.size() > 0) {
+        // Check cells on neihgbors
+        if (placeMachine(field, cells[0].x+1, cells[0].y, cells, counts, counter)) {
+            break;
+        }
+        if (placeMachine(field, cells[0].x, cells[0].y+1, cells, counts, counter)) {
+            break;
+        }
+        if (placeMachine(field, cells[0].x, cells[0].y-1, cells, counts, counter)) {
+            break;
+        }
+        if (placeMachine(field, cells[0].x-1, cells[0].y, cells, counts, counter)) {
+            break;
+        }
+
+        // Clear already seen
+        cells.erase(cells.begin());
     }
 }
 
-void Optimiser::placeMachine(Field& field, CellType _type, unsigned _count) {
-    for (int i=0; i < field.getHeight(); ++i) {
+void Optimiser::findFirst(Field& field, std::vector<sf::Vector2i>& cells) {
+    for (int i=1; i < field.getHeight(); ++i) {
         for (int j=0; j < field.getWidth(); ++j) {
-            if (field[{j, i}].getType() == CellType::Unspecified) {
-                field[{j, i}].setType(_type);
-                // Check, if place enough
-                _count--;
-                if (_count == 0) {
-                    return;
+            if (field[{j, i}].getType() == CellType::Way) {
+                field[{j, i}].weight = 1;
+                cells.push_back({j, i});
+                return;
+            }
+        }
+    }
+}
+
+bool Optimiser::placeMachine(Field& field, int X, int Y, std::vector<sf::Vector2i>& cells, std::vector<unsigned>& counts, int& counter) {
+    if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
+        // Check, that has't already seen
+        if (field[{X, Y}].weight == 0) {
+            if (field[{X, Y}].getType() == CellType::Way) {
+                field[{X, Y}].weight = 1;
+                cells.push_back({X, Y});
+            }
+            if (field[{X, Y}].getType() == CellType::Unspecified) {
+                // Replacing cell with need type
+                switch (counter % 3) {
+                case 0:
+                    // Need to place lathe
+                    field[{X, Y}].setType(CellType::Lathe_1);
+                    break;
+
+                case 1:
+                    // Need to place lathe
+                    field[{X, Y}].setType(CellType::Furnace_1);
+                    break;
+
+                case 2:
+                    // Need to place lathe
+                    field[{X, Y}].setType(CellType::Warehouse);
+                    break;
+                }
+                // Update counters
+                counts[counter]--;
+                if (counts[counter] == 0) {
+                    // Switch to next one
+                    counter++;
+                    // Check, if was last
+                    if (counter >= counts.size()) {
+                        return true;
+                    }
                 }
             }
         }
+    }
+    return false;
+}
+
+void Optimiser::clearRestCells(Field& field) {
+    bool rest = false;
+    // Detect all unspecified celss
+    for (int i=0; i < field.getHeight(); ++i) {
+        for (int j=0; j < field.getWidth(); ++j) {
+            if (field[{j, i}].getType() == CellType::Unspecified) {
+                field[{j, i}].setType(CellType::None);
+                rest = true;
+            }
+        }
+    }
+    // Clearing ways to unused celss
+    while (rest) {
+        rest = false;
+        // Check on unusing ways
+        for (int i=0; i < field.getHeight(); ++i) {
+            for (int j=0; j < field.getWidth(); ++j) {
+                if (field[{j, i}].getType() == CellType::Way) {
+                    int machines = 0;
+                    int ways = 0;
+                    checkNotUsing(field, j-1, i, ways, machines);
+                    checkNotUsing(field, j, i-1, ways, machines);
+                    checkNotUsing(field, j+1, i, ways, machines);
+                    checkNotUsing(field, j, i+1, ways, machines);
+                    if (ways <= 1 && machines == 0) {
+                        // Clear cell, as unusing
+                        field[{j, i}].setType(CellType::None);
+                        rest = true;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Optimiser::checkNotUsing(Field& field, int X, int Y, int& ways, int& machines) {
+    if (X >= 0 && Y >= 0 && X < field.getWidth() && Y < field.getHeight()) {
+        switch (field[{X, Y}].getType()) {
+        case CellType::Way:
+            ways++;
+            return;
+
+        case CellType::Lathe_1:
+        case CellType::Lathe_2:
+        case CellType::Furnace_1:
+        case CellType::Warehouse:
+            machines++;
+            return;
+
+        }
+    }
+}
+
+void Optimiser::debug(Field& field) {
+    // Debugging info
+    fout << '\n';
+    for (int i=0; i < field.getHeight(); ++i) {
+        for (int j=0; j < field.getWidth(); ++j) {
+            fout << std::format("({:1}, {:2}, {:2}) ", (unsigned)field[{j, i}].getType(), field[{j, i}].getIndex(), (int)field[{j, i}].weight);
+        }
+        fout << '\n';
     }
 }

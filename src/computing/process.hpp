@@ -42,7 +42,7 @@ public:
     static unsigned getLatheCount();
     static unsigned getFurnaceCount();
     static unsigned getWarehouseCount();
-    static const std::vector<unsigned> getMachinesCount();
+    static std::vector<unsigned> getMachinesCount();
     static float getPartProductionTime();
     static float getVolumeProductionTime();
     static float getPartCost();
