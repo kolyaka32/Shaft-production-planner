@@ -15,6 +15,8 @@ private:
     GUI::SwitchBox<5> cellTypeSwitch;
     GUI::TextButton optimizeButton;
     GUI::TextButton updatePathButton;
+    GUI::Text pathTypeText;
+    std::string getPathTypeText();
 
     // Current selected object to place
     bool selectObject = false;

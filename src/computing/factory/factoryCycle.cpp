@@ -4,14 +4,15 @@
 FactoryCycle::FactoryCycle(Window& window)
 : SubmenuCycle(window),
 factory(window, {250, 200}),
-widthText(window, 80, 100, LanguagedText{"Width", "Ширина"}),
-widthBox(window, 40, 140, 80, Factory::getWidth()),
-heightText(window, 200, 100, LanguagedText{"Height", "Высота"}),
-heightBox(window, 160, 140, 80, Factory::getHeight()),
-cellTypeSwitch(window, 5, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
+widthText(window, 80, 60, LanguagedText{"Width", "Ширина"}),
+widthBox(window, 40, 100, 80, Factory::getWidth()),
+heightText(window, 200, 60, LanguagedText{"Height", "Высота"}),
+heightBox(window, 160, 100, 80, Factory::getHeight()),
+cellTypeSwitch(window, 10, 200, (LanguagedText[]){{"None", "Ничего"}, {"Path tile", "Клетка пути"},
     {"Lathe 1", "Станок 1"}, {"Furnace 1", "Печь 1"}, {"Warehouse", "Склад"}}),
-optimizeButton(window, 5, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
-updatePathButton(window, 5, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
+optimizeButton(window, 10, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
+updatePathButton(window, 10, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
+pathTypeText(window, 20, 140, getPathTypeText(), GUI::Aligment::Left),
 cursorCell() {}
 
 void FactoryCycle::LClick(sf::Vector2i pos) {
@@ -49,24 +50,31 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         case 0:
             selectObject = false;
             return;
-        
+
         case 1:
             cursorCell.setType(CellType::UnspecifiedWay);
-            break;
+            factory.resetWayType();
+            pathTypeText.setText("");
+            return;
 
         case 2:
             cursorCell.setType(CellType::Lathe_1);
-            break;
+            factory.resetWayType();
+            pathTypeText.setText("");
+            return;
 
         case 3:
             cursorCell.setType(CellType::Furnace_1);
-            break;
+            factory.resetWayType();
+            pathTypeText.setText("");
+            return;
 
         case 4:
             cursorCell.setType(CellType::Warehouse);
-            break;
+            factory.resetWayType();
+            pathTypeText.setText("");
+            return;
         }
-        return;
     }
     if (factory.isSelected(pos)) {
         // Setting object in grid
@@ -83,9 +91,12 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
     // Check on trying to optimise field
     if (optimizeButton.isClicked(pos)) {
         factory.tryOptimize();
+        return;
     }
     if (updatePathButton.isClicked(pos)) {
         factory.updateWays();
+        pathTypeText.setText(getPathTypeText());
+        return;
     }
     // Check, if stop input - update grid scales
     if (widthBox.click(pos)) {
@@ -93,16 +104,20 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         // Check on getting over border
         if (number > 18) {
             number = 18;
+            widthBox.setString("18");
         }
         factory.setWidth(number);
+        return;
     }
     if (heightBox.click(pos)) {
         int number = heightBox.getNumber();
         // Check on getting over border
         if (number > 10) {
             number = 10;
+            heightBox.setString("10");
         }
         factory.setHeight(number);
+        return;
     }
 }
 
@@ -118,6 +133,9 @@ void FactoryCycle::RClick(sf::Vector2i pos) {
     } else if (factory.isSelected(pos)) {
         // Setting object in grid
         factory.remove(pos);
+        // Updating path text
+        factory.resetWayType();
+        pathTypeText.setText("");
     }
 }
 
@@ -173,8 +191,6 @@ void FactoryCycle::draw() {
     // Draw grid
     factory.draw(window);
 
-    settings.draw(window);
-
     // Draw selected object
     if (selectObject) {
         cursorCell.draw(window, sf::Mouse::getPosition(window));
@@ -182,7 +198,41 @@ void FactoryCycle::draw() {
 
     optimizeButton.draw(window);
     updatePathButton.draw(window);
+    pathTypeText.draw(window);
+
+    // Draw important process data
+    settings.draw(window);
 
     // Display things on screen
     window.display();
+}
+
+std::string FactoryCycle::getPathTypeText() {
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        switch (factory.getOptimalWay()) {
+        case 1:
+            return "Carrying manualy";
+
+        case 2:
+            return "Transport by hoist";
+
+        case 3:
+            return "Transport by conveyor";
+        }
+        break;
+    
+    case Language::Russian:
+        switch (factory.getOptimalWay()) {
+        case 1:
+            return "Перенос вручную";
+
+        case 2:
+            return "Транспорт талью";
+
+        case 3:
+            return "Транспорт конвейером";
+        }
+    }
+    return "";
 }

@@ -448,6 +448,7 @@ void Optimiser::checkNotUsing(Field& field, int X, int Y, int& ways, int& machin
     }
 }
 
+#if DEBUG
 void Optimiser::debug(Field& field) {
     // Debugging info
     fout << '\n';
@@ -458,3 +459,4 @@ void Optimiser::debug(Field& field) {
         fout << '\n';
     }
 }
+#endif

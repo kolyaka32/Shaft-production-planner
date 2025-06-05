@@ -2,6 +2,8 @@
 #include "optimiser.hpp"
 
 
+int Factory::minWay = 0;
+
 Factory::Factory(Window& window, sf::Vector2f _pos)
 : Grid(window, _pos) {
     // First updation of existing grid
@@ -201,38 +203,65 @@ void Factory::tryOptimize() {
 
 void Factory::updateWays() {
     // Costs of all variants
-    int costs[3] {0};
+    float costs[3] {0};
+
+    float cellCosts[3] {
+        0,
+        10000,
+        100000,
+    };
+
+    float cellCostsPrtTime[3] {
+        1000,
+        500,
+        200,
+    };
+
+    // Counting path tiles
+    int pathCounts = 0;
+    for (int y=0; y < field.getHeight(); ++y) {
+        for (int x=0; x < field.getWidth(); ++x) {
+            switch (field.getCell({x, y}).getType()) {
+            case CellType::UnspecifiedWay:
+            case CellType::ManualWay:
+            case CellType::HoistWay:
+            case CellType::ConveyorWay:
+                pathCounts++;
+                break;
+            }
+        }
+    }
+
+    float time = Process::getVolumeProductionTime();
+    float mass = Process::getInputPart().mass;
+
+    // Calculate cost
+    // Placing object itself
+    costs[0] += cellCosts[0]*pathCounts;
+    costs[1] += cellCosts[1]*pathCounts;
+    costs[2] += cellCosts[2]*pathCounts;
+
+    // Calculating cost of using
+    costs[0] += pathCounts*time*cellCostsPrtTime[0]*mass/10;
+    costs[1] += pathCounts*time*cellCostsPrtTime[1];
+    costs[2] += pathCounts*time*cellCostsPrtTime[2];
 
     // Check on part weight
-    if (Process::getInputPart().mass > 20) {
-        //
-        costs[0] = INT32_MAX;
+    if (mass > 20) {
+        costs[0] = 1000000000;
     }
 
     // Finding type with minimal cost
-    int minCost = INT32_MAX;
-    int minWay = 0;
-
-    for (int i=0; i < 3; ++i) {
-        if (costs[i] < minCost) {
-            minCost = costs[i];
-            minWay = 0;
+    int minCost = 1000000000;
+    minWay = 0;
+    for (int i=1; i < 4; ++i) {
+        if (costs[i-1] < minCost) {
+            minCost = costs[i-1];
+            minWay = i;
         }
     }
     // Selecting way
-    switch (minWay) {
-    case 0:
-        wayType = CellType::ManualWay;
-        break;
-    
-    case 1:
-        wayType = CellType::HoistWay;
-        break;
-
-    case 2:
-        wayType = CellType::ConveyorWay;
-        break;
-    }
+    CellType wayType = getOptimalWayType();
 
     // Changing all ways to specified
     for (int y=0; y < field.getHeight(); ++y) {
@@ -244,6 +273,42 @@ void Factory::updateWays() {
             case CellType::ConveyorWay:
                 field.getCell({x, y}).setType(wayType);
                 break;
+            }
+        }
+    }
+}
+
+int Factory::getOptimalWay() {
+    return minWay;
+}
+
+CellType Factory::getOptimalWayType() {
+    switch (minWay) {
+    case 1:
+        return CellType::ManualWay;
+    
+    case 2:
+        return CellType::HoistWay;
+
+    case 3:
+        return CellType::ConveyorWay;
+    }
+    return CellType::UnspecifiedWay;
+}
+
+void Factory::resetWayType() {
+    if (minWay != 0) {
+        minWay = 0;
+        for (int y=0; y < field.getHeight(); ++y) {
+            for (int x=0; x < field.getWidth(); ++x) {
+                switch (field.getCell({x, y}).getType()) {
+                case CellType::UnspecifiedWay:
+                case CellType::ManualWay:
+                case CellType::HoistWay:
+                case CellType::ConveyorWay:
+                    field.getCell({x, y}).setType(CellType::UnspecifiedWay);
+                    break;
+                }
             }
         }
     }

@@ -14,6 +14,7 @@ namespace GUI {
 
 	class Text {
 	 private:
+		const Aligment aligment;
 		sf::Text text;
 
 	 public:
@@ -28,7 +29,7 @@ namespace GUI {
 	private:
 		sf::Text text;
 		LanguagedText textTemplate;
-		Aligment aligment;
+		const Aligment aligment;
 		void updateOrigin();
 
 	public:
