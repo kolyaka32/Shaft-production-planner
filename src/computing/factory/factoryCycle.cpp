@@ -12,7 +12,7 @@ cellTypeSwitch(window, 10, 200, (LanguagedText[]){{"None", "Ничего"}, {"Pa
     {"Lathe 1", "Станок 1"}, {"Furnace 1", "Печь 1"}, {"Warehouse", "Склад"}}),
 optimizeButton(window, 10, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
 updatePathButton(window, 10, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
-pathTypeText(window, 280, 155, getPathTypeText(), GUI::Aligment::Left),
+pathTypeText(window, 280, 155, factory.getPathTypeText(), GUI::Aligment::Left),
 cursorCell() {}
 
 void FactoryCycle::LClick(sf::Vector2i pos) {
@@ -42,6 +42,11 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         stop();
         return;
     }
+    if (exportButton.isClicked(pos)) {
+        result();
+        saveInfo.reset();
+        return;
+    }
 
     // Checking, if select new type of cell
     if (cellTypeSwitch.click(pos)) {
@@ -54,25 +59,25 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         case 1:
             cursorCell.setType(CellType::UnspecifiedWay);
             factory.resetWayType();
-            pathTypeText.setText(getPathTypeText());
+            pathTypeText.setText(factory.getPathTypeText());
             return;
 
         case 2:
             cursorCell.setType(CellType::Lathe_1);
             factory.resetWayType();
-            pathTypeText.setText(getPathTypeText());
+            pathTypeText.setText(factory.getPathTypeText());
             return;
 
         case 3:
             cursorCell.setType(CellType::Furnace_1);
             factory.resetWayType();
-            pathTypeText.setText(getPathTypeText());
+            pathTypeText.setText(factory.getPathTypeText());
             return;
 
         case 4:
             cursorCell.setType(CellType::Warehouse);
             factory.resetWayType();
-            pathTypeText.setText(getPathTypeText());
+            pathTypeText.setText(factory.getPathTypeText());
             return;
         }
     }
@@ -95,7 +100,7 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
     }
     if (updatePathButton.isClicked(pos)) {
         factory.updateWays();
-        pathTypeText.setText(getPathTypeText());
+        pathTypeText.setText(factory.getPathTypeText());
         return;
     }
     // Check, if stop input - update grid scales
@@ -135,7 +140,7 @@ void FactoryCycle::RClick(sf::Vector2i pos) {
         factory.remove(pos);
         // Updating path text
         factory.resetWayType();
-        pathTypeText.setText(getPathTypeText());
+        pathTypeText.setText(factory.getPathTypeText());
     }
 }
 
@@ -178,6 +183,7 @@ void FactoryCycle::draw() {
     selectFactoryButton.draw(window);
     saveButton.draw(window);
     loadButton.draw(window);
+    exportButton.draw(window);
     saveInfo.draw(window);
 
     // Draw input objects
@@ -205,40 +211,4 @@ void FactoryCycle::draw() {
 
     // Display things on screen
     window.display();
-}
-
-std::string FactoryCycle::getPathTypeText() {
-    switch (LanguagedText::getLanguage()) {
-    case Language::English:
-        switch (factory.getOptimalWay()) {
-        case 0:
-            return "Transport unspecified";
-
-        case 1:
-            return "Carrying manualy";
-
-        case 2:
-            return "Transport by hoist";
-
-        case 3:
-            return "Transport by conveyor";
-        }
-        break;
-    
-    case Language::Russian:
-        switch (factory.getOptimalWay()) {
-        case 0:
-            return "Транспорт не указан";
-
-        case 1:
-            return "Перенос вручную";
-
-        case 2:
-            return "Транспорт талью";
-
-        case 3:
-            return "Транспорт конвейером";
-        }
-    }
-    return "";
 }

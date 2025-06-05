@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <string>
 
 
 // Class represemting material of creating part
@@ -18,13 +19,13 @@ public:
     constexpr operator Value() const { return value; }
     operator unsigned();
 
-
     // Properties of material
     float recristalisationTemp();
     float density();  // Density in kg/m^3
     float mainFi();   // Main cutting fi in deg
     float addFi();    // Additional cutting fi in deg
     float Cv(float toolFeed);  // 
+    const std::string getName();
 
 private:
     Value value;

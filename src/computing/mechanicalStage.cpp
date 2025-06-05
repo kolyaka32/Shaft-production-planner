@@ -228,3 +228,17 @@ float MechanicalStage::calculateInstrumentCost(float activeTime) {
 Part MechanicalStage::getInputPart() {
     return inputPart;
 }
+
+void MechanicalStage::saveToFile(std::ofstream& fout) {
+    fout << "Mechanical stage:\n";
+    // Process info
+    fout << "Tool feed: " << calculateToolFeed() << " mm; ";
+    fout << "Cutting speed: " << calculateCutSpeed() << " mm/min;\n";
+    fout << "Rotation frequency: " << calculateRotateFrequency() << " rpm; ";
+    fout << "Minute feed: " << calculateMinuteFeed() << " mm/min;\n";
+    fout << "Active time: " << activeTime << " hours;\n";
+    // Other data
+    fout << "Time per operation: " << getTimePerOperation() << " hours;\n";
+    fout << "Required: " << getReqieredQuantity() << " machines;\n";
+    fout << "Cost per part: " << getPartCost() << " rub;\n";
+}

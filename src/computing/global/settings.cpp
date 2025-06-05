@@ -1,8 +1,9 @@
 #include "settings.hpp"
 
+
 Settings::Settings(Window& window)
 : settingText(window, 512, 120, LanguagedText{"Settings", "Настройки"}),
-activateButton(1150, 10, "GUI/esc_button.png"),
+activateButton(1155, 15, "GUI/esc_button.png"),
 languageButtons {
     {452, 200, "GUI/Flag_ENG.png"},
     {452, 300, "GUI/Flag_RUS.png"},

@@ -33,6 +33,7 @@ public:
     void set(Part outPart, unsigned stepIndex, float settedPartCapacity, int batchVolume);
     void setFirst(Part outPart, unsigned stepIndex, float inputRougness, float settedPartCapacity, int batchVolume);
     Part getInputPart();
+    void saveToFile(std::ofstream& fout);
 
     static int getStepNumber(float rougness);
     static float getRougness(int stepIndex);

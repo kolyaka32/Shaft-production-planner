@@ -20,3 +20,12 @@ int ThermalStage::calculateCapacity(Part part) {
 float ThermalStage::calculateTreatmentTime(Part part) {
     return 1 + part.diameter/2/recrystalysationDepth + part.material.recristalisationTemp()/coolingSpeed;
 }
+
+void ThermalStage::saveToFile(std::ofstream& fout) {
+    fout << "Thermal stage:\n";
+    fout << "Capacity: " << getCapacity() << " parts;\n";
+    fout << "Time per load: " << getTimePerOperation() << " hours;\n";
+    fout << "Required: " << getReqieredQuantity() << " machines;\n";
+    fout << "Cost per batch: " << getBatchCost() << " rub;\n";
+    fout << '\n';
+}

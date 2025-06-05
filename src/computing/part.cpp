@@ -25,3 +25,7 @@ void Part::setMaterial(Material _material) {
 void Part::updateMass() {
     mass = diameter*diameter*M_PI/4*length/1000000000*material.density();
 }
+
+void Part::saveToFile(std::ofstream& fout) {
+    fout << "d = " << diameter << " mm, l = " << length << " mm, Rz = " << rougness << " mkm;\n";
+}

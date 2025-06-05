@@ -18,4 +18,5 @@ protected:
 public:
     ThermalStage();
     void set(Part outPart, float settedPartCapacity, int batchVolume);
+    void saveToFile(std::ofstream& fout);
 };

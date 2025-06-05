@@ -10,9 +10,10 @@ settings(window),
 selectProductButton(window, 82, 2, 160, 50, {"Product", "Изделие"}),
 selectProcessButton(window, 242, 2, 160, 50, {"Process", "Процесс"}),
 selectFactoryButton(window, 402, 2, 160, 50, {"Factory", "Цех"}),
-saveButton(window, 880, 10, 160, 40, {"Save", "Сохранить"}),
-loadButton(window, 1060, 10, 160, 40, {"Load", "Загрузить"}),
-saveInfo(window, 700, 10, {"Saved", "Сохранено"}) {}
+saveButton(window, 750, 10, 150, 40, {"Save", "Сохранить"}),
+loadButton(window, 910, 10, 150, 40, {"Load", "Загрузить"}),
+exportButton(window, 1070, 10, 150, 40, {"Export", "Выгрузить"}),
+saveInfo(window, 580, 10, {"Saved", "Сохранено"}) {}
 
 void SubmenuCycle::save() {
     // Create save file
@@ -38,4 +39,22 @@ void SubmenuCycle::load() {
     ProductProcess::load(fin);
     std::getline(fin, line);
     Factory::load(fin);
+}
+
+void SubmenuCycle::result() {
+    // Saving results of all work to export file
+    std::ofstream fout("Results.txt");
+
+    // Writing title
+    fout << "Exported production process:\n";
+    fout << '\n';
+
+    // Writing input data
+    ProductProcess::saveInput(fout);
+    
+    // Writing calculated data
+    ProductProcess::saveOutput(fout);
+
+    // Writing field data
+    Factory::saveToFile(fout);
 }

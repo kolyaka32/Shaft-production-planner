@@ -12,8 +12,9 @@ class SubmenuCycle : public CycleTemplate {
     // Global settings
     Settings settings;
     // Saving options
-    GUI::TextButton saveButton, loadButton;
+    GUI::TextButton saveButton, loadButton, exportButton;
     GUI::InfoBox saveInfo;
+    void result();
     void save();
     void load();
 

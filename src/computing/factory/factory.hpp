@@ -14,9 +14,11 @@ public:
     static bool checkConnections();
     void tryOptimize();
     void updateWays();
-    int getOptimalWay();
-    CellType getOptimalWayType();
+    static int getOptimalWay();
+    static CellType getOptimalWayType();
+    static std::string getPathTypeText();
     void resetWayType();
+    static void saveToFile(std::ofstream& fout);
 
 private:
     static void indexConnected(int X, int Y, unsigned index);

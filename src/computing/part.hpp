@@ -1,7 +1,10 @@
 #pragma once
 
+#include <fstream>
 #include "material.hpp"
 
+
+// Class of part (or semiproduct), getted in process
 class Part {
 private:
     void updateMass();
@@ -10,6 +13,7 @@ public:
     void set(float diameter, float length, float rougness=0);
     void set(const Part part);
     static void setMaterial(Material material);
+    void saveToFile(std::ofstream& fout);
 
     // Properties
     float diameter;

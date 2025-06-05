@@ -138,18 +138,77 @@ void ProductProcess::draw(Window& window) {
 void ProductProcess::save(std::ofstream& fout) {
     // Writing system data
     fout << '\n';
-    fout << "Part\n";
-    // Writing part data
-    fout << targetPart.diameter << ' ' << targetPart.length << ' ' << targetPart.rougness << '\n';
 
     // Writing blank data
+    fout << "Blank part\n";
     fout << blankPart.diameter << ' ' << blankPart.length << ' ' << blankPart.rougness << '\n';
+    
+    // Writing target part data
+    fout << "Target part\n";
+    fout << targetPart.diameter << ' ' << targetPart.length << ' ' << targetPart.rougness << '\n';
 
     // Writing other part data
     fout << Part::material << '\n';
 
     // Writing process data
     fout << partProductionTarget << ' ' << targetBatchVolume << '\n';
+}
+
+void ProductProcess::saveInput(std::ofstream& fout) {
+    // Writing blank data
+    fout << "Input part:\n";
+    fout << "Blank part:\n";
+    blankPart.saveToFile(fout);
+    
+    // Writing target part data
+    fout << "Target part\n";
+    targetPart.saveToFile(fout);
+
+    // Writing other part data
+    fout << "Material: " << Part::material.getName() << ";\n";
+
+    // Process data
+    fout << "Target part production: " << partProductionTarget << " parts/hour;\n";
+    fout << "Batch volume: " << targetBatchVolume << " parts;\n";
+    fout << '\n';
+    fout << '\n';
+}
+
+void ProductProcess::saveOutput(std::ofstream& fout) {
+    // Subtitle
+    fout << "Output data:\n";
+
+    // Saving production process with semiproducts
+    for (int i=startStep; i < endStep; ++i) {
+        // Adding subtitle
+        fout << "Step #" << (i-startStep) << "\n";
+
+        // Saving input semiproduct
+        fout << "Semiproduct:\n";
+        semiproducts[i].saveToFile(fout);
+
+        // Saving mechanical stage
+        mechanicalStages[i].saveToFile(fout);
+
+        // Saving thermal stage
+        thermalStages[i].saveToFile(fout);
+    }
+    // Saving end product
+    fout << "Output part:\n";
+    semiproducts[endStep].saveToFile(fout);
+
+    // Additional separation
+    fout << '\n';
+
+    // Result process time
+    fout << std::format("Time to produce part: {:.1f} hours\n", getPartProductionTime());
+    fout << std::format("Time to produce batch: {:.1f} hours\n", getVolumeProductionTime());
+
+    // Result process cost
+    fout << std::format("Part cost: {:.0f} rub\n", getPartCost());
+    fout << std::format("Batch total cost: {:.0f} rub\n", getBatchCost());
+    fout << '\n';
+    fout << '\n';
 }
 
 void ProductProcess::load(std::ifstream& fin) {

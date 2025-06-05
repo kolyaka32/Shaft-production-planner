@@ -296,6 +296,42 @@ CellType Factory::getOptimalWayType() {
     return CellType::UnspecifiedWay;
 }
 
+std::string Factory::getPathTypeText() {
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        switch (minWay) {
+        case 0:
+            return "Transport unspecified";
+
+        case 1:
+            return "Carrying manualy";
+
+        case 2:
+            return "Transport by hoist";
+
+        case 3:
+            return "Transport by conveyor";
+        }
+        break;
+    
+    case Language::Russian:
+        switch (minWay) {
+        case 0:
+            return "Транспорт не указан";
+
+        case 1:
+            return "Перенос вручную";
+
+        case 2:
+            return "Транспорт талью";
+
+        case 3:
+            return "Транспорт конвейером";
+        }
+    }
+    return "";
+}
+
 void Factory::resetWayType() {
     if (minWay != 0) {
         minWay = 0;
@@ -311,5 +347,39 @@ void Factory::resetWayType() {
                 }
             }
         }
+    }
+}
+
+void Factory::saveToFile(std::ofstream& fout) {
+    // Topic
+    fout << "Field data:\n";
+
+    // Saving getted field
+    field.save(fout);
+    fout << '\n';
+
+    // Save objects counts
+    fout << "Machine counts:\n";
+    fout << std::format("Lathes: {}, requered {};\n", latheCount, Process::getLatheCount());
+    fout << std::format("Furnaces: {}, requered {};\n", furnaceCount, Process::getFurnaceCount());
+    fout << std::format("Warehouces: {}, requered {};\n", warehouseCount, Process::getWarehouseCount());
+
+    // Path tiles
+    fout << '\n';
+    switch (minWay) {
+    case 1:
+        fout << "Carrying manualy\n";
+        break;
+
+    case 2:
+        fout << "Transport by hoist\n";
+        break;
+
+    case 3:
+        fout << "Transport by conveyor\n";
+        break;
+
+    default:
+        fout << "Transport unspecified\n";
     }
 }

@@ -102,7 +102,7 @@ IndexedCell& Field::operator[](unsigned _pos) {
 }
 
 void Field::save(std::ofstream& fout) {
-    fout << width << ' ' << height << '\n';
+    fout << width << " x " << height << '\n';
 
     // Writing grid data
     for (int y=0; y < height; ++y) {
@@ -118,7 +118,8 @@ void Field::load(std::ifstream& fin) {
     delete[] grid;
     
     // Getting width and height
-    fin >> width >> height;
+    char emptyChar;
+    fin >> width >> emptyChar >> height;
 
     // Create new grid
     grid = new IndexedCell[width*height];

@@ -38,4 +38,6 @@ class ProductProcess : Process {
     void draw(Window& window);
     static void save(std::ofstream& fout);
     static void load(std::ifstream& fin);
+    static void saveInput(std::ofstream& fout);
+    static void saveOutput(std::ofstream& fout);
 };

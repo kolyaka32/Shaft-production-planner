@@ -47,6 +47,11 @@ void ProductCycle::LClick(sf::Vector2i pos) {
         stop();
         return;
     }
+    if (exportButton.isClicked(pos)) {
+        result();
+        saveInfo.reset();
+        return;
+    }
 
     // Check, if stop input - update values
     if (partWidthInput.click(pos)) {
@@ -133,6 +138,7 @@ void ProductCycle::draw() {
     selectFactoryButton.draw(window);
     saveButton.draw(window);
     loadButton.draw(window);
+    exportButton.draw(window);
     saveInfo.draw(window);
 
     // Draw main part

@@ -114,3 +114,17 @@ float Material::Cv(float toolFeed) {
     }
     return 0;
 }
+
+const std::string Material::getName() {
+    switch (value) {
+    case Material::MachineSteel:
+        return "machine steel";
+    
+    case Material::Alloys:
+        return "alloys";
+
+    case Material::HeatResistantSteel:
+        return "heat resistant steel";
+    }
+    return "Unknown";
+}
