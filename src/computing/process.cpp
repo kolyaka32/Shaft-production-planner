@@ -156,3 +156,7 @@ float Process::getBatchCost() {
 float Process::getAvaragePartCost() {
     return totalBatchCost/targetBatchVolume;
 }
+
+const Part Process::getInputPart() {
+    return semiproducts[startStep];
+}

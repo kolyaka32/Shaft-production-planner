@@ -16,5 +16,6 @@ public:
     void updateWays();
 
 private:
-    static void indexConnected(sf::Vector2i pos, unsigned index);
+    static void indexConnected(int X, int Y, unsigned index);
+    CellType wayType = CellType::UnspecifiedWay;
 };

@@ -118,14 +118,19 @@ bool Factory::checkConnections() {
     // Checking grid on way networks
     for (int y=0; y < field.getHeight(); ++y) {
         for (int x=0; x < field.getWidth(); ++x) {
-            if (field.getCell({x, y}).getType() == CellType::UnspecifiedWay
-                && field.getCell({x, y}).getIndex() == 0) {
-                // Setting cell and all, connected to it to be same index
-                indexConnected({x, y}, indexCounter);
-                if (indexCounter != 1) {
-                    notConnected = true;
+            if (field.getCell({x, y}).getIndex() == 0) {
+                switch (field[{x, y}].getType()) {
+                    case CellType::UnspecifiedWay:
+                    case CellType::ManualWay:
+                    case CellType::HoistWay:
+                    case CellType::ConveyorWay:
+                    // Setting cell and all, connected to it to be same index
+                    indexConnected(x, y, indexCounter);
+                    if (indexCounter != 1) {
+                        notConnected = true;
+                    }
+                    indexCounter++;
                 }
-                indexCounter++;
             }
         }
     }
@@ -133,8 +138,8 @@ bool Factory::checkConnections() {
     // Checking on not connected machines
     for (int y=0; y < field.getHeight(); ++y) {
         for (int x=0; x < field.getWidth(); ++x) {
-            if (field.getCell({x, y}).getIndex() == 0) {
-                switch (field.getCell({x, y}).getType()) {
+            if (field[{x, y}].getIndex() == 0) {
+                switch (field[{x, y}].getType()) {
                 case CellType::Lathe_1:
                 case CellType::Furnace_1:
                     field.getCell({x, y}).setIndex(indexCounter);
@@ -148,28 +153,39 @@ bool Factory::checkConnections() {
     return notConnected;
 }
 
-void Factory::indexConnected(sf::Vector2i pos, unsigned _index) {
+void Factory::indexConnected(int X, int Y, unsigned _index) {
     // Checking, cell already have index
-    if (field.getCell(pos).getIndex()
-        || field.getCell(pos).getType() == CellType::None
-        || field.getCell(pos).getType() == CellType::Void) {
+    if (field[{X, Y}].getIndex()) {
         return;
     }
-    field.getCell(pos).setIndex(_index);
-    // Setting all neighbourth to be same type (recursevly)
-    if (field.getCell(pos).getType() == CellType::UnspecifiedWay) {
-        if (pos.x > 0) {
-            indexConnected({pos.x-1, pos.y}, _index);
+    // Update index
+    
+    switch (field[{X, Y}].getType()) {
+    case CellType::None:
+    case CellType::Void:
+        return;
+    
+    case CellType::UnspecifiedWay:
+    case CellType::ManualWay:
+    case CellType::HoistWay:
+    case CellType::ConveyorWay:
+        field[{X, Y}].setIndex(_index);
+        if (X > 0) {
+            indexConnected(X-1, Y, _index);
         }
-        if (pos.x < field.getWidth()-1) {
-            indexConnected({pos.x+1, pos.y}, _index);
+        if (X < field.getWidth()-1) {
+            indexConnected(X+1, Y, _index);
         }
-        if (pos.y > 0) {
-            indexConnected({pos.x, pos.y-1}, _index);
+        if (Y > 0) {
+            indexConnected(X, Y-1, _index);
         }
-        if (pos.y < field.getHeight()-1) {
-            indexConnected({pos.x, pos.y+1}, _index);
+        if (Y < field.getHeight()-1) {
+            indexConnected(X, Y+1, _index);
         }
+        break;
+
+    default:
+        field[{X, Y}].setIndex(_index);
     }
 }
 
@@ -184,5 +200,51 @@ void Factory::tryOptimize() {
 }
 
 void Factory::updateWays() {
+    // Costs of all variants
+    int costs[3] {0};
+
+    // Check on part weight
+    if (Process::getInputPart().mass > 20) {
+        //
+        costs[0] = INT32_MAX;
+    }
+
+    // Finding type with minimal cost
+    int minCost = INT32_MAX;
+    int minWay = 0;
+
+    for (int i=0; i < 3; ++i) {
+        if (costs[i] < minCost) {
+            minCost = costs[i];
+            minWay = 0;
+        }
+    }
+    // Selecting way
+    switch (minWay) {
+    case 0:
+        wayType = CellType::ManualWay;
+        break;
     
+    case 1:
+        wayType = CellType::HoistWay;
+        break;
+
+    case 2:
+        wayType = CellType::ConveyorWay;
+        break;
+    }
+
+    // Changing all ways to specified
+    for (int y=0; y < field.getHeight(); ++y) {
+        for (int x=0; x < field.getWidth(); ++x) {
+            switch (field.getCell({x, y}).getType()) {
+            case CellType::UnspecifiedWay:
+            case CellType::ManualWay:
+            case CellType::HoistWay:
+            case CellType::ConveyorWay:
+                field.getCell({x, y}).setType(wayType);
+                break;
+            }
+        }
+    }
 }

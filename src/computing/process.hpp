@@ -48,4 +48,5 @@ public:
     static float getPartCost();
     static float getBatchCost();
     static float getAvaragePartCost();
+    static const Part getInputPart();
 };

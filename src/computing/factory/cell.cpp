@@ -64,6 +64,9 @@ char Cell::saveAs() {
         return 'n';
 
     case CellType::UnspecifiedWay:
+    case CellType::ManualWay:
+    case CellType::HoistWay:
+    case CellType::ConveyorWay:
         return 'w';
 
     case CellType::Warehouse:
