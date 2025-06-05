@@ -12,7 +12,7 @@ cellTypeSwitch(window, 10, 200, (LanguagedText[]){{"None", "Ничего"}, {"Pa
     {"Lathe 1", "Станок 1"}, {"Furnace 1", "Печь 1"}, {"Warehouse", "Склад"}}),
 optimizeButton(window, 10, 400, {"Try optimize", "Оптимизировать"}, GUI::Aligment::Left),
 updatePathButton(window, 10, 450, {"Update pathes", "Обновить пути"}, GUI::Aligment::Left),
-pathTypeText(window, 20, 140, getPathTypeText(), GUI::Aligment::Left),
+pathTypeText(window, 280, 155, getPathTypeText(), GUI::Aligment::Left),
 cursorCell() {}
 
 void FactoryCycle::LClick(sf::Vector2i pos) {
@@ -54,25 +54,25 @@ void FactoryCycle::LClick(sf::Vector2i pos) {
         case 1:
             cursorCell.setType(CellType::UnspecifiedWay);
             factory.resetWayType();
-            pathTypeText.setText("");
+            pathTypeText.setText(getPathTypeText());
             return;
 
         case 2:
             cursorCell.setType(CellType::Lathe_1);
             factory.resetWayType();
-            pathTypeText.setText("");
+            pathTypeText.setText(getPathTypeText());
             return;
 
         case 3:
             cursorCell.setType(CellType::Furnace_1);
             factory.resetWayType();
-            pathTypeText.setText("");
+            pathTypeText.setText(getPathTypeText());
             return;
 
         case 4:
             cursorCell.setType(CellType::Warehouse);
             factory.resetWayType();
-            pathTypeText.setText("");
+            pathTypeText.setText(getPathTypeText());
             return;
         }
     }
@@ -135,7 +135,7 @@ void FactoryCycle::RClick(sf::Vector2i pos) {
         factory.remove(pos);
         // Updating path text
         factory.resetWayType();
-        pathTypeText.setText("");
+        pathTypeText.setText(getPathTypeText());
     }
 }
 
@@ -211,6 +211,9 @@ std::string FactoryCycle::getPathTypeText() {
     switch (LanguagedText::getLanguage()) {
     case Language::English:
         switch (factory.getOptimalWay()) {
+        case 0:
+            return "Transport unspecified";
+
         case 1:
             return "Carrying manualy";
 
@@ -224,6 +227,9 @@ std::string FactoryCycle::getPathTypeText() {
     
     case Language::Russian:
         switch (factory.getOptimalWay()) {
+        case 0:
+            return "Транспорт не указан";
+
         case 1:
             return "Перенос вручную";
 

@@ -10,15 +10,15 @@ int Grid::warehouseCount = 0;
 
 Grid::Grid(Window& window, sf::Vector2f _pos)
 : pos(_pos),
-latheCountText(window, 280, 60, {"Lathes: {}, needed: {}", "Станков: {}, необходимо: {}"}, GUI::Aligment::Left),
-furnaceCountText(window, 280, 100, {"Furnaces: {}, needed: {}", "Печей: {}, необходимо: {}"}, GUI::Aligment::Left),
-warehouseCountText(window, 280, 140, {"Warehouses: {}, needed: {}", "Складов: {}, необходимо: {}"}, GUI::Aligment::Left),
-latheCountHigh(window, 740, 60, {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
-furnaceCountHigh(window, 740, 100, {"Number of furnaces is excessive", "Число печей избыточно"}, "machines/warning-icon.png"),
-warehouseCountHigh(window, 740, 140, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
-latheCountLow(window, 740, 60,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
-furnaceCountLow(window, 740, 100, {"Number of furnaces is insufficient", "Число печей недостаточно"}, "machines/warning-icon.png"),
-warehouseCountLow(window, 740, 140, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
+latheCountText(window, 280, 50, {"Lathes: {}, needed: {}", "Станков: {}, необходимо: {}"}, GUI::Aligment::Left),
+furnaceCountText(window, 280, 85, {"Furnaces: {}, needed: {}", "Печей: {}, необходимо: {}"}, GUI::Aligment::Left),
+warehouseCountText(window, 280, 120, {"Warehouses: {}, needed: {}", "Складов: {}, необходимо: {}"}, GUI::Aligment::Left),
+latheCountHigh(window, 740, 50, {"Number of machines is excessive", "Число станков избыточно"}, "machines/warning-icon.png"),
+furnaceCountHigh(window, 740, 85, {"Number of furnaces is excessive", "Число печей избыточно"}, "machines/warning-icon.png"),
+warehouseCountHigh(window, 740, 120, {"Number of warehouses is excessive", "Число складов избыточно"}, "machines/warning-icon.png"),
+latheCountLow(window, 740, 50,  {"Number of machines is insufficient", "Число станков недостаточно"}, "machines/warning-icon.png"),
+furnaceCountLow(window, 740, 85, {"Number of furnaces is insufficient", "Число печей недостаточно"}, "machines/warning-icon.png"),
+warehouseCountLow(window, 740, 120, {"Number of warehouses is insufficient", "Число складов недостаточно"}, "machines/warning-icon.png") {
     // Placing texts
     updateLatheText();
     updateFurnaceText();

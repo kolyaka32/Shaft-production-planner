@@ -1,11 +1,18 @@
 #include "GUI.hpp"
 
+
 template <unsigned count>
-GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText _texts[count], unsigned startOption) {
+GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText _texts[count], unsigned startOption)
+: arrowTexture(resourcesDir() / "GUI/switchArrow.png"),
+arrowSprite(arrowTexture) {
+    // Placing arrow sprite
+    arrowSprite.setPosition({X, Y});
+
+    // Placing select options
     float maxWidth = 0;
     for (int i=0; i < count; ++i) {
         drawnTexts.emplace_back(window.font, _texts[i].getUTF8());
-        drawnTexts[i].setPosition({X, Y+i*30-4});
+        drawnTexts[i].setPosition({X+30, Y+i*30-4});
         drawnTexts[i].setFillColor(sf::Color::Black);
         maxWidth = std::max(maxWidth, drawnTexts[i].getGlobalBounds().size.x);
     }
@@ -14,7 +21,7 @@ GUI::SwitchBox<count>::SwitchBox(Window& window, float X, float Y, LanguagedText
     drawnTexts[selected].move({0, -(float)selected*30.0f});
 
     // Setting background of active text
-    backgroundBox.setSize({maxWidth+5, 30});
+    backgroundBox.setSize({maxWidth+35, 30});
     backgroundBox.setPosition({X, Y});
 }
 
@@ -58,9 +65,11 @@ void GUI::SwitchBox<count>::draw(Window& window) {
         for (int i=0; i < count; ++i) {
             window.draw(drawnTexts[i]);
         }
+        window.draw(arrowSprite);
     } else {
         window.draw(backgroundBox);
         window.draw(drawnTexts[selected]);
+        window.draw(arrowSprite);
     }
 }
 

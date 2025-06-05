@@ -153,6 +153,9 @@ namespace GUI {
 		// Draw options
 		std::vector<sf::Text> drawnTexts;
 		sf::RectangleShape backgroundBox;
+		// Static options
+		const sf::Texture arrowTexture;
+		sf::Sprite arrowSprite;
 
 	 public:
 		SwitchBox(Window& window, float X, float Y, LanguagedText texts[count], unsigned startOption = 0);
