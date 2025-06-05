@@ -106,8 +106,8 @@ namespace GUI {
 		bool pressed = false;
 
 		// Caret and select data info
-		int caret;
-		int selectLength;
+		int caret = 0;
+		int selectLength = 0;
 		// Caret draw info
 		bool showCaret = false;
 		sf::Clock clock;
@@ -123,6 +123,9 @@ namespace GUI {
 
 		void clearSelected(const sf::String& str);
 		void updateInversePos();
+
+		// Error check
+		void debug();
 
 	 public:
 		TypeBox(Window& window, float X, float Y, float W, std::string startText = "");

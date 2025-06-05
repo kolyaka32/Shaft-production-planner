@@ -1,4 +1,8 @@
 #include "GUI.hpp"
+#if DEBUG
+#include <iostream>
+#endif
+
 
 GUI::TypeBox::TypeBox(Window& window, float X, float Y, float W, std::string _startText)
 : drawText(window.font, _startText),
@@ -86,11 +90,13 @@ bool GUI::TypeBox::click(sf::Vector2i point) {
         selected = false;
         pressed = false;
         selectLength = 0;
+        caret = 0;
         showCaret = false;
         clock.stop();
 
         return wasSelected;
     }
+    debug();
 }
 
 void GUI::TypeBox::unClick() {
@@ -100,6 +106,7 @@ void GUI::TypeBox::unClick() {
 bool GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
     if (selected) {
         pressed = false;
+        debug();
         const sf::String& str = drawText.getString();
         switch (state.code) {
         case sf::Keyboard::Key::Delete:
@@ -223,6 +230,7 @@ bool GUI::TypeBox::keyPress(sf::Event::KeyPressed state) {
             clock.stop();
             return true;
         }
+        debug();
     }
     return false;
 }
@@ -235,8 +243,10 @@ void GUI::TypeBox::inputText(char32_t ch) {
     if (selected && ch > 40) {
         // Adding new charachter, deleting selected part
         const sf::String& str = drawText.getString();
+        debug();
         if (selectLength < 0) {
             drawText.setString(str.substring(0, caret+selectLength) + ch + str.substring(caret));
+            caret += selectLength;
         } else {
             drawText.setString(str.substring(0, caret) + ch + str.substring(caret+selectLength));
         }
@@ -262,6 +272,8 @@ void GUI::TypeBox::update(sf::Vector2i point) {
                 }
             }
             selectLength -= caret;
+
+            debug();
 
             // Update caret position
             drawCaret.setPosition(drawText.findCharacterPos(caret));
@@ -333,4 +345,14 @@ float GUI::TypeBox::getNumber() {
 
     // At this moment - simple function
     // TODO: create improved parser for understand +-*/()^
+}
+
+void GUI::TypeBox::debug() {
+    #if DEBUG
+    // Additional check
+    std::cout << (std::string)drawText.getString() << ' ' << drawText.getString().getSize() << ' ' << caret << ' ' << selectLength << '\n';
+    if (caret > drawText.getString().getSize() || caret+selectLength > drawText.getString().getSize()) {
+        throw "Error";
+    }
+    #endif
 }
