@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <string>
+#include "../app/languages.hpp"
 
 
 // Class represemting material of creating part

@@ -230,15 +230,32 @@ Part MechanicalStage::getInputPart() {
 }
 
 void MechanicalStage::saveToFile(std::ofstream& fout) {
-    fout << "Mechanical stage:\n";
-    // Process info
-    fout << "Tool feed: " << calculateToolFeed() << " mm; ";
-    fout << "Cutting speed: " << calculateCutSpeed() << " mm/min;\n";
-    fout << "Rotation frequency: " << calculateRotateFrequency() << " rpm; ";
-    fout << "Minute feed: " << calculateMinuteFeed() << " mm/min;\n";
-    fout << "Active time: " << activeTime << " hours;\n";
-    // Other data
-    fout << "Time per operation: " << getTimePerOperation() << " hours;\n";
-    fout << "Required: " << getReqieredQuantity() << " machines;\n";
-    fout << "Cost per part: " << getPartCost() << " rub;\n";
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        fout << "Mechanical stage:\n";
+        // Process info
+        fout << "Tool feed: " << calculateToolFeed() << " mm; ";
+        fout << "Cutting speed: " << calculateCutSpeed() << " mm/min;\n";
+        fout << "Rotation frequency: " << calculateRotateFrequency() << " rpm; ";
+        fout << "Minute feed: " << calculateMinuteFeed() << " mm/min;\n";
+        fout << "Active time: " << activeTime << " hours;\n";
+        // Other data
+        fout << "Time per operation: " << getTimePerOperation() << " hours;\n";
+        fout << "Required: " << getReqieredQuantity() << " machines;\n";
+        fout << "Cost per part: " << getPartCost() << " rub;\n";
+        break;
+
+    case Language::Russian:
+        fout << "Механическая обработка:\n";
+        // Process info
+        fout << "Подача: " << calculateToolFeed() << " мм; ";
+        fout << "Скорость резания: " << calculateCutSpeed() << " мм/мин;\n";
+        fout << "Частота вращения: " << calculateRotateFrequency() << " оборотов/мин; ";
+        fout << "Минутная подача: " << calculateMinuteFeed() << " мм/мин;\n";
+        fout << "Время резания: " << activeTime << " часов;\n";
+        // Other data
+        fout << "Длительность производства детали: " << getTimePerOperation() << " часов;\n";
+        fout << "Необходимо: " << getReqieredQuantity() << " станков;\n";
+        fout << "Стоимость одной детали: " << getPartCost() << " рублей;\n";
+    }
 }

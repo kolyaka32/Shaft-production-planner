@@ -116,15 +116,32 @@ float Material::Cv(float toolFeed) {
 }
 
 const std::string Material::getName() {
-    switch (value) {
-    case Material::MachineSteel:
-        return "machine steel";
-    
-    case Material::Alloys:
-        return "alloys";
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        switch (value) {
+        case Material::MachineSteel:
+            return "machine steel";
+        
+        case Material::Alloys:
+            return "alloys";
 
-    case Material::HeatResistantSteel:
-        return "heat resistant steel";
+        case Material::HeatResistantSteel:
+            return "heat resistant steel";
+        }
+        return "unknown";
+
+    case Language::Russian:
+        switch (value) {
+        case Material::MachineSteel:
+            return "машиноотделочная сталь";
+        
+        case Material::Alloys:
+            return "цветные сплавы";
+
+        case Material::HeatResistantSteel:
+            return "жаропрочные стали";
+        }
+        return "неизвестно";
     }
-    return "Unknown";
+    return "unknown";
 }

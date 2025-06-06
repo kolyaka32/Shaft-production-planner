@@ -3,7 +3,7 @@
 #include "part.hpp"
 
 
-// 
+// One step of process, need for understanding requered part and parameters 
 class Stage {
 private:
     // Constants

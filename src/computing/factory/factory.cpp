@@ -351,35 +351,30 @@ void Factory::resetWayType() {
 }
 
 void Factory::saveToFile(std::ofstream& fout) {
-    // Topic
-    fout << "Field data:\n";
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        // Topic
+        fout << "Field data:\n";
 
-    // Saving getted field
-    field.save(fout);
-    fout << '\n';
+        // Save objects counts
+        fout << "Machine counts:\n";
+        fout << std::format("Lathes: {}, requered {};\n", latheCount, Process::getLatheCount());
+        fout << std::format("Furnaces: {}, requered {};\n", furnaceCount, Process::getFurnaceCount());
+        fout << std::format("Warehouces: {}, requered {};\n", warehouseCount, Process::getWarehouseCount());
+        break;
+    
+    case Language::Russian:
+        // Topic
+        fout << "Данные цеха:\n";
 
-    // Save objects counts
-    fout << "Machine counts:\n";
-    fout << std::format("Lathes: {}, requered {};\n", latheCount, Process::getLatheCount());
-    fout << std::format("Furnaces: {}, requered {};\n", furnaceCount, Process::getFurnaceCount());
-    fout << std::format("Warehouces: {}, requered {};\n", warehouseCount, Process::getWarehouseCount());
+        // Save objects counts
+        fout << "Количество машин:\n";
+        fout << std::format("Токарные станки: {}, необходимо {};\n", latheCount, Process::getLatheCount());
+        fout << std::format("Печи: {}, необходимо {};\n", furnaceCount, Process::getFurnaceCount());
+        fout << std::format("Склады: {}, необходимо {};\n", warehouseCount, Process::getWarehouseCount());
+    }
 
     // Path tiles
     fout << '\n';
-    switch (minWay) {
-    case 1:
-        fout << "Carrying manualy\n";
-        break;
-
-    case 2:
-        fout << "Transport by hoist\n";
-        break;
-
-    case 3:
-        fout << "Transport by conveyor\n";
-        break;
-
-    default:
-        fout << "Transport unspecified\n";
-    }
+    fout << getPathTypeText() << '\n';
 }

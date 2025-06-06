@@ -46,8 +46,14 @@ void SubmenuCycle::result() {
     std::ofstream fout("Results.txt");
 
     // Writing title
-    fout << "Exported production process:\n";
-    fout << '\n';
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        fout << "Exported production process:\n\n";
+        break;
+    
+    case Language::Russian:
+        fout << "Экспортированный производственный процесс:\n\n";
+    }
 
     // Writing input data
     ProductProcess::saveInput(fout);

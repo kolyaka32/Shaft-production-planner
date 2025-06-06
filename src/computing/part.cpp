@@ -1,6 +1,8 @@
 #include "part.hpp"
 
+
 Material Part::material(Material::MachineSteel);
+
 
 Part::Part(float _diameter, float _length, float _rougness)
 : diameter(_diameter),
@@ -27,5 +29,12 @@ void Part::updateMass() {
 }
 
 void Part::saveToFile(std::ofstream& fout) {
-    fout << "d = " << diameter << " mm, l = " << length << " mm, Rz = " << rougness << " mkm;\n";
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        fout << "d = " << diameter << " mm, l = " << length << " mm, Rz = " << rougness << " mkm;\n";
+        break;
+
+    case Language::Russian:
+        fout << "d = " << diameter << " мм, l = " << length << " мм, Rz = " << rougness << " мкм;\n";
+    }
 }

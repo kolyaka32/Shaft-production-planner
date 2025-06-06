@@ -9,7 +9,7 @@ void ThermalStage::set(Part outPart, float _settedPartCapacity, int _batchVolume
     setOperationTime(calculateTreatmentTime(outPart), _batchVolume);
     setRequiredQuantity(_settedPartCapacity, _batchVolume);
     setPowerConsumption(powerInput);
-    setCost(ceilf(_batchVolume/getCapacity()), 1.5);
+    setCost(ceilf((float)_batchVolume/getCapacity()), 1.5);
 }
 
 int ThermalStage::calculateCapacity(Part part) {
@@ -22,10 +22,22 @@ float ThermalStage::calculateTreatmentTime(Part part) {
 }
 
 void ThermalStage::saveToFile(std::ofstream& fout) {
-    fout << "Thermal stage:\n";
-    fout << "Capacity: " << getCapacity() << " parts;\n";
-    fout << "Time per load: " << getTimePerOperation() << " hours;\n";
-    fout << "Required: " << getReqieredQuantity() << " machines;\n";
-    fout << "Cost per batch: " << getBatchCost() << " rub;\n";
-    fout << '\n';
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
+        fout << "Thermal stage:\n";
+        fout << "Capacity: " << getCapacity() << " parts;\n";
+        fout << "Time per load: " << getTimePerOperation() << " hours;\n";
+        fout << "Required: " << getReqieredQuantity() << " machines;\n";
+        fout << "Cost per batch: " << getBatchCost() << " rub;\n";
+        fout << '\n';
+        break;
+
+    case Language::Russian:
+        fout << "Термическая обработка:\n";
+        fout << "Вместимость: " << getCapacity() << " деталей;\n";
+        fout << "Время на одну заугрузку: " << getTimePerOperation() << " часов;\n";
+        fout << "Необходимо: " << getReqieredQuantity() << " печей;\n";
+        fout << "Стоимость одной загрузки: " << getBatchCost() << " рублей;\n";
+        fout << '\n';
+    }
 }
