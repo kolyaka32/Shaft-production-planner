@@ -1,5 +1,5 @@
 # Shaft production planner
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README-ru.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/Main/README.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/Main/README-ru.md)
 
 This codebase implement the system for planning and development of shaft prouction factory.
 
@@ -85,8 +85,4 @@ Sources with all self-builded libraries can be located at [releases](https://git
 
 
 ## Used external libraries:
-* https://github.com/libsdl-org/SDL
-* https://github.com/libsdl-org/SDL_image
-* https://github.com/libsdl-org/SDL_mixer
-* https://github.com/libsdl-org/SDL_ttf
-* https://github.com/libsdl-org/SDL_net
+* https://github.com/SFML/SFML/releases/

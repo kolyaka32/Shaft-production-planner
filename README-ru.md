@@ -1,7 +1,7 @@
 # Планнировщик произодства валов
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README-ru.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/Main/README.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/Main/README-ru.md)
 
-Данный репозиторий содержит систему расчёта и планирования цеха по производству валов.
+Данный репозиторий содержит систему расчёта и планирования производственной цепочки и цеха по производству валов.
 
 ## Использование
 Изначально требуется ввести входные параметры заготовок и выходных изделий.
@@ -84,8 +84,4 @@ cmake --build ./build --config Release --target all --
 
 
 ## Использованные сторонние библиотеки:
-* https://github.com/libsdl-org/SDL
-* https://github.com/libsdl-org/SDL_image
-* https://github.com/libsdl-org/SDL_mixer
-* https://github.com/libsdl-org/SDL_ttf
-* https://github.com/libsdl-org/SDL_net
+* https://github.com/SFML/SFML/releases/
