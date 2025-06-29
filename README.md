@@ -1,18 +1,21 @@
 # Shaft production planner
-[![ru](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README.md)[![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README-ru.md)
+[![ru](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/Shaft-production-planner/blob/main/README-ru.md)
 
 This codebase implement the system for planning and development of shaft prouction factory.
 
-![Screenshot of programm](/screenshots/game-main-en.png?raw=true)
-
-
 ## Usage
 After entering program you suppose to enter input and output part parameters.
+
 ![Screenshot of product input stage](/screenshots/product-en.png?raw=true)
+
 Based on this parameters program create production chain, calulate required parameters and showing required equipment and cost.
+
 ![Screenshot of process stage](/screenshots/process-en.png?raw=true)
+
 Based on required equipment you should place it in grid, creating workshop layout.
+
 ![Screenshot of workshop planner stage](/screenshots/factory-en.png?raw=true)
+
 Also you can allow to program do it by itself and get automatick acceptable result.
 After all calculation program provide end result list with all calculated values.
 Also program allows to save/load in any state of work, remembering all inputed values.
@@ -34,21 +37,21 @@ Also program allows to save/load in any state of work, remembering all inputed v
 3. Install [CMake](https://sourceforge.net/projects/cmake.mirror/);
 4. Download and install external [SFML library](https://github.com/SFML/SFML);
 For build and install code by yourself: [download](https://github.com/SFML/SFML/releases/) source code, unzip to any folder and run comand line **as administrator**:
-'''bash
+```console
 cd ./SFML-3.0.1
 mkdir build
 cd build/
 cmake ../
 make
 make install
-'''
+```
 5. (*Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage) (Recomended to use with plugins on c++ and cmake).
 6. Compile project itself:
-'''bash
+```console
 cd ./Shaft-production-planner
 mkdir build
 cmake --build ./build --config Release --target all --
-'''
+```
 
 
 ## Instalation for own use (unux systems)
@@ -56,26 +59,26 @@ cmake --build ./build --config Release --target all --
 2. Check availability of [git];
 3. Install external library [SFML](https://github.com/SFML/SFML)
 (For Debian-like systems):
-'''bash
+```bash
 sudo apt-get update
 sudo apt-get install libsfml-dev
-'''
+```
 Or build and install code by yourself: [download](https://github.com/SFML/SFML/releases/) source code, unzip to any folder and run comand line **as administrator**:
-'''bash
+```bash
 cd ./SFML-3.0.1
 mkdir build
 cd build/
 cmake ../
 make
 make install
-'''
+```
 5. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
 6. Compile project itself:
-'''bash
+```bash
 cd ./Shaft-production-planner
 mkdir build
 cmake --build ./build --config Release --target all --
-'''
+```
 
 
 ## Prepaired sources
