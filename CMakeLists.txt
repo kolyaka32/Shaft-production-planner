@@ -9,7 +9,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc")
 set(SFML_STATIC_LIBRARIES TRUE)
 
 # Creating project
-project(Simulator)
+project(Planner)
 
 # Hidding console
 set(CMAKE_CXX_FLAGS "-mwindows -static")

@@ -13,7 +13,7 @@ bool App::running = true;
 Cycle App::nextCycle = Cycle::Default;
 
 App::App()
-: window(1200, 720, "Test window") {}
+: window(1200, 720, "Planner") {}
 
 void App::stop() {
     running = false;
